@@ -1,83 +1,71 @@
 <?php
 //
-// Postfix Admin
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// login.php
 //
-// File: login.php
-//
-// Template File: login.tpl
-//
-// Template Variables:
-//
-//  tMessage
-//  tUsername
-//
-// Form POST \ GET Variables:
-//
-//  fUsername
-//  fPassword
-//
-require ("./variables.inc.php");
-require ("./config.inc.php");
-require ("./functions.inc.php");
-include ("./languages/" . check_language () . ".lang");
+include "my_lib.php";
 
-if ($_SERVER['REQUEST_METHOD'] == "GET")
-{
-   include ("./templates/header.tpl");
-   include ("./templates/login.tpl");
-   include ("./templates/footer.tpl");
-}
+if (!empty($_POST[submit])) {
+	$form_login = $_POST[form_login];
+	$form_passwd = $_POST[form_passwd];
 
-if ($_SERVER['REQUEST_METHOD'] == "POST")
-{
-   if (isset ($_POST['fUsername'])) $fUsername = escape_string ($_POST['fUsername']);
-   if (isset ($_POST['fPassword'])) $fPassword = escape_string ($_POST['fPassword']);
+	$result = db_query ("SELECT password FROM admin WHERE username='$form_login'");
+	
+	if ($result[rows] == 1) {
+		$row = mysql_fetch_array($result[result]);
+		$db_passwd = $row[password];
+		$salt = preg_split('/\$/', $row[password]);
+		$checked_passwd = md5crypt($form_passwd, $salt[2]);
 
-   $result = db_query ("SELECT password FROM $table_admin WHERE username='$fUsername' AND active='1'");
-   if ($result['rows'] == 1)
-   {
-      $row = db_array ($result['result']);
-      $password = pacrypt ($fPassword, $row['password']);
+		$result = db_query ("SELECT * FROM admin WHERE username='$form_login' AND password='$checked_passwd' AND active='1'");
 
-      $result = db_query ("SELECT * FROM $table_admin WHERE username='$fUsername' AND password='$password' AND active='1'");
-      if ($result['rows'] != 1)
-      {
-         $error = 1;
-         $tMessage = $PALANG['pLogin_password_incorrect'];
-         $tUsername = $fUsername;
-      }
-   }
-   else
-   {
-      $error = 1;
-      $tMessage = $PALANG['pLogin_username_incorrect'];
-   }
+		if ($result[rows] == 1) {
+			session_name("SessID");
+			session_start();
+			session_register("sessid");
 
-   if ($error != 1)
-   {
-      session_start();
-      session_register("sessid");
-      $_SESSION['sessid']['username'] = $fUsername;
+			$row = mysql_fetch_array($result[result]);
 
-      $result = db_query ("SELECT * FROM $table_domain_admins WHERE username='$fUsername' AND domain='ALL' AND active='1'");
-      if ($result['rows'] == 1)
-      {
-         $row = db_array ($result['result']);
-         if ($fUsername == $row['username'])
-         {
-            header("Location: admin/index.php");
-            exit;
-         }
-      }
-      header("Location: main.php");
-      exit;
-   }
+			$sessid = array (
+				"domain" => $row[domain],
+				"username" => $row[username]
+			);
 
-   include ("./templates/header.tpl");
-   include ("./templates/login.tpl");
-   include ("./templates/footer.tpl");
-}
+		} else {
+			print_header();
+			print "<h1>Mail Admin</h1>\n";
+			print "<hr>\n";
+			print "<p class=error>\n";
+			print "Either the password that you supplied is incorrect, go back and try again.<p>\n";
+			print "Or you are not authorized to view this page.\n";
+			print_footer();
+			exit;
+		}
+
+	} else {
+		print_header();
+		print "<h1>Mail Admin</h1>\n";
+		print "<hr>\n";
+		print "<p class=error>\n";
+		print "The login that you supplied is not correct, please press BACK and try again.\n";
+		print_footer();
+		exit;
+	}
+
+	header("Location: main.php?" .  session_name() . "=" . session_id());
+} 
+print_header($welcome_title);
+print "<h1>$welcome_header</h1>\n";
+?>
+<hr>
+<form name=login method=post>
+<table class=form>
+<tr><td>Login:</td><td><input type=text name=form_login></td><td>(email address)</td></tr>
+<tr><td>Password:</td><td><input type=password name=form_passwd></td></tr>
+<tr><td colspan=3 align=center><input type=submit name=submit value=Enter></td></tr>
+</table>
+</form>
+<p>
+<a href=vcp.php>Mailbox Password Change</a>
+<?php
+print_footer();
 ?>

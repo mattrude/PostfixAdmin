@@ -1,30 +1,21 @@
 <?php
 //
-// Postfix Admin
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// logout.php
 //
-// File: logout.php
-//
-// Template File: -none-
-//
-// Template Variables:
-//
-// -none-
-//
-// Form POST \ GET Variables:
-//
-// -none-
-//
-require ("./config.inc.php");
-require ("./functions.inc.php");
+include "my_lib.php";
 
-$SESSID_USERNAME = check_session ();
+$sessid = check_session();
 
-session_unset ();
-session_destroy ();
+session_unset();
 
-header ("Location: login.php");
-exit;
+session_destroy();
+
+print_header();
+
+print "<h1>Mail Admin</h1>\n";
+print "<hr>\n";
+print "You are logged out\n";
+print "<p>\n";
+print "<a href=login.php>Login again</a>\n";
+print_footer();
 ?>
