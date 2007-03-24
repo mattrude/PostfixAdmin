@@ -68,23 +68,22 @@
          <?php print "$pCreate_mailbox_name_text\n"; ?>
       </td>
    </tr>
-   <tr>
-<?php
-if ($CONF['quota'] == 'YES')
-{
-   print "   <tr>\n";
-   print "      <td>\n";
-   print "         " . $LANG['pCreate_mailbox_quota'] . ":\n";
-   print "      </td>\n";
-   print "      <td>\n";
-   print "         <input type=\"text\" name=\"fQuota\" value=\"$tQuota\">\n";
-   print "      </td>\n";
-   print "      <td>\n";
-   print "         $pCreate_mailbox_quota_text\n";
-   print "      </td>\n";
-   print "   </tr>\n";
-}
-?>
+   <?php
+   if ($CONF['quota'] == 'YES')
+   {
+      print "   <tr>\n";
+      print "      <td>\n";
+      print "         " . $LANG['pCreate_mailbox_quota'] . ":\n";
+      print "      </td>\n";
+      print "      <td>\n";
+      print "         <input type=\"text\" name=\"fQuota\" value=\"$tQuota\">\n";
+      print "      </td>\n";
+      print "      <td>\n";
+      print "         $pCreate_mailbox_quota_text\n";
+      print "      </td>\n";
+      print "   </tr>\n";
+   }
+   ?>
    <tr>
       <td>
          <?php print $LANG['pCreate_mailbox_active'] . ":\n"; ?>

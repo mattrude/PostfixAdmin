@@ -1,26 +1,39 @@
-<div id="main_menu">
-<table>
+<center>
+<table class="auto" border="0">
    <tr>
-      <td>&nbsp;</td>
-      <td><?php print $_SESSION['userid']['username']; ?></td>
+      <td colspan="2" nowrap>
+         <?php print $LANG['pUsersMain_welcome'] . "\n"; ?>
+         <p />
+      </td>
    </tr>
-   <?php if ($CONF['vacation'] == 'YES') { ?>
+   <?php
+   if ($CONF['vacation'] == 'YES')
+   {
+      print "<tr>\n";
+      print "   <td nowrap>\n";
+      print "      <a target=\"_top\" href=\"vacation.php\">" . $LANG['pUsersMenu_vacation'] . "</a>\n";
+      print "   </td>\n";
+      print "   <td>\n";
+      print "      " . $LANG['pUsersMain_vacation'] . "\n";
+      print "   </td>\n";
+      print "</tr>\n";
+   }
+   ?>
    <tr>
-      <td nowrap><a target="_top" href="vacation.php"><?php print $PALANG['pUsersMenu_vacation']; ?></a></td>
-      <td><?php print $PALANG['pUsersMain_vacation']; ?></td>
+      <td nowrap>
+         <a target="_top" href="edit-alias.php"><?php print $LANG['pUsersMenu_edit_alias']; ?></a>
+      </td>
+      <td>
+         <?php print $LANG['pUsersMain_edit_alias'] . "\n"; ?>
+      </td>
    </tr>
-   <?php } ?>
    <tr>
-      <td nowrap><a target="_top" href="edit-alias.php"><?php print $PALANG['pUsersMenu_edit_alias']; ?></a></td>
-      <td><?php print $PALANG['pUsersMain_edit_alias']; ?></td>
-   </tr>
-   <tr>
-      <td nowrap><a target="_top" href="password.php"><?php print $PALANG['pUsersMenu_password']; ?></a></td>
-      <td><?php print $PALANG['pUsersMain_password']; ?></td>
-   </tr>
-   <tr>
-      <td nowrap><a target="_top" href="logout.php"><?php print $PALANG['pMenu_logout']; ?></a></td>
-      <td><?php print $PALANG['pMain_logout']; ?></td>
+      <td nowrap>
+         <a target="_top" href="password.php"><?php print $LANG['pUsersMenu_password']; ?></a>
+      </td>
+      <td>
+         <?php print $LANG['pUsersMain_password'] . "\n"; ?>
+      </td>
    </tr>
 </table>
-</div>
+<hr />

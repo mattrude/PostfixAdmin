@@ -1,35 +1,62 @@
-<div id="edit_form">
-<form name="alias" method="post">
-<table>
+<center>
+<?php print $tMessage; ?>
+<table class="form">
    <tr>
-      <td colspan="3"><h3><?php print $PALANG['pPassword_welcome']; ?></td>
+      <td align="center" colspan="3">
+         <?php print $LANG['pPassword_welcome'] . "\n"; ?>
+         <br />
+         <br />
+      </td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pPassword_admin'] . ":"; ?></td>
-      <td><?php print $USERID_USERNAME; ?></td>
-      <td><?php print $pPassword_admin_text; ?></td>
+      <td>
+         <form name="mailbox" method="post">
+         <?php print $LANG['pPassword_admin'] . ":\n"; ?>
+      </td>
+      <td>
+         <?php print $USERID_USERNAME; ?>
+      </td>
+      <td>
+         <?php print $pPassword_admin_text . "\n"; ?>
+      </td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pPassword_password_current'] . ":"; ?></td>
-      <td><input class="flat" type="password" name="fPassword_current" ></td>
-      <td><?php print $pPassword_password_current_text; ?></td>
+      <td>
+         <?php print $LANG['pPassword_password_current'] . ":\n"; ?>
+      </td>
+      <td>
+         <input type="password" name="fPassword_current">
+      </td>
+      <td>
+         <?php print "$pPassword_password_current_text\n"; ?>
+      </td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pPassword_password'] . ":"; ?></td>
-      <td><input class="flat" type="password" name="fPassword" ></td>
-      <td><?php print $pPassword_password_text; ?></td>
+      <td>
+         <?php print $LANG['pPassword_password'] . ":\n"; ?>
+      </td>
+      <td>
+         <input type="password" name="fPassword">
+      </td>
+      <td>
+         <?php print "$pPassword_password_text\n"; ?>
+      </td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pPassword_password2'].":" ?></td>
-      <td><input class="flat" type="password" name="fPassword2" /></td>
-      <td>&nbsp;</td>
+      <td>
+         <?php print $LANG['pPassword_password2'] . ":\n"; ?>
+      </td>
+      <td>
+         <input type="password" name="fPassword2">
+      </td>
+      <td>
+         &nbsp;
+      </td>
    </tr>
    <tr>
-      <td colspan="3" class="hlp_center"><input type="submit" name="submit" value="<?php print $PALANG['pPassword_button']; ?>" /></td>
-   </tr>
-   <tr>
-      <td colspan="3" class="standout"><?php print $tMessage; ?></td>
+      <td align="center" colspan="3">
+         <input type="submit" name="submit" value="<?php print $LANG['pPassword_button']; ?>" />
+         </form>
+      </td>
    </tr>
 </table>
-</form>
-</div>

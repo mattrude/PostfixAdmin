@@ -1,10 +1,10 @@
+#############################
+# Postfix Admin Release 2.x #
+#############################
 #
-# Postfix Admin
-# by Mischa Peters <mischa at high5 dot net>
-# Copyright (c) 2002 - 2005 High5!
-# Licensed under GPL for more info check GPL-LICENSE.TXT
+# 2004 (c) High5!
+# Created by: Mischa Peters <mischa at high5 dot net>
 #
-
 # mysql -u root [-p] < TABLE_CHANGES.TXT
 
 #
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS domain_admins (
   username varchar(255) NOT NULL default '',
   domain varchar(255) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',
-  active tinyint(1) NOT NULL default '1',
+  active tinyint(4) NOT NULL default '1',
   KEY username (username)
 ) TYPE=MyISAM COMMENT='Postfix Admin - Domain Admins';
 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS vacation (
   cache text NOT NULL,
   domain varchar(255) NOT NULL default '',
   created datetime NOT NULL default '0000-00-00 00:00:00',
-  active tinyint(1) NOT NULL default '1',
+  active tinyint(4) NOT NULL default '1',
   PRIMARY KEY  (email),
   KEY email (email)
 ) TYPE=MyISAM COMMENT='Postfix Admin - Virtual Vacation';
@@ -68,8 +68,6 @@ ALTER TABLE domain CHANGE change_date modified DATETIME DEFAULT '0000-00-00 00:0
 ALTER TABLE domain ADD aliases INT(10) DEFAULT '-1' NOT NULL AFTER description;
 ALTER TABLE domain ADD mailboxes INT(10) DEFAULT '-1' NOT NULL AFTER aliases;
 ALTER TABLE domain ADD maxquota INT(10) DEFAULT '-1' NOT NULL AFTER mailboxes;
-ALTER TABLE domain ADD transport VARCHAR(255) AFTER maxquota;
-ALTER TABLE domain ADD backupmx TINYINT(1) DEFAULT '0' NOT NULL AFTER transport;
 ALTER TABLE domain ADD INDEX (domain);
 
 #
@@ -85,7 +83,7 @@ ALTER TABLE mailbox ADD INDEX (username);
 #
 ALTER TABLE vacation ADD domain VARCHAR(255) DEFAULT '' NOT NULL AFTER cache;
 ALTER TABLE vacation ADD created DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL AFTER domain;
-ALTER TABLE vacation ADD active TINYINT(1) DEFAULT '1' NOT NULL AFTER created;
+ALTER TABLE vacation ADD active TINYINT(4) DEFAULT '' NOT NULL AFTER created;
 ALTER TABLE vacation DROP PRIMARY KEY, ADD PRIMARY KEY(email);
 
 #

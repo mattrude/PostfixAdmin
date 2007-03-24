@@ -1,23 +1,62 @@
-<div id="login">
-<form name="login" method="post">
-<table id="login_table" cellspacing="10">
-   <tr>
-      <td colspan="2"><h4><?php print $PALANG['pUsersLogin_welcome']; ?></h4></td>
+<?php 
+if ($CONF['logo'] == "YES")
+{
+   print "<img src=\"../postfixadmin.png\" />\n";
+}
+else
+{
+   print "<h1>" . $CONF['header_text'] . "</h1>\n";
+}
+?>
+<p />
+<center>
+<font color="red"><?php print $tMessage; ?></font>
+<table width="10%" border="0" cellspacing="0" cellpadding="0" height="100">
+   <tr bgcolor="#999999">
+      <td colspan="3" height="1">
+      </td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pUsersLogin_username'] . ":"; ?></td>
-      <td><input class="flat" type="text" name="fUsername" value="<?php print $tUsername; ?>" /></td>
+      <td bgcolor="#999999">
+      </td>
+      <td bgcolor="#eeeeee" valign="top">
+         <table border="0" cellspacing="0" cellpadding="6">
+         <tr>
+            <td colspan="2" align="center">
+            <br />
+            <b><?php print $LANG['pUsersLogin_welcome']; ?></b><br />
+            <br />
+            </td>
+         </tr>
+            <td align="right">
+               <form name="login" method="post">
+               <?php print $LANG['pUsersLogin_username'] . ":\n"; ?>
+            </td>
+            <td align="left">
+               <input type="text" name="fUsername" value="<?php print $tUsername; ?>" /><br />
+            </td>
+         </tr>
+         <tr>
+            <td align="right">
+               <?php print $LANG['pUsersLogin_password'] . ":\n"; ?>
+            </td>
+            <td align="left">
+               <input type="password" name="fPassword" /><br />
+            </td>
+         </tr>
+         <tr>
+            <td align="center" colspan="2">
+               <input type="submit" name="submit" value="<?php print $LANG['pUsersLogin_button']; ?>" />
+               </form>
+            </td>
+         </tr>
+         </table>
+      </td>
+      <td bgcolor="#999999">
+      </td>
    </tr>
-   <tr>
-      <td><?php print $PALANG['pUsersLogin_password'] . ":"; ?></td>
-      <td><input class="flat" type="password" name="fPassword" /></td>
-   </tr>
-   <tr>
-      <td colspan="2" class="hlp_center"><input class="button" type="submit" name="submit" value="<?php print $PALANG['pUsersLogin_button']; ?>" /></td>
-   </tr>
-   <tr>
-      <td colspan="2" class="standout"><?php print $tMessage; ?></td>
+   <tr bgcolor="#999999">
+      <td colspan="3" height="1">
+      </td>
    </tr>
 </table>
-</form>
-</div>
