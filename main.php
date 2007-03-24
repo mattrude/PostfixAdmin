@@ -1,41 +1,63 @@
-<?php
-//
-// Postfix Admin
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
-//
-// File: main.php
-//
-// Template File: main.tpl
-//
-// Template Variables:
-//
-// -none-
-//
-// Form POST \ GET Variables:
-//
-// -none-
-//
-require ("./config.inc.php");
-require ("./functions.inc.php");
-include ("./languages/" . check_language () . ".lang");
+<?
+include "my_lib.php";
 
-$SESSID_USERNAME = check_session ();
+$sessid = check_session();
 
-if ($_SERVER["REQUEST_METHOD"] == "GET")
-{
-   include ("./templates/header.tpl");
-   include ("./templates/menu.tpl");
-   include ("./templates/main.tpl");
-   include ("./templates/footer.tpl");
+print_header();
+
+print_menu();
+
+print "<hr>\n";
+print "Domain: $sessid[domain]\n";
+print "<p>\n";
+
+$query = "SELECT alias.address,alias.goto,alias.change_date FROM alias LEFT JOIN mailbox ON alias.address=mailbox.username WHERE alias.domain='$sessid[domain]' AND mailbox.maildir IS NULL ORDER BY alias.address";
+
+$result = db_query ("$query");
+	
+if ($result[rows] > 0) {
+	print "<center>\n";
+	print "<table border=1>\n";
+	print "<tr><td><b>From</b></td><td><b>To</b></td><td><b>Date Changed</b></td></tr>\n";
+	while ($row = mysql_fetch_array ($result[result])) {
+		print "<tr onMouseOver=\"this.bgColor = '#dfdfdf'\" onMouseOut =\"this.bgColor = '#ffffff'\" bgcolor=\"#ffffff\">";
+		print "<td>$row[address]</td>";
+		print "<td>" . ereg_replace (",", "<br>", $row[goto]) . "</td>";
+		print "<td>$row[change_date]</td>";
+		print "<td><a href=modify.php?" . session_name() . "=" . session_id() . "&modify=$row[address]>edit</a></td>";
+		print "<td><a href=delete.php?" . session_name() . "=" . session_id() . "&table=alias" . "&delete=$row[address] onclick=\"return confirm ('Are you sure you want to delete this?')\">del</a></td>";
+		print "</tr>\n";
+	}
+	print "</table>\n";
+	print "</center>\n";
+	print "<p>\n";
+} else {
+	print "Nothing found in the alias table!\n";
+	print "<p>\n";
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST")
-{
-   include ("./templates/header.tpl");
-   include ("./templates/menu.tpl");
-   include ("./templates/main.tpl");
-   include ("./templates/footer.tpl");
+$query = "SELECT * FROM mailbox WHERE domain='$sessid[domain]' ORDER BY username";
+
+$result = db_query ("$query");
+	
+if ($result[rows] > 0) {
+	print "<center>\n";
+	print "<table border=1>\n";
+	print "<tr><td><b>Email</b></td><td><b>Name</b></td><td><b>Date Changed</b></td></tr>\n";
+	while ($row = mysql_fetch_array ($result[result])) {
+		print "<tr onMouseOver=\"this.bgColor = '#dfdfdf'\" onMouseOut =\"this.bgColor = '#ffffff'\" bgcolor=\"#ffffff\">";
+		print "<td>$row[username]</td>";
+		print "<td>$row[name]</td>";
+		print "<td>$row[change_date]</td>";
+		print "<td><a href=pwd.php?" . session_name() . "=" . session_id() . "&username=$row[username]>edit</a></td>";
+		print "<td><a href=delete.php?" . session_name() . "=" . session_id() . "&table=mailbox" . "&delete=$row[username] onclick=\"return confirm ('Are you sure you want to delete this?')\">del</a></td>";
+		print "</tr>\n";
+	}
+	print "</table>\n";
+	print "</center>\n";
+} else {
+	print "Nothing found in the mailbox table!\n";
 }
+
+print_footer();
 ?>
