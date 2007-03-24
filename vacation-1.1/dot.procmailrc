@@ -1,0 +1,16 @@
+PATH=/bin:/usr/bin:/usr/local/bin
+MAILDIR=$HOME
+#LOGFILE=$HOME/procmail.log
+DEFAULT=$MAILDIR
+VACATION=`formail -x "To:"`
+
+:0 Whc: vacation.lock
+* !^FROM_DAEMON
+* !^X-Loop: Postfix Vacation
+| formail -rD 8192 $VACATION.cache
+
+:0 ehc
+| formail -X "From:" -X "To:" -X "Subject:" | $HOME/vacation.pl
+
+:0:
+/dev/null

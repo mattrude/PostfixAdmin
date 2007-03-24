@@ -1,0 +1,46 @@
+##################################################
+# Virtual Vacation for Postfix Admin Release 2.x #
+##################################################
+#
+# 2003 (c) High5!
+# Created by: Mischa Peters <mischa at high5 dot net>
+#
+
+REQUIRED!
+---------
+You need to have the following installed to be able to use Virtual Vacation.
+- Procmail
+- Perl5
+- Perl DBI
+
+
+Upgrade from 1.x to 2.0
+-----------------------
+The files that have changed are .procmailrc and vacation.pl.
+Copy these files to the location where you have vacation stored.
+
+  $ cp dot.procmailrc <HOME>/.procmailrc
+  $ cp vacation.pl <HOME>/vacation.pl
+
+Again some changes on the caching side. This is no longer done with formail,
+but is builtin vacation.pl. Name of the files are now: cache.<email address>
+
+  $ rm <HOME>/*.cache
+
+The log file format has also changed. You might want to delete the old
+files.
+
+
+Upgrade from 1.0 to 1.1
+-----------------------
+The file that has changed is .procmailrc. Copy this file to the location
+where you have vacation stored.
+
+  $ cp dot.procmailrc <HOME>/.procmailrc
+
+The changes is in regards to the vacation.cache. This is now done on a
+per-user level. If you want you can remove your old vacation.cache.
+
+  $ rm <HOME>/vacation.cache
+
+

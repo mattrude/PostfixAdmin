@@ -1,0 +1,87 @@
+##################################################
+# Virtual Vacation for Postfix Admin Release 2.x #
+##################################################
+#
+# 2003 (c) High5!
+# Created by: Mischa Peters <mischa at high5 dot net>
+#
+
+REQUIRED!
+---------
+You need to have the following installed to be able to use Virtual Vacation.
+- Procmail
+- Perl5
+- Perl DBI
+
+
+About Virtual Vacation
+----------------------
+Virual Vacation is today done with a local shell account that can receive
+email. The email is then handled by a Perl script which sends the Vacation
+message back to the sender.
+
+
+Install Virtual Vacation
+------------------------
+First you need to create a local user account, or shell account, which is
+going to be used to handle vacation email.
+When you don't know how to do this please consult your local administrator
+
+NOTE: The shell for this account needs to be a real shell NOT /nonexistent
+
+Second you need to copy the included files to the home directory of that
+user. The files that you need to copy are.
+
+  $ cp dot.forward <HOME>/.forward
+  $ cp dot.procmailrc <HOME>/.procmailrc
+  $ cp vacation.pl <HOME>/vacation.pl
+
+Which will then look something like:
+
+-rw-r--r--   1 vacation  users    28 Jun 16 00:00 .forward
+-rw-r--r--   1 vacation  users   291 Jun 16 00:00 .procmailrc
+-rwx------   1 vacation  users  1129 Jun 16 00:00 vacation.pl*
+
+To use Virtual Vacation with Postfix Admin you need to create an extra table
+in the database that is used by Postfix Admin.
+
+USE postfix;
+CREATE TABLE vacation (
+  email varchar(255) NOT NULL default '',
+  subject varchar(255) NOT NULL default '',
+  body text NOT NULL,
+  cache text NOT NULL
+) TYPE=MyISAM COMMENT='Virtual Vacation - Vacation Daemon Table';
+
+
+What do these files do?
+-----------------------
+The .forward redirects every email that it received to procmail.
+NOTE: Make sure that the path to procmail is correct.
+
+The .procmailrc will strip out the from, to and subject header which are
+then send to the vacation.pl script.
+
+Vacation.pl then checks the database to see wether a user is on holiday and
+what message to send back. Make sure that vacation.pl is able to communicate
+to your databse. In the first couple of lines you have to specify the
+database, username and password for it.
+NOTE: Make sure that the path to perl is correct.
+
+
+I'm in trouble!
+---------------
+When something is not working there are a couple of files that you can have
+a look at. The most important one is your maillog (usually in /var/log/).
+
+There is also a logfile for whatever procmail is doing, just uncomment the
+line in the .procmailrc.
+
+Vacation.pl also has some debugging and logging capabilties. Check the top
+of vacation.pl.
+
+
+Done!
+-----
+When this is all in place you need to have a look at the Postfix Admin
+config.inc.php. Here you need to enable Virtual Vacation for the site.

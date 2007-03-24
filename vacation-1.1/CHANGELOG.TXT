@@ -1,0 +1,16 @@
+##################################################
+# Virtual Vacation for Postfix Admin Release 1.x #
+##################################################
+#
+# 2003 (c) High5!
+# Created by: Mischa Peters <mischa at high5 dot net>
+#
+
+Version 1.1 -- 2003/07/17
+-------------------------
+  - Change: The vacation.cache is replaced with a per-user cache.
+
+
+Version 1.0 -- 2003/06/16
+-------------------------
+  - Initial public release of vacation.
