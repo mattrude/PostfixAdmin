@@ -1,6 +1,6 @@
 <div id="overview">
 <form name="overview" method="post">
-<select name="fDomain" onChange="this.form.submit();">
+<select name="fDomain" onChange="this.form.submit()";>
 <?php
 for ($i = 0; $i < sizeof ($list_domains); $i++)
 {
@@ -53,5 +53,6 @@ for ($i = 0; $i < sizeof ($list_domains); $i++)
        }
 
        print "</table>\n";
+       print "<p />\n";
     }
 ?>

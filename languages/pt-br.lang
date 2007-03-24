@@ -3,9 +3,6 @@
 // Language file Portuguese - Brazil
 // by Roberto
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = 'Sim';
 $PALANG['NO'] = 'Não';
 $PALANG['edit'] = 'Modificar';
@@ -44,7 +41,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Ir';
@@ -89,8 +86,6 @@ $PALANG['pEdit_alias_goto'] = 'Para';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">Você não digitou um destinatário (Para)</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">O e-mail que você digitou não é válido: ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">Esse domínio não é seu: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = 'Modificar o alias';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Impossível modificar esse alias!</span>';
 
@@ -254,7 +249,6 @@ $PALANG['pAdminEdit_admin_password'] = 'Senha';
 $PALANG['pAdminEdit_admin_password2'] = 'Senha (confirmação)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">A senha digitada não é válida<br /> ou é nula!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Ativo';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Modificar administdrador';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Impossível modificar administrador !</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Administrador já foi criado!';

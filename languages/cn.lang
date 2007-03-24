@@ -3,9 +3,6 @@
 // Language file Simplified Chinese
 // by Matthew <matthew at cnfug dot org>
 //
-
-require ('default.lang');
-
 $PALANG['charset'] = 'gb2312';
 $PALANG['YES'] = '是';
 $PALANG['NO'] = '否';
@@ -90,8 +87,6 @@ $PALANG['pEdit_alias_goto'] = '转到';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">你没有填写收信人</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">邮件地址非法: ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">你没有该域的管理权限: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = '编辑别名';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">不能修改该别名!</span>';
 
@@ -255,7 +250,6 @@ $PALANG['pAdminEdit_admin_password'] = '密码';
 $PALANG['pAdminEdit_admin_password2'] = '密码 (验证)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">你两次输入的新密码不相同!<br />或者为空!</span>';
 $PALANG['pAdminEdit_admin_active'] = '活动';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = '修改';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">编辑域管理员失败!</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = '编辑域管理员成功!';

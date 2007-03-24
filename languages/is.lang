@@ -3,9 +3,6 @@
 // Language file Icelandic
 // by Gestur
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = 'JÁ';
 $PALANG['NO'] = 'NEI';
 $PALANG['edit'] = 'skrifa í';
@@ -44,7 +41,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Áfram';
@@ -88,8 +85,6 @@ $PALANG['pEdit_alias_goto'] = 'To';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">þú gafst ekki upp neitt í Til</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">Pósthólfið sem þú reynir að nota er ekki til: ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">Þú átt ekki þetta lén: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = 'Breyta Alias';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Get ekki breytt alias!</span>';
 
@@ -253,7 +248,6 @@ $PALANG['pAdminEdit_admin_password'] = 'Lykilorð';
 $PALANG['pAdminEdit_admin_password2'] = 'Lykilorð (aftur)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">Lykilorðið sem þú gafst upp passar ekki!<br />Eða var tómt!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Virkt';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Breyta kerfisstjóra';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Get ekki breytt kerfisstjóra!</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Kerfisstjórinn hefur verið breyttur!';

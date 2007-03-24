@@ -44,9 +44,9 @@
    <?php if ($CONF['quota'] == 'YES') { ?>
    <tr>
       <td><?php print $PALANG['pCreate_mailbox_quota'] . ":"; ?></td>
-      <td><input class="flat" type="text" name="fQuota" value="<?php print $tQuota; ?>" /></td>
+      <td><input type="text" name="fQuota" value="<?php print $tQuota; ?>" /></td>
       <td><?php print $pCreate_mailbox_quota_text; ?></td>
-   </tr>
+   <tr>
    <?php } ?>
    <tr>
       <td><?php print $PALANG['pCreate_mailbox_active'] . ":"; ?></td>
@@ -55,7 +55,7 @@
    </tr>
    <tr>
       <td><?php print $PALANG['pCreate_mailbox_mail'] . ":"; ?></td>
-      <td><input class="flat" type="checkbox" name="fMail" <?php print (isset($CONF['create_mailbox_subdirs'])) ? '' : 'checked'; ?> /></td>
+      <td><input class="flat" type="checkbox" name="fMail" checked /></td>
       <td>&nbsp;</td>
    </tr>
    <tr>

@@ -10,22 +10,17 @@
    </tr>
    <tr>
       <td><?php print $PALANG['pAdminEdit_admin_password'] . ":"; ?></td>
-      <td><input class="flat" type="password" name="fPassword" /></td>
+      <td><input class="flat" type="password" name="fPassword" ></td>
       <td><?php print $pAdminEdit_admin_password_text; ?></td>
    </tr>
    <tr>
       <td><?php print $PALANG['pAdminEdit_admin_password2'] . ":"; ?></td>
-      <td><input class="flat" type="password" name="fPassword2" /></td>
+      <td><input class="flat" type="password" name="fPassword2" ></td>
       <td>&nbsp;</td>
    </tr>
    <tr>
       <td><?php print $PALANG['pAdminEdit_admin_active'] . ":"; ?></td>
-      <td><input class="flat" type="checkbox" name="fActive" <?php print (!empty ($tActive)) ? 'checked' : ''; ?> /></td>
-      <td>&nbsp;</td>
-   </tr>
-   <tr>
-      <td><?php print $PALANG['pAdminEdit_admin_super_admin'] . ":"; ?></td>
-      <td><input class="flat" type="checkbox" name="fSadmin" <?php print (!empty ($tSadmin)) ? 'checked' : ''; ?> /></td>
+      <td><input class="flat" type="checkbox" name="fActive" <?php print (!empty ($tActive)) ? 'checked' : ''; ?> ></td>
       <td>&nbsp;</td>
    </tr>
    <tr>

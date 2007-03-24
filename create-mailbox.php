@@ -3,7 +3,7 @@
 // Postfix Admin 
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: create-mailbox.php
 //
@@ -34,14 +34,7 @@ require ("./functions.inc.php");
 include ("./languages/" . check_language () . ".lang");
 
 $SESSID_USERNAME = check_session ();
-if (!check_admin($SESSID_USERNAME))
-{
-   $list_domains = list_domains_for_admin ($SESSID_USERNAME);
-}
-else
-{
-   $list_domains = list_domains ();
-}
+$list_domains = list_domains_for_admin ($SESSID_USERNAME);
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
@@ -65,13 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    $pCreate_mailbox_name_text = $PALANG['pCreate_mailbox_name_text'];
    $pCreate_mailbox_quota_text = $PALANG['pCreate_mailbox_quota_text'];
   
-   if (isset ($_POST['fUsername'])) $fUsername = escape_string ($_POST['fUsername']) . "@" . escape_string ($_POST['fDomain']);
+   $fUsername = escape_string ($_POST['fUsername']) . "@" . escape_string ($_POST['fDomain']);
    $fUsername = strtolower ($fUsername);
-   if (isset ($_POST['fPassword'])) $fPassword = escape_string ($_POST['fPassword']);
-   if (isset ($_POST['fPassword2'])) $fPassword2 = escape_string ($_POST['fPassword2']);
-   if (isset ($_POST['fName'])) $fName = escape_string ($_POST['fName']);
-   if (isset ($_POST['fDomain'])) $fDomain = escape_string ($_POST['fDomain']);
-   if (isset ($_POST['fQuota'])) $fQuota = intval ($_POST['fQuota']);
+   $fPassword = escape_string ($_POST['fPassword']);
+   $fPassword2 = escape_string ($_POST['fPassword2']);
+   $fName = escape_string ($_POST['fName']);
+   $fDomain = escape_string ($_POST['fDomain']);
+   if (isset ($_POST['fQuota'])) $fQuota = escape_string ($_POST['fQuota']);
    if (isset ($_POST['fActive'])) $fActive = escape_string ($_POST['fActive']);
    if (isset ($_POST['fMail'])) $fMail = escape_string ($_POST['fMail']);
 
@@ -95,8 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       $pCreate_mailbox_username_text = $PALANG['pCreate_mailbox_username_text_error3'];
    }
     
-   if (empty ($fUsername) or !check_email ($fUsername))
-   {
+	if (empty ($fUsername) or !check_email ($fUsername))
+	{
       $error = 1;
       $tUsername = escape_string ($_POST['fUsername']);
       $tName = $fName;
@@ -105,14 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       $pCreate_mailbox_username_text = $PALANG['pCreate_mailbox_username_text_error1'];
    }
 
-   if (empty ($fPassword) or empty ($fPassword2) or ($fPassword != $fPassword2))
-   {
-      if (empty ($fPassword) and empty ($fPassword2) and $CONF['generate_password'] == "YES")
-      {
-	 $fPassword = generate_password ();
-      }
-      else
-      {
+	if (empty ($fPassword) or ($fPassword != $fPassword2))
+	{
+	   if ($CONF['generate_password'] == "YES")
+	   {
+	      $fPassword = generate_password ();
+	   }
+	   else
+	   {
          $error = 1;
          $tUsername = escape_string ($_POST['fUsername']);
          $tName = $fName;
@@ -120,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
          $tDomain = $fDomain;
          $pCreate_mailbox_password_text = $PALANG['pCreate_mailbox_password_text_error'];
       }
-   }
+	}
 
    if ($CONF['quota'] == "YES")
    {
@@ -135,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       }
    }
 	
-   $result = db_query ("SELECT * FROM $table_alias WHERE address='$fUsername'");
+   $result = db_query ("SELECT * FROM alias WHERE address='$fUsername'");
    if ($result['rows'] == 1)
    {
       $error = 1;
@@ -168,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       
       if (!empty ($fQuota))
       {
-         $quota = multiply_quota ($fQuota);
+         $quota = $fQuota * $CONF['quota_multiplier'];
       }
       else
       {
@@ -183,55 +176,34 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       {
          $fActive = 0;
       }
-      $sqlActive=$fActive;
-      if ('pgsql'==$CONF['database_type'])
-      {
-         $sqlActive=($fActive) ? 'true' : 'false';
-         db_query('BEGIN');
-      }
 
-      $result = db_query ("INSERT INTO $table_alias (address,goto,domain,created,modified,active) VALUES ('$fUsername','$fUsername','$fDomain',NOW(),NOW(),'$sqlActive')");
+      $result = db_query ("INSERT INTO alias (address,goto,domain,created,modified,active) VALUES ('$fUsername','$fUsername','$fDomain',NOW(),NOW(),'$fActive')");
       if ($result['rows'] != 1)
       {
          $tDomain = $fDomain;
          $tMessage = $PALANG['pAlias_result_error'] . "<br />($fUsername -> $fUsername)</br />";
       }
 
-      $result = db_query ("INSERT INTO $table_mailbox (username,password,name,maildir,quota,domain,created,modified,active) VALUES ('$fUsername','$password','$fName','$maildir','$quota','$fDomain',NOW(),NOW(),'$sqlActive')");
-      if ($result['rows'] != 1 || !mailbox_postcreation($fUsername,$fDomain,$maildir))
+      $result = db_query ("INSERT INTO mailbox (username,password,name,maildir,quota,domain,created,modified,active) VALUES ('$fUsername','$password','$fName','$maildir','$quota','$fDomain',NOW(),NOW(),'$fActive')");
+      if ($result['rows'] != 1)
       {
          $tDomain = $fDomain;
          $tMessage .= $PALANG['pCreate_mailbox_result_error'] . "<br />($fUsername)<br />";
-         db_query('ROLLBACK');
       }
       else
       {
-         db_query('COMMIT');
+      
          db_log ($SESSID_USERNAME, $fDomain, "create mailbox", "$fUsername");
 
          $tDomain = $fDomain;
-
-         if (create_mailbox_subfolders($fUsername,$fPassword))
-         {
-            $tMessage = $PALANG['pCreate_mailbox_result_succes'] . "<br />($fUsername";
-         } else {
-            $tMessage = $PALANG['pCreate_mailbox_result_succes_nosubfolders'] . "<br />($fUsername";
-         }
-
+         $tMessage = $PALANG['pCreate_mailbox_result_succes'] . "<br />($fUsername";
          if ($CONF['generate_password'] == "YES")
          {
             $tMessage .= " / $fPassword)</br />";
          }
          else
          {
-				if ($CONF['show_password'] == "YES")
-				{
-					$tMessage .= " / $fPassword)</br />";
-				}
-				else
-				{
-					$tMessage .= ")</br />";
-				}
+            $tMessage .= ")</br />";
          }
    
          $tQuota = $CONF['maxquota'];
@@ -273,6 +245,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    include ("./templates/menu.tpl");
    include ("./templates/create-mailbox.tpl");
    include ("./templates/footer.tpl");
-/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 }
 ?>

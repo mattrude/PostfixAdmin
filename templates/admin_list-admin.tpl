@@ -16,7 +16,6 @@ if (sizeof ($list_admins) > 0)
       {
          print "   <tr class=\"hilightoff\" onMouseOver=\"className='hilighton';\" onMouseOut=\"className='hilightoff';\">\n";
       	print "      <td><a href=\"list-domain.php?username=" . $list_admins[$i] . "\">" . $list_admins[$i] . "</a></td>";
-         if ($admin_properties[$i]['domain_count'] == 'ALL') $admin_properties[$i]['domain_count'] = $PALANG['pAdminEdit_admin_super_admin'];
       	print "      <td>" . $admin_properties[$i]['domain_count'] . "</td>";
    		print "      <td>" . $admin_properties[$i]['modified'] . "</td>";
          $active = ($admin_properties[$i]['active'] == 1) ? $PALANG['YES'] : $PALANG['NO'];

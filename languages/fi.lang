@@ -3,9 +3,6 @@
 // Language file Finnish
 // by Palo
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = 'Kyll‰';
 $PALANG['NO'] = 'Ei';
 $PALANG['edit'] = 'muokkaa';
@@ -44,7 +41,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Siirry';
@@ -88,8 +85,6 @@ $PALANG['pEdit_alias_goto'] = 'Kenelle';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">Et kirjoitanut mit‰‰n Kenelle: -riville</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">Antamasi s‰hkˆpostiosoite ei ole oikean muotoinen: ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">T‰m‰ ei ole sinun domainisi: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = 'Muokkaa aliasta';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Aliasta ei voi muokata!</span>';
 
@@ -253,7 +248,6 @@ $PALANG['pAdminEdit_admin_password'] = 'Salasana';
 $PALANG['pAdminEdit_admin_password2'] = 'Salasana (toistamiseen)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">Antamasi salasanat eiv‰t t‰sm‰‰!<br />Tai ne ovat tyhji‰!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Aktiivinen';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Muokkaa yll‰pit‰j‰‰';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Yll‰pit‰j‰n muokkaaminen ei onnistu!</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Yll‰pit‰j‰n muokkaus onnistui!';

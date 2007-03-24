@@ -3,10 +3,6 @@
 // Language file Rusian
 // by Paul
 //
-
-require ('default.lang');
-
-$PALANG['charset'] = 'windows-1251';
 $PALANG['YES'] = 'ДА';
 $PALANG['NO'] = 'НЕТ';
 $PALANG['edit'] = 'редактировать';
@@ -45,7 +41,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Выбрать';
@@ -90,8 +86,6 @@ $PALANG['pEdit_alias_goto'] = 'Куда';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">Вы ничего не ввели в поле Кому</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg"> Вы ввели неверный адрес ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">Этот домен не принадлежит вам: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = 'Редактировать алиас';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Невозможно изменить алиас!</span>';
 
@@ -255,7 +249,6 @@ $PALANG['pAdminEdit_admin_password'] = 'Пароль';
 $PALANG['pAdminEdit_admin_password2'] = 'Пароль (еще раз)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">Пароли, которые вы ввели не совпадают!<br />либо пустые!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Активный';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Редактировать админа';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Невозможно изменить админа!</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Админ был изменен!';

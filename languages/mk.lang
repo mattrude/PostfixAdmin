@@ -4,9 +4,6 @@
 // by Damjan Georgiev <dame at mol dot com dot mk>
 // Encoding iso-8859-5
 //
-
-require ('default.lang');
-
 $PALANG['charset'] = 'iso-8859-5';
 $PALANG['YES'] = 'Да';
 $PALANG['NO'] = 'Не';
@@ -46,7 +43,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Оди';
@@ -91,8 +88,6 @@ $PALANG['pEdit_alias_goto'] = 'До';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">Немате ништо внесено во полето ДО</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">Адресата која ја имате внесено не е валидна: ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">Овој домен не е ваш: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = 'Едитирање на алијас';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Не можам да го променам алијасот!</span>';
 
@@ -256,7 +251,6 @@ $PALANG['pAdminEdit_admin_password'] = 'Лозинка';
 $PALANG['pAdminEdit_admin_password2'] = 'Лозинка (повторно)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">Внесените лозинки не одговараат!<br />Или се празни!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Активен';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Едитирај Администратор';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Не можам да го модифицирам администраторот!</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Администраторот е модифициран!';

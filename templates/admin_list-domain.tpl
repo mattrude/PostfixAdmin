@@ -1,6 +1,6 @@
 <div id="overview">
 <form name="overview" method="post">
-<select name="fUsername" onChange="this.form.submit();">
+<select name="fUsername" onChange="this.form.submit()";>
 <?php
 if (!empty ($list_admins))
 {
@@ -21,7 +21,7 @@ if (!empty ($list_admins))
 <input class="button" type="submit" name="go" value="<?php print $PALANG['pOverview_button']; ?>" />
 </form>
 <form name="search" method="post" action="search.php">
-<input type="textbox" name="search" size="10" />
+<input type="textbox" name="search" size="10">
 </form>
 </div>
 
@@ -51,23 +51,7 @@ if (sizeof ($list_domains) > 0)
          print "<td>" . $domain_properties[$i]['description'] . "</td>";
          print "<td>" . $domain_properties[$i]['alias_count'] . " / " . $domain_properties[$i]['aliases'] . "</td>";
          print "<td>" . $domain_properties[$i]['mailbox_count'] . " / " . $domain_properties[$i]['mailboxes'] . "</td>";
-         if ($CONF['quota'] == 'YES')
-         {
-            print "      <td>";
-            if ($domain_properties[$i]['maxquota'] == 0)
-            {
-               print $PALANG['pOverview_unlimited'];
-            }
-            elseif ($domain_properties[$i]['maxquota'] < 0)
-            {
-               print $PALANG['pOverview_disabled'];
-            }
-            else
-            {
-               print $domain_properties[$i]['maxquota'];
-            }
-            print "</td>\n";
-         }
+         if ($CONF['quota'] == 'YES') print "<td>" . $domain_properties[$i]['maxquota'] . "</td>";
          if ($CONF['transport'] == 'YES') print "<td>" . $domain_properties[$i]['transport'] . "</td>";
          $backupmx = ($domain_properties[$i]['backupmx'] == 1) ? $PALANG['YES'] : $PALANG['NO'];
          print "<td>$backupmx</td>";

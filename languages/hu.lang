@@ -3,9 +3,6 @@
 // Language file Hungarian
 // by Christian Hamar <krics at linuxforum dot hu>
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = 'IGEN';
 $PALANG['NO'] = 'NEM';
 $PALANG['edit'] = 'szerkeszt';
@@ -44,7 +41,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Gyerünk';
@@ -89,8 +86,6 @@ $PALANG['pEdit_alias_goto'] = 'Hova';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">Nem írtál semmit a \'Hova\' mezõbe</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">Az email cím amit beírtál érvénytelen: ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">Ehhez a domainhez nincs jogosultságod: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = 'Alias szerkesztése';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Nemsikerült módosítani az Aliast!</span>';
 
@@ -254,7 +249,6 @@ $PALANG['pAdminEdit_admin_password'] = 'Jelszó';
 $PALANG['pAdminEdit_admin_password2'] = 'Jelszó (mégegyszer)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">A beírt jelszavak nem egyeznek!<br />Vagy üresek!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Aktív';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Admin szerkesztése';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Nemsikerült módosítani az admint!</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Az Admin módosítása megtörtént!';
@@ -290,7 +284,7 @@ $PALANG['pUsersVacation_button_back'] = 'Automatikus válaszadás kikapcsolása';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Nem sikerült megváltoztatni az automatikus válasz konfigurációdat!</span>';
 $PALANG['pUsersVacation_result_succes'] = 'Az automatikus válaszadás sikeresen kikapcsolva!';
 
-$PALANG['pCreate_dbLog_createmailbox'] = 'postafiók létrehozása';
+$PALANG['pCreate_dbLog_createmailbox'] = 'postafiók létrehozása';     
 $PALANG['pCreate_dbLog_createalias'] = 'alias létrehozása';
 $PALANG['pDelete_dbLog_deletealias'] = 'alias törlése';
 $PALANG['pDelete_dbLog_deletemailbox'] = 'postafiók törlése';
@@ -301,3 +295,4 @@ $PALANG['pEdit_dbLog_editmailbox'] = 'postafiók szerkesztése';
 
 $PALANG['pSearch_welcome'] = 'Keresendõ kulcsszó: ';
 ?>
+

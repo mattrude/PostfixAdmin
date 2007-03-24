@@ -3,9 +3,6 @@
 // Language file Estonian
 // by Peeter Partel <peeter at sigma dot ee>
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = 'JAH';
 $PALANG['NO'] = 'EI';
 $PALANG['edit'] = 'Redigeeri';
@@ -39,14 +36,14 @@ $PALANG['pMain_password'] = 'Muuda haldamise konto parool.';
 $PALANG['pMain_viewlog'] = 'Vaata logi faili.';
 $PALANG['pMain_logout'] = 'Logi välja liidesest.';
 
-$PALANG['pOverview_disabled'] = 'Deaktiveeritud';
-$PALANG['pOverview_unlimited'] = 'Piiramata';
-$PALANG['pOverview_title'] = ':: Valitud domeenid';
-$PALANG['pOverview_up_arrow'] = 'Mine üles';
-$PALANG['pOverview_right_arrow'] = 'Järgmine leht';
-$PALANG['pOverview_left_arrow'] = 'Eelmine leht';
+$PALANG['pOverview_disabled'] = 'Disabled';
+$PALANG['pOverview_unlimited'] = 'Unlimited';
+$PALANG['pOverview_title'] = ':: Defined Domains';
+$PALANG['pOverview_up_arrow'] = 'Go Top';
+$PALANG['pOverview_right_arrow'] = 'Next Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
-$PALANG['pOverview_mailbox_title'] = ':: Postkastid';
+$PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Mine';
 $PALANG['pOverview_welcome'] = 'Ülevaade domeenist: ';
 $PALANG['pOverview_alias_alias_count'] = 'Aliasi';
@@ -159,9 +156,9 @@ $PALANG['pSendmail_button'] = 'Saada teade';
 $PALANG['pSendmail_result_error'] = '<span class="error_msg">Postkasti loomine ebaõnnestus!</span>';
 $PALANG['pSendmail_result_succes'] = 'Postkast on loodud!';
 
-$PALANG['pAdminMenu_list_admin'] = 'Haldajad';
-$PALANG['pAdminMenu_list_domain'] = 'Domeenid';
-$PALANG['pAdminMenu_list_virtual'] = 'Aliased';
+$PALANG['pAdminMenu_list_admin'] = 'Haldajate loetelu';
+$PALANG['pAdminMenu_list_domain'] = 'Domeenide loetelu';
+$PALANG['pAdminMenu_list_virtual'] = 'Domeenide loetelu';
 $PALANG['pAdminMenu_viewlog'] = 'Vaata logi';
 $PALANG['pAdminMenu_backup'] = 'Varukoopia';
 $PALANG['pAdminMenu_create_domain_admins'] = 'Domeeni haldajad';
@@ -172,7 +169,7 @@ $PALANG['pAdminMenu_create_mailbox'] = 'Lisa postkast';
 
 $PALANG['pAdminList_admin_domain'] = 'Domeen';
 $PALANG['pAdminList_admin_username'] = 'Haldaja';
-$PALANG['pAdminList_admin_count'] = 'Domeene';
+$PALANG['pAdminList_admin_count'] = 'Domeenid';
 $PALANG['pAdminList_admin_modified'] = 'Viimati muudetud';
 $PALANG['pAdminList_admin_active'] = 'Aktiivne';
 
@@ -204,11 +201,11 @@ $PALANG['pAdminCreate_domain_domain'] = 'Domeen';
 $PALANG['pAdminCreate_domain_domain_text_error'] = '<span class="error_msg">Selline domeen on juba olemas!</span>';
 $PALANG['pAdminCreate_domain_description'] = 'Kirjeldus';
 $PALANG['pAdminCreate_domain_aliases'] = 'Aliasi';
-$PALANG['pAdminCreate_domain_aliases_text'] = '-1 = keelatud | 0 = piiramatult';
+$PALANG['pAdminCreate_domain_aliases_text'] = '0 = keelatud | -1 = piiramatult';
 $PALANG['pAdminCreate_domain_mailboxes'] = 'Postkaste';
-$PALANG['pAdminCreate_domain_mailboxes_text'] = '-1 = keelatud | 0 = piiramatult';
+$PALANG['pAdminCreate_domain_mailboxes_text'] = '0 = keelatud | -1 = piiramatult';
 $PALANG['pAdminCreate_domain_maxquota'] = 'Maksimaalne kettaruum';
-$PALANG['pAdminCreate_domain_maxquota_text'] = 'MB<br /> -1 = keelatud | 0 = piiramatult';
+$PALANG['pAdminCreate_domain_maxquota_text'] = 'MB<br /> 0 = keelatud | -1 = piiramatult';
 $PALANG['pAdminCreate_domain_transport'] = 'Transport';
 $PALANG['pAdminCreate_domain_transport_text'] = 'Define transport';
 $PALANG['pAdminCreate_domain_defaultaliases'] = 'Lisa vaikimisi aliased';
@@ -221,13 +218,13 @@ $PALANG['pAdminEdit_domain_welcome'] = 'Redigeeri domeeni';
 $PALANG['pAdminEdit_domain_domain'] = 'Domeen';
 $PALANG['pAdminEdit_domain_description'] = 'Kirjeldus';
 $PALANG['pAdminEdit_domain_aliases'] = 'Aliasi';
-$PALANG['pAdminEdit_domain_aliases_text'] = '-1 = keelatud | 0 = piiramatult';
+$PALANG['pAdminEdit_domain_aliases_text'] = '0 = keelatud | -1 = piiramatult';
 $PALANG['pAdminEdit_domain_mailboxes'] = 'Postkaste';
-$PALANG['pAdminEdit_domain_mailboxes_text'] = '-1 = keelatud | 0 = piiramatult';
+$PALANG['pAdminEdit_domain_mailboxes_text'] = '0 = keelatud | -1 = piiramatult';
 $PALANG['pAdminEdit_domain_maxquota'] = 'Maksimaalne kettaruum';
-$PALANG['pAdminEdit_domain_maxquota_text'] = 'MB<br /> -1 = keelatud | 0 = piiramatult';
+$PALANG['pAdminEdit_domain_maxquota_text'] = 'MB<br /> 0 = keelatud | -1 = piiramatult';
 $PALANG['pAdminEdit_domain_transport'] = 'Transport';
-$PALANG['pAdminEdit_domain_transport_text'] = 'Kirjelda transport';
+$PALANG['pAdminEdit_domain_transport_text'] = 'Define transport';
 $PALANG['pAdminEdit_domain_backupmx'] = 'E-posti server on varuserver (backup MX)';
 $PALANG['pAdminEdit_domain_active'] = 'Aktiivne';
 $PALANG['pAdminEdit_domain_button'] = 'Muuda domeen';
@@ -288,14 +285,14 @@ $PALANG['pUsersVacation_button_back'] = 'Tulen tagasi';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Automaatse vastuse uuendamine ebaõnnestus!</span>';
 $PALANG['pUsersVacation_result_succes'] = 'Automaatne vastus on eemaldatud!';
 
-$PALANG['pCreate_dbLog_createmailbox'] = 'postkasti loomine';     
-$PALANG['pCreate_dbLog_createalias'] = 'aliase loomine';
-$PALANG['pDelete_dbLog_deletealias'] = 'aliase ksututamine';
-$PALANG['pDelete_dbLog_deletemailbox'] = 'postkasti kustutamine';
+$PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';     
+$PALANG['pCreate_dbLog_createalias'] = 'create alias';
+$PALANG['pDelete_dbLog_deletealias'] = 'delete alias';
+$PALANG['pDelete_dbLog_deletemailbox'] = 'delete mailbox';
 
-$PALANG['pEdit_dbLog_editactive'] = 'aktiivne staatuse muutmine';
-$PALANG['pEdit_dbLog_editalias'] = 'aliase redigeerimine';
-$PALANG['pEdit_dbLog_editmailbox'] = 'postkasti redigeerimine';
+$PALANG['pEdit_dbLog_editactive'] = 'change active state';
+$PALANG['pEdit_dbLog_editalias'] = 'edit alias';
+$PALANG['pEdit_dbLog_editmailbox'] = 'edit mailbox';
 
-$PALANG['pSearch_welcome'] = 'Otsi: ';
+$PALANG['pSearch_welcome'] = 'Searching for: ';
 ?>

@@ -1,6 +1,6 @@
 <div id="overview">
-<form name="overview" method="get">
-<select class="flat" name="domain" onChange="this.form.submit();">
+<form name="overview" method="post">
+<select class="flat" name="fDomain" onChange="this.form.submit()";>
 <?php
 for ($i = 0; $i < sizeof ($list_domains); $i++)
 {

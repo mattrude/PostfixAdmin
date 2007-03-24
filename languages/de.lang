@@ -3,9 +3,6 @@
 // Language file German
 // by Tobias
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = 'JA';
 $PALANG['NO'] = 'NEIN';
 $PALANG['edit'] = 'editieren';
@@ -44,7 +41,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Los';
@@ -89,8 +86,6 @@ $PALANG['pEdit_alias_goto'] = 'An';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">Sie haben im "To"-Feld nichts angegeben!</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">Die angegebene eMail-Adresse ist nicht korrekt: ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">Diese Domain geh&ouml;rt nicht Ihnen: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = 'Alias &auml;ndern';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">&Auml;ndern des Aliases nicht m&ouml;glich!</span>';
 
@@ -189,7 +184,7 @@ $PALANG['pAdminList_domain_modified'] = 'zuletzt ge&auml;ndert';
 $PALANG['pAdminList_domain_active'] = 'Aktiv';
 
 $PALANG['pAdminList_virtual_button'] = 'Los';
-$PALANG['pAdminList_virtual_welcome'] = '&Uuml;berblick f&uuml;r ';
+$PALANG['pAdminList_virtual_welcome'] = '&Uuml;berblic f&uuml;r ';
 $PALANG['pAdminList_virtual_alias_alias_count'] = 'Aliase';
 $PALANG['pAdminList_virtual_alias_mailbox_count'] = 'Mailboxen';
 $PALANG['pAdminList_virtual_alias_address'] = 'Von';
@@ -254,7 +249,6 @@ $PALANG['pAdminEdit_admin_password'] = 'Passwort';
 $PALANG['pAdminEdit_admin_password2'] = 'Passwort (nochmal)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">Die beiden Passw&ouml;rter sind nicht identisch<br />Oder leer!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Aktiv';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Admin editieren';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Konnte Admin nicht &auml;ndern</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Admin ge&auml;ndert!';

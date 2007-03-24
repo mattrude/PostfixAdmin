@@ -3,7 +3,7 @@
 // Postfix Admin
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: index.php
 //
@@ -31,7 +31,7 @@ else
 </head>
 <body>
 <img id="login_header_logo" src="images/postbox.png" />
-<img id="login_header_logo2" src="images/postfixadmin2.png" />
+<img id="login_header_logo" src="images/postfixadmin2.png" />
 <h1>Welcome to Postfix Admin</h1>
 It seems that you are running this version of Postfix Admin for the first time.<br />
 <p />

@@ -5,7 +5,7 @@
 # Postfix Admin (Virtual Vacation)
 # by Mischa Peters <mischa at high5 dot net>
 # Copyright (c) 2002 - 2005 High5!
-# Licensed under GPL for more info check GPL-LICENSE.TXT
+# License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 #
 # Modified by: Nicholas Paufler <npaufler at incentre dot net> (12/06/2004)
 #
@@ -70,8 +70,8 @@ Which will then look something like:
 Define the transport type in the Postfix master file:
 
 #/etc/postfix/master.cf:
-vacation    unix  -       n       n       -       -       pipe
-  flags=Rq user=vacation argv=/var/spool/vacation/vacation.pl -f ${sender} -- ${recipient}
+filter    unix  -       n       n       -       -       pipe
+  flags=DRhu user=vacation argv=/var/spool/vacation/vacation.pl
 
 Tell Postfix to use a transport maps file, so add the following to your
 Postfix main.cf:
@@ -85,7 +85,7 @@ arbitrary domain, and it is easiest if you just choose one that will be used
 for all your domains.
 
 #/etc/postfix/transport
-autoreply.yourdomain.com	vacation:
+autoreply.yourdomain.com	vacation
 
 Execute "postmap /etc/postfix/transport" to build the hashed database.
 

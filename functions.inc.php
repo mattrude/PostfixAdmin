@@ -1,9 +1,9 @@
 <?php
-//
-// Postfix Admin
+// 
+// Postfix Admin 
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: functions.inc.php
 //
@@ -24,12 +24,10 @@ $version = "2.1.0";
 //
 function check_session ()
 {
-   global $CONF;
    session_start ();
-   session_fixid ();
    if (!session_is_registered ("sessid"))
    {
-      header ("Location: " . $CONF['postfix_admin_url'] . "/login.php");
+      header ("Location: login.php");
       exit;
    }
    $SESSID_USERNAME = $_SESSION['sessid']['username'];
@@ -38,30 +36,14 @@ function check_session ()
 
 function check_user_session ()
 {
-   global $CONF;
    session_start ();
-   session_fixid ();
    if (!session_is_registered ("userid"))
    {
-      header ("Location: " . $CONF['postfix_admin_url'] . "/login.php");
+      header ("Location: login.php");
       exit;
    }
    $USERID_USERNAME = $_SESSION['userid']['username'];
    return $USERID_USERNAME;
-}
-
-//
-// session_fixid
-// Action: should avoid 'session fixation'
-// Call: session_fixid ()
-//
-function session_fixid ()
-{
-    if (!isset($_SESSION['exist']))
-    {
-	if ( !session_regenerate_id() ) die("Couldn't regenerate your session id.");
-	$_SESSION['exist'] = true;
-    }
 }
 
 
@@ -74,21 +56,24 @@ function session_fixid ()
 function check_language ()
 {
    global $CONF;
-   $lang = $CONF['default_language'];
    $supported_languages = array ('bg', 'ca', 'cn', 'cs', 'da', 'de', 'en', 'es', 'et', 'eu', 'fi', 'fo', 'fr', 'hu', 'is', 'it', 'mk', 'nl', 'nn', 'pl', 'pt-br', 'ru', 'sl', 'sv', 'tr', 'tw');
-   if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+   $lang_array = preg_split ('/(\s*,\s*)/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+   if (is_array ($lang_array))
    {
-      $lang_array = preg_split ('/(\s*,\s*)/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-      for($i = 0; $i < count($lang_array); $i++)
+      $lang_first = strtolower ((trim (strval ($lang_array[0]))));
+      $lang_first = substr ($lang_first, 0, 2);
+      if (in_array ($lang_first, $supported_languages))
       {
-         $lang_next = $lang_array[$i];
-         $lang_next = strtolower(substr(trim($lang_next), 0, 2));
-         if(in_array($lang_next, $supported_languages))
-	 {
-            $lang = $lang_next;
-            break;
-         }
+         $lang = $lang_first;
       }
+      else
+      {
+         $lang = $CONF['default_language'];
+      }
+   }
+   else
+   {
+      $lang = $CONF['default_language'];
    }
    return $lang;
 }
@@ -97,7 +82,7 @@ function check_language ()
 
 //
 // check_string
-// Action: checks if a string is valid and returns TRUE if this is the case.
+// Action: checks if a string is valid and returns TRUE is this is the case.
 // Call: check_string (string var)
 //
 function check_string ($var)
@@ -110,27 +95,7 @@ function check_string ($var)
    {
       return false;
    }
-}
-
-
-
-//
-// check_domain
-// Action: Checks if domain is valid and returns TRUE if this is the case.
-// Call: check_domain (string domain)
-//
-// TODO: make check_domain able to handle as example .local domains
-function check_domain ($domain)
-{
-   if (preg_match ('/([-0-9A-Z]+\.)+' . '([0-9A-Z]){2,4}$/i', trim ($domain)))
-   {
-      return true;
-   }
-   else
-   {
-      return false;
-   }
-}
+} 
 
 
 
@@ -139,44 +104,8 @@ function check_domain ($domain)
 // Action: Checks if email is valid and returns TRUE if this is the case.
 // Call: check_email (string email)
 //
-// TODO: make check_email able to handle already added domains
 function check_email ($email)
 {
-   global $CONF;
-
-   if (
-      isset($CONF['emailcheck_resolve_domain'])
-      && 'YES'==$CONF['emailcheck_resolve_domain']
-      && 'WINDOWS'!=(strtoupper(substr(php_uname('s'), 0, 7)))
-   ) {
-      // Perform non-domain-part sanity checks
-      if (!preg_match ('/^[-!#$%&\'*+\\.\/0-9=?A-Z^_{|}~]+' . '@' . '[^@]+$/i', trim ($email)))
-      {
-         return false;
-      }
-
-      // Determine domain name
-      $matches=array();
-      if (!preg_match('|@(.+)$|',$email,$matches))
-      {
-         return false;
-      }
-      $domain=$matches[1];
-
-      // Look for an AAAA, A, or MX record for the domain
-
-      // AAAA (IPv6) is only available in PHP v. >= 5
-      if (version_compare(phpversion(), "5.0.0", ">="))
-      {
-         if (checkdnsrr($domain,'AAAA')) return true;
-      }
-
-      if (checkdnsrr($domain,'A')) return true;
-      if (checkdnsrr($domain,'MX')) return true;
-
-      return false;
-   }
-
    if (preg_match ('/^[-!#$%&\'*+\\.\/0-9=?A-Z^_{|}~]+' . '@' . '([-0-9A-Z]+\.)+' . '([0-9A-Z]){2,4}$/i', trim ($email)))
    {
       return true;
@@ -194,32 +123,18 @@ function check_email ($email)
 // Action: Escape a string
 // Call: escape_string (string string)
 //
-(ini_get('magic_quotes_gpc') ? ini_set('magic_quotes_runtime', '0') : '1');
-(ini_get('magic_quotes_gpc') ? ini_set('magic_quotes_sybase', '0') : '1');
 function escape_string ($string)
 {
    global $CONF;
-	if (get_magic_quotes_gpc ())
+   if (get_magic_quotes_gpc () == 0)
    {
-      $string = stripslashes($string);
-   }
-   if (!is_numeric($string))
-   {
-      if ($CONF['database_type'] == "mysql")
-      {
-	$link = db_connect();
-	$escaped_string = mysql_real_escape_string($string, $link);
-      }
-      if ($CONF['database_type'] == "mysqli")
-      {
-	$link = db_connect();
-	$escaped_string = mysqli_real_escape_string($link, $string);
-      }
-      if ($CONF['database_type'] == "pgsql") $escaped_string = pg_escape_string($string);
+      if ($CONF['database_type'] == "mysql")  $escaped_string = mysql_real_escape_string ($string);
+      if ($CONF['database_type'] == "mysqli")  $escaped_string = mysqli_real_escape_string ($string);
+      if ($CONF['database_type'] == "pgsql")  $escaped_string = pg_escape_string ($string);
    }
    else
    {
-     $escaped_string = $string;
+      $escaped_string = $string;
    }
    return $escaped_string;
 }
@@ -234,41 +149,30 @@ function escape_string ($string)
 function get_domain_properties ($domain)
 {
    global $CONF;
-   global $table_alias, $table_mailbox, $table_domain;
    $list = array ();
-
-   $result = db_query ("SELECT COUNT(*) FROM $table_alias WHERE domain='$domain'");
+   
+   $result = db_query ("SELECT COUNT(*) FROM alias WHERE domain='$domain'");
    $row = db_row ($result['result']);
    $list['alias_count'] = $row[0];
-
-   $result = db_query ("SELECT COUNT(*) FROM $table_mailbox WHERE domain='$domain'");
+   
+   $result = db_query ("SELECT COUNT(*) FROM mailbox WHERE domain='$domain'");
    $row = db_row ($result['result']);
    $list['mailbox_count'] = $row[0];
-
-   $result = db_query ("SELECT SUM(quota) FROM $table_mailbox WHERE domain='$domain'");
-   $row = db_row ($result['result']);
-   $list['quota_sum'] = $row[0];
-   $list['alias_count'] = $list['alias_count'] - $list['mailbox_count'];
-
-   $query="SELECT * FROM $table_domain WHERE domain='$domain'";
-   if ('pgsql'==$CONF['database_type'])
+   if ($CONF['alias_control'] == "NO")
    {
-      $query="
-         SELECT
-            *,
-            EXTRACT(epoch FROM created) AS uts_created,
-            EXTRACT(epoch FROM modified) AS uts_modified
-         FROM $table_domain
-         WHERE domain='$domain'
-      ";
+      $list['alias_count'] = $list['alias_count'] - $list['mailbox_count'];
    }
-   $result = db_query ($query);
+   else
+   {
+      $list['alias_count'] = $list['alias_count'];
+   }
+   
+   $result = db_query ("SELECT * FROM domain WHERE domain='$domain'");
    $row = db_array ($result['result']);
    $list['description'] = $row['description'];
    $list['aliases'] = $row['aliases'];
    $list['mailboxes'] = $row['mailboxes'];
    $list['maxquota'] = $row['maxquota'];
-   $list['quota'] = $row['quota'];
    $list['transport'] = $row['transport'];
    $list['backupmx'] = $row['backupmx'];
    $list['created'] = $row['created'];
@@ -277,62 +181,28 @@ function get_domain_properties ($domain)
 
    if ($CONF['database_type'] == "pgsql")
    {
-      $list['active']=('t'==$row['active']) ? 1 : 0;
-      $list['backupmx']=('t'==$row['backupmx']) ? 1 : 0;
-      $list['created']= gmstrftime('%c %Z',$row['uts_created']);
-      $list['modified']= gmstrftime('%c %Z',$row['uts_modified']);
+      if ($row['active'] == "t")
+      {
+         $list['active'] = 1;
+      }
+      else
+      {
+         $list['active'] = 0;
+      }
+
+      if ($row['backupmx'] == "t")
+      {
+         $list['backupmx'] = 1;
+      }
+      else
+      {
+         $list['backupmx'] = 0;
+      }
    }
    else
    {
       $list['active'] = $row['active'];
       $list['backupmx'] = $row['backupmx'];
-   }
-
-   return $list;
-}
-
-
-
-//
-// get_mailbox_properties
-// Action: Get all the properties of a mailbox.
-// Call: get_mailbox_properties (string mailbox)
-//
-function get_mailbox_properties ($username)
-{
-   global $CONF;
-   global $table_mailbox;
-   $query="SELECT * FROM $table_mailbox WHERE username='$username'";
-   if ('pgsql'==$CONF['database_type'])
-   {
-      $query="
-         SELECT
-            *,
-            EXTRACT(epoch FROM created) AS uts_created,
-            EXTRACT(epoch FROM modified) AS uts_modified
-         FROM $table_mailbox
-         WHERE username='$username'
-      ";
-   }
-   $result = db_query ($query);
-   $row = db_array ($result['result']);
-   $list['name'] = $row['name'];
-   $list['maildir'] = $row['maildir'];
-   $list['quota'] = $row['quota'];
-   $list['domain'] = $row['domain'];
-   $list['created'] = $row['created'];
-   $list['modified'] = $row['modified'];
-   $list['active'] = $row['active'];
-
-   if ($CONF['database_type'] == "pgsql")
-   {
-      $list['active']=('t'==$row['active']) ? 1 : 0;
-      $list['created']= gmstrftime('%c %Z',$row['uts_created']);
-      $list['modified']= gmstrftime('%c %Z',$row['uts_modified']);
-   }
-   else
-   {
-      $list['active'] = $row['active'];
    }
 
    return $list;
@@ -371,7 +241,7 @@ function check_alias ($domain)
 //
 // check_mailbox
 // Action: Checks if the domain is still able to create mailboxes.
-// Call: check_mailbox (string domain)
+// Call: ceck_mailbox (string domain)
 //
 function check_mailbox ($domain)
 {
@@ -429,67 +299,14 @@ function check_quota ($quota, $domain)
 
 
 //
-// multiply_quota
-// Action: Recalculates the quota from bytes to MBs (multiply, *)
-// Call: multiply_quota (string $quota)
-//
-function multiply_quota ($quota)
-{
-   global $CONF;
-   if ($quota == -1) return $quota;
-   $value = $quota * $CONF['quota_multiplier'];
-   return $value;
-}
-
-
-
-//
-// divide_quota
-// Action: Recalculates the quota from MBs to bytes (divide, /)
-// Call: divide_quota (string $quota)
-//
-function divide_quota ($quota)
-{
-   global $CONF;
-   if ($quota == -1) return $quota;
-   $value = $quota / $CONF['quota_multiplier'];
-   return $value;
-}
-
-
-
-//
 // check_owner
 // Action: Checks if the admin is the owner of the domain.
 // Call: check_owner (string admin, string domain)
 //
 function check_owner ($username, $domain)
 {
-   global $table_domain_admins;
-   $result = db_query ("SELECT 1 FROM $table_domain_admins WHERE username='$username' AND (domain='$domain' OR domain='ALL') AND active='1'");
+   $result = db_query ("SELECT * FROM domain_admins WHERE username='$username' AND domain='$domain' AND active='1'");
    if ($result['rows'] != 1)
-   {
-      return false;
-   }
-   else
-   {
-      return true;
-   }
-}
-
-
-
-//
-// check_alias_owner
-// Action: Checks if the admin is the owner of the alias.
-// Call: check_alias_owner (string admin, string alias)
-//
-function check_alias_owner ($username, $alias)
-{
-   global $CONF;
-   if (check_admin ($username)) return true;
-   $tmp = preg_split('/\@/', $alias);
-   if (($CONF['special_alias_control'] == 'NO') && array_key_exists($tmp[0], $CONF['default_aliases']))
    {
       return false;
    }
@@ -508,26 +325,14 @@ function check_alias_owner ($username, $alias)
 //
 function list_domains_for_admin ($username)
 {
-   global $CONF;
-   global $table_domain, $table_domain_admins;
    $list = array ();
-
-   $query = "SELECT $table_domain.domain FROM $table_domain LEFT JOIN $table_domain_admins ON $table_domain.domain=$table_domain_admins.domain WHERE $table_domain_admins.username='$username' AND $table_domain.active='1' AND $table_domain.backupmx='0' ORDER BY $table_domain_admins.domain";
-   if ('pgsql'==$CONF['database_type'])
-   {
-      $query = "SELECT $table_domain.domain FROM $table_domain LEFT JOIN $table_domain_admins ON $table_domain.domain=$table_domain_admins.domain WHERE $table_domain_admins.username='$username' AND $table_domain.active=true AND $table_domain.backupmx=false ORDER BY $table_domain_admins.domain";
-   }
-   $result = db_query ($query);
+   
+   $result = db_query ("SELECT * FROM domain LEFT JOIN domain_admins ON domain.domain=domain_admins.domain WHERE domain_admins.username='$username' AND domain.active='1' AND domain.backupmx='0' ORDER BY domain_admins.domain");
    if ($result['rows'] > 0)
    {
       $i = 0;
       while ($row = db_array ($result['result']))
       {
-         if ('pgsql'==$CONF['database_type'])
-         {
-            $row['active'] = ('t'==$row['active'] ? 1 : 0);
-            $row['backupmx'] = ('t'==$row['backupmx'] ? 1 : 0);
-         }
          $list[$i] = $row['domain'];
          $i++;
       }
@@ -544,10 +349,9 @@ function list_domains_for_admin ($username)
 //
 function list_domains ()
 {
-   global $table_domain;
    $list = array();
-
-   $result = db_query ("SELECT domain FROM $table_domain WHERE domain!='ALL' ORDER BY domain");
+   
+   $result = db_query ("SELECT * FROM domain ORDER BY domain");
    if ($result['rows'] > 0)
    {
       $i = 0;
@@ -563,28 +367,6 @@ function list_domains ()
 
 
 //
-// check_admin
-// Action: Checks if the admin is super-admin.
-// Call: check_admin (string admin)
-//
-function check_admin ($username)
-{
-   global $table_domain_admins;
-
-   $result = db_query ("SELECT 1 FROM $table_domain_admins WHERE username='$username' AND domain='ALL' AND active='1'");
-   if ($result['rows'] != 1)
-   {
-      return false;
-   }
-   else
-   {
-      return true;
-   }
-}
-
-
-
-//
 // admin_exist
 // Action: Checks if the admin already exists.
 // Call: admin_exist (string admin)
@@ -593,9 +375,7 @@ function check_admin ($username)
 //
 function admin_exist ($username)
 {
-   global $table_admin;
-
-   $result = db_query ("SELECT 1 FROM $table_admin WHERE username='$username'");
+	$result = db_query ("SELECT * FROM admin WHERE username='$username'");
    if ($result['rows'] != 1)
    {
       return false;
@@ -605,8 +385,6 @@ function admin_exist ($username)
       return true;
    }
 }
-
-
 
 //
 // domain_exist
@@ -615,9 +393,7 @@ function admin_exist ($username)
 //
 function domain_exist ($domain)
 {
-   global $table_domain;
-
-   $result = db_query ("SELECT 1 FROM $table_domain WHERE domain='$domain'");
+	$result = db_query ("SELECT * FROM domain WHERE domain='$domain'");
    if ($result['rows'] != 1)
    {
       return false;
@@ -627,7 +403,6 @@ function domain_exist ($domain)
       return true;
    }
 }
-
 
 
 //
@@ -639,10 +414,9 @@ function domain_exist ($domain)
 //
 function list_admins ()
 {
-   global $table_admin;
    $list = "";
-
-   $result = db_query ("SELECT username FROM $table_admin ORDER BY username");
+   
+   $result = db_query ("SELECT * FROM admin ORDER BY username");
    if ($result['rows'] > 0)
    {
       $i = 0;
@@ -661,58 +435,30 @@ function list_admins ()
 // get_admin_properties
 // Action: Get all the admin properties.
 // Call: get_admin_properties (string admin)
-//
 function get_admin_properties ($username)
 {
-   global $CONF;
-   global $table_admin, $table_domain_admins;
    $list = array ();
-
-   $result = db_query ("SELECT * FROM $table_domain_admins WHERE username='$username' AND domain='ALL'");
-   if ($result['rows'] == 1)
-   {
-      $list['domain_count'] = 'ALL';
-   }
-   else
-   {
-      $result = db_query ("SELECT COUNT(*) FROM $table_domain_admins WHERE username='$username'");
-      $row = db_row ($result['result']);
-      $list['domain_count'] = $row[0];
-   }
-
-   $query = "SELECT * FROM $table_admin WHERE username='$username'";
-   if ('pgsql'==$CONF['database_type']) {
-      $query="
-         SELECT
-            *,
-            EXTRACT(epoch FROM created) AS uts_created,
-            EXTRACT (epoch FROM modified) AS uts_modified
-            FROM $table_admin
-            WHERE username='$username'
-      ";
-   }
-
-   $result = db_query ($query);
+   
+   $result = db_query ("SELECT COUNT(*) FROM domain_admins WHERE username='$username'");
+   $row = db_row ($result['result']);
+   $list['domain_count'] = $row[0];
+   
+   $result = db_query ("SELECT * FROM admin WHERE username='$username'");
    $row = db_array ($result['result']);
    $list['created'] = $row['created'];
    $list['modified'] = $row['modified'];
    $list['active'] = $row['active'];
-   if ('pgsql'==$CONF['database_type']) {
-      $list['active'] = ('t'==$row['active']) ? 1 : 0;
-      $list['created']= gmstrftime('%c %Z',$row['uts_created']);
-      $list['modified']= gmstrftime('%c %Z',$row['uts_modified']);
-   }
    return $list;
 }
 
 
 
-//
+// 
 // encode_header
 // Action: Encode a string according to RFC 1522 for use in headers if it contains 8-bit characters.
 // Call: encode_header (string header, string charset)
 //
-function encode_header ($string, $default_charset)
+function encode_header ($string, $default_charset) 
 {
    if (strtolower ($default_charset) == 'iso-8859-1')
    {
@@ -795,7 +541,7 @@ function encode_header ($string, $default_charset)
                // do not start encoding in the middle of a string, also take the rest of the word.
                $sLeadString = substr ($string,0,$i);
                $aLeadString = explode (' ',$sLeadString);
-               $sToBeEncoded = array_pop ($aLeadString);
+               $sToBeEncoded = array_pop ($aLeadString);                  
                $iEncStart = $i - strlen ($sToBeEncoded);
                $ret .= $sToBeEncoded;
                $cur_l += strlen ($sToBeEncoded);
@@ -876,7 +622,6 @@ function generate_password ()
 function pacrypt ($pw, $pw_db="")
 {
    global $CONF;
-	$pw = stripslashes($pw);
    $password = "";
    $salt = "";
 
@@ -897,14 +642,7 @@ function pacrypt ($pw, $pw_db="")
       }
       else
       {
-         if (strlen($pw_db) == 0)
-           {
-               $salt = substr (md5 (mt_rand ()), 0, 2);
-           }
-         else
-           {
-               $salt = substr ($pw_db, 0, 2);
-           }
+         $salt = substr ($pw_db, 0, 2);
       }
       $password = crypt ($pw, $salt);
    }
@@ -913,7 +651,7 @@ function pacrypt ($pw, $pw_db="")
    {
       $password = $pw;
    }
-   $password = escape_string ($password);
+
    return $password;
 }
 
@@ -932,7 +670,7 @@ function md5crypt ($pw, $salt="", $magic="")
    global $MAGIC;
 
    if ($magic == "") $magic = $MAGIC;
-   if ($salt == "") $salt = create_salt ();
+   if ($salt == "") $salt = create_salt (); 
    $slist = explode ("$", $salt);
    if ($slist[0] == "1") $salt = $slist[1];
 
@@ -952,7 +690,7 @@ function md5crypt ($pw, $salt="", $magic="")
       }
    }
    $i = strlen ($pw);
-
+   
    while ($i > 0)
    {
       if ($i & 1) $ctx .= chr (0);
@@ -1036,14 +774,13 @@ function to64 ($v, $n)
 function smtp_mail ($to, $from, $data)
 {
    global $CONF;
-   $smtpd_server = $CONF['smtp_server'];
-   $smtpd_port = $CONF['smtp_port'];
-   $smtp_server = $_SERVER["SERVER_NAME"];
+   $smtp_server = $CONF['smtp_server'];
+   $smtp_port = $CONF['smtp_port'];
    $errno = "0";
    $errstr = "0";
    $timeout = "30";
-
-   $fh = @fsockopen ($smtpd_server, $smtpd_port, $errno, $errstr, $timeout);
+   
+   $fh = @fsockopen ($smtp_server, $smtp_port, $errno, $errstr, $timeout);
 
    if (!$fh)
    {
@@ -1052,39 +789,20 @@ function smtp_mail ($to, $from, $data)
    else
    {
       fputs ($fh, "EHLO $smtp_server\r\n");
-      $res = smtp_get_response($fh);
+      $res = fgets ($fh, 256);
       fputs ($fh, "MAIL FROM:<$from>\r\n");
-      $res = smtp_get_response($fh);
+      $res = fgets ($fh, 256);
       fputs ($fh, "RCPT TO:<$to>\r\n");
-      $res = smtp_get_response($fh);
+      $res = fgets ($fh, 256);
       fputs ($fh, "DATA\r\n");
-      $res = smtp_get_response($fh);
+      $res = fgets ($fh, 256);
       fputs ($fh, "$data\r\n.\r\n");
-      $res = smtp_get_response($fh);
+      $res = fgets ($fh, 256);
       fputs ($fh, "QUIT\r\n");
-      $res = smtp_get_response($fh);
+      $res = fgets ($fh, 256);
       fclose ($fh);
    }
    return true;
-}
-
-
-
-//
-// smtp_get_response
-// Action: Get response from mail server
-// Call: smtp_get_response (string FileHandle)
-//
-function smtp_get_response ($fh)
-{
-   $res ='';
-   do
-   {
-      $line = fgets($fh, 256);
-      $res .= $line;
-   }
-   while (preg_match("/^\d\d\d\-/", $line));
-   return $res;
 }
 
 
@@ -1097,8 +815,6 @@ Please check the documentation and website for more information.\n
 <a href=\"http://forums.high5.net/index.php?showforum=7\">Knowledge Base</a>\n
 ";
 
-
-
 //
 // db_connect
 // Action: Makes a connection to the database if it doesn't exist
@@ -1108,6 +824,7 @@ function db_connect ()
 {
    global $CONF;
    global $DEBUG_TEXT;
+   $link = "";
 
    if ($CONF['database_type'] == "mysql")
    {
@@ -1139,10 +856,10 @@ function db_connect ()
 
    if ($CONF['database_type'] == "pgsql")
    {
-      if (function_exists ("pg_pconnect"))
+      if (function_exists ("pg_connect"))
       {
          $connect_string = "host=" . $CONF['database_host'] . " dbname=" . $CONF['database_name'] . " user=" . $CONF['database_user'] . " password=" . $CONF['database_password'];
-         $link = @pg_pconnect ($connect_string) or die ("<p />DEBUG INFORMATION:<br />Connect: " .  pg_last_error () . "$DEBUG_TEXT");
+         $link = @pg_connect ($connect_string) or die ("<p />DEBUG INFORMATION:<br />Connect: " .  pg_last_error () . "$DEBUG_TEXT");
       }
       else
       {
@@ -1179,22 +896,40 @@ function db_query ($query)
    global $DEBUG_TEXT;
    $result = "";
    $number_rows = "";
-   static $link;
 
-   if (!is_resource($link)) $link = db_connect ();
+   $link = db_connect ();
 
+   // database prefix workaround
+   if (!empty ($CONF['database_prefix']))
+   {
+      if (eregi ("^SELECT", $query))
+      {
+         $query = substr ($query, 0, 14) . $CONF['database_prefix'] . substr ($query, 14);
+      }
+      else
+      {
+         $query = substr ($query, 0, 6) . $CONF['database_prefix'] . substr ($query, 7);
+      }
+   }
+   
    if ($CONF['database_type'] == "mysql") $result = @mysql_query ($query, $link) or die ("<p />DEBUG INFORMATION:<br />Invalid query: " . mysql_error() . "$DEBUG_TEXT");
    if ($CONF['database_type'] == "mysqli") $result = @mysqli_query ($link, $query) or die ("<p />DEBUG INFORMATION:<br />Invalid query: " . mysqli_error() . "$DEBUG_TEXT");
    if ($CONF['database_type'] == "pgsql")
    {
+      if (eregi ("LIMIT", $query)) 
+      { 
+         $search = "/LIMIT (\w+), (\w+)/";
+         $replace = "LIMIT \$2 OFFSET \$1";
+         $query = preg_replace ($search, $replace, $query); 
+      }
       $result = @pg_query ($link, $query) or die ("<p />DEBUG INFORMATION:<br />Invalid query: " . pg_last_error() . "$DEBUG_TEXT");
-   }
+   } 
 
    if (eregi ("^SELECT", $query))
    {
       // if $query was a SELECT statement check the number of rows with [database_type]_num_rows ().
       if ($CONF['database_type'] == "mysql") $number_rows = mysql_num_rows ($result);
-      if ($CONF['database_type'] == "mysqli") $number_rows = mysqli_num_rows ($result);
+      if ($CONF['database_type'] == "mysqli") $number_rows = mysqli_num_rows ($result);      
       if ($CONF['database_type'] == "pgsql") $number_rows = pg_num_rows ($result);
    }
    else
@@ -1203,8 +938,12 @@ function db_query ($query)
       // [database_type]_affected_rows ().
       if ($CONF['database_type'] == "mysql") $number_rows = mysql_affected_rows ($link);
       if ($CONF['database_type'] == "mysqli") $number_rows = mysqli_affected_rows ($link);
-      if ($CONF['database_type'] == "pgsql") $number_rows = pg_affected_rows ($result);
+      if ($CONF['database_type'] == "pgsql") $number_rows = pg_affected_rows ($result);      
    }
+
+   if ($CONF['database_type'] == "mysql") mysql_close ($link);
+   if ($CONF['database_type'] == "mysqli") mysqli_close ($link);
+   if ($CONF['database_type'] == "pgsql") pg_close ($link);      
 
    $return = array (
       "result" => $result,
@@ -1241,7 +980,7 @@ function db_array ($result)
    $row = "";
    if ($CONF['database_type'] == "mysql") $row = mysql_fetch_array ($result);
    if ($CONF['database_type'] == "mysqli") $row = mysqli_fetch_array ($result);
-   if ($CONF['database_type'] == "pgsql") $row = pg_fetch_array ($result);
+   if ($CONF['database_type'] == "pgsql") $row = pg_fetch_array ($result);   
    return $row;
 }
 
@@ -1257,7 +996,7 @@ function db_assoc ($result)
    $row = "";
    if ($CONF['database_type'] == "mysql") $row = mysql_fetch_assoc ($result);
    if ($CONF['database_type'] == "mysqli") $row = mysqli_fetch_assoc ($result);
-   if ($CONF['database_type'] == "pgsql") $row = pg_fetch_assoc ($result);
+   if ($CONF['database_type'] == "pgsql") $row = pg_fetch_assoc ($result);   
    return $row;
 }
 
@@ -1286,17 +1025,16 @@ function db_delete ($table,$where,$delete)
 //
 // db_log
 // Action: Logs actions from admin
-// Call: db_log (string username, string domain, string action, string data)
+// Call: db_delete (string username, string domain, string action, string data)
 //
 function db_log ($username,$domain,$action,$data)
 {
    global $CONF;
-   global $table_log;
    $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
-
+   
    if ($CONF['logging'] == 'YES')
    {
-      $result = db_query ("INSERT INTO $table_log (timestamp,username,domain,action,data) VALUES (NOW(),'$username ($REMOTE_ADDR)','$domain','$action','$data')");
+      $result = db_query ("INSERT INTO log (timestamp,username,domain,action,data) VALUES (NOW(),'$username ($REMOTE_ADDR)','$domain','$action','$data')");
       if ($result['rows'] != 1)
       {
          return false;
@@ -1308,251 +1046,4 @@ function db_log ($username,$domain,$action,$data)
    }
 }
 
-
-
-//
-// table_by_key
-// Action: Return table name for given key
-// Call: table_by_key (string table_key)
-//
-function table_by_key ($table_key)
-{
-   global $CONF;
-   $table = $CONF['database_prefix'].$CONF['database_tables'][$table_key];
-   return $table;
-}
-
-
-
-//
-// table_by_pos
-// Action: Return table name for given position
-// Call: table_by_pos (int pos)
-//
-function table_by_pos ($pos)
-{
-   global $CONF;
-   $x=0;
-   foreach($CONF['database_tables'] as $i=>$v)
-   {
-      if($pos==$x++) return table_by_key ($i);
-   }
-   return false;
-}
-
-
-
-/*
-   Called after a mailbox has been created in the DBMS.
-   Returns: boolean.
-*/
-function mailbox_postcreation($username,$domain,$maildir)
-{
-   if (empty($username) || empty($domain) || empty($maildir))
-   {
-      trigger_error('In '.__FUNCTION__.': empty username, domain and/or maildir parameter',E_USER_ERROR);
-      return FALSE;
-   }
-
-   global $CONF;
-   $confpar='mailbox_postcreation_script';
-
-   if (!isset($CONF[$confpar]) || empty($CONF[$confpar])) return TRUE;
-
-   $cmdarg1=escapeshellarg($username);
-   $cmdarg2=escapeshellarg($domain);
-   $cmdarg3=escapeshellarg($maildir);
-   $command=$CONF[$confpar]." $cmdarg1 $cmdarg2 $cmdarg3";
-   $retval=0;
-   $output=array();
-   $firstline='';
-   $firstline=exec($command,$output,$retval);
-   if (0!=$retval)
-   {
-      error_log("Running $command yielded return value=$retval, first line of output=$firstline");
-      print '<p>WARNING: Problems running mailbox postcreation script!</p>';
-      return FALSE;
-   }
-
-   return TRUE;
-}
-
-/*
-   Called after a mailbox has been deleted in the DBMS.
-   Returns: boolean.
-*/
-function mailbox_postdeletion($username,$domain)
-{
-   global $CONF;
-   $confpar='mailbox_postdeletion_script';
-
-   if (!isset($CONF[$confpar]) || empty($CONF[$confpar]))
-   {
-      return true;
-   }
-
-   if (empty($username) || empty($domain))
-   {
-      print '<p>Warning: empty username and/or domain parameter.</p>';
-      return false;
-   }
-
-   $cmdarg1=escapeshellarg($username);
-   $cmdarg2=escapeshellarg($domain);
-   $command=$CONF[$confpar]." $cmdarg1 $cmdarg2";
-   $retval=0;
-   $output=array();
-   $firstline='';
-   $firstline=exec($command,$output,$retval);
-   if (0!=$retval)
-   {
-      error_log("Running $command yielded return value=$retval, first line of output=$firstline");
-      print '<p>WARNING: Problems running mailbox postdeletion script!</p>';
-      return FALSE;
-   }
-
-   return TRUE;
-}
-
-/*
-   Called after a domain has been deleted in the DBMS.
-   Returns: boolean.
-*/
-function domain_postdeletion($domain)
-{
-   global $CONF;
-   $confpar='domain_postdeletion_script';
-
-   if (!isset($CONF[$confpar]) || empty($CONF[$confpar]))
-   {
-      return true;
-   }
-
-   if (empty($domain))
-   {
-      print '<p>Warning: empty domain parameter.</p>';
-      return false;
-   }
-
-   $cmdarg1=escapeshellarg($domain);
-   $command=$CONF[$confpar]." $cmdarg1";
-   $retval=0;
-   $output=array();
-   $firstline='';
-   $firstline=exec($command,$output,$retval);
-   if (0!=$retval)
-   {
-      error_log("Running $command yielded return value=$retval, first line of output=$firstline");
-      print '<p>WARNING: Problems running domain postdeletion script!</p>';
-      return FALSE;
-   }
-
-   return TRUE;
-}
-
-/*
-   Called by mailbox_postcreation() after a mailbox has been
-   created. Immediately returns, unless configuration indicates
-   that one or more sub-folders should be created.
-
-   Triggers E_USER_ERROR if configuration error is detected.
-
-   If IMAP login fails, the problem is logged to the system log
-   (such as /var/log/httpd/error_log), and the function returns
-   FALSE.
-
-   Returns FALSE on all other errors, or TRUE if everything
-   succeeds.
-
-   Doesn't clean up, if only some of the folders could be
-   created.
-*/
-function create_mailbox_subfolders($login,$cleartext_password)
-{
-   global $CONF;
-
-   if (empty($login))
-   {
-      trigger_error('In '.__FUNCTION__.': empty $login',E_USER_ERROR);
-      return FALSE;
-   }
-
-   if (!isset($CONF['create_mailbox_subdirs']) || empty($CONF['create_mailbox_subdirs'])) return TRUE;
-
-   if (!is_array($CONF['create_mailbox_subdirs']))
-   {
-      trigger_error('create_mailbox_subdirs must be an array',E_USER_ERROR);
-      return FALSE;
-   }
-
-   if (!isset($CONF['create_mailbox_subdirs_host']) || empty($CONF['create_mailbox_subdirs_host']))
-   {
-      trigger_error('An IMAP/POP server host ($CONF["create_mailbox_subdirs_host"]) must be configured, if sub-folders are to be created',E_USER_ERROR);
-      return FALSE;
-   }
-
-   $s_host=$CONF['create_mailbox_subdirs_host'];
-   $s_options='';
-   $s_port='';
-
-   if (
-      isset($CONF['create_mailbox_subdirs_hostoptions'])
-      && !empty($CONF['create_mailbox_subdirs_hostoptions'])
-   ) {
-      if (!is_array($CONF['create_mailbox_subdirs_hostoptions']))
-      {
-         trigger_error('The $CONF["create_mailbox_subdirs_hostoptions"] parameter must be an array',E_USER_ERROR);
-         return FALSE;
-      }
-      foreach ($CONF['create_mailbox_subdirs_hostoptions'] as $o)
-      {
-         $s_options.='/'.$o;
-      }
-   }
-
-   if (isset($CONF['create_mailbox_subdirs_hostport']) && !empty($CONF['create_mailbox_subdirs_hostport']))
-   {
-      $s_port=$CONF['create_mailbox_subdirs_hostport'];
-      if (intval($s_port)!=$s_port)
-      {
-         trigger_error('The $CONF["create_mailbox_subdirs_hostport"] parameter must be an integer',E_USER_ERROR);
-         return FALSE;
-      }
-      $s_port=':'.$s_port;
-   }
-
-   $s='{'.$s_host.$s_port.$s_options.'}';
-
-   $i=@imap_open($s,$login,$cleartext_password);
-   if (FALSE==$i)
-   {
-      error_log('Could not log into IMAP/POP server: '.imap_last_error());
-      return FALSE;
-   }
-
-   foreach($CONF['create_mailbox_subdirs'] as $f)
-   {
-      $f='{'.$s_host.'}INBOX.'.$f;
-      $res=imap_createmailbox($i,$f);
-      if (!$res) {
-         @imap_close($i);
-         return FALSE;
-      }
-      @imap_subscribe($i,$f);
-   }
-
-   @imap_close($i);
-   return TRUE;
-}
-
-
-
-$table_admin = table_by_key ('admin');
-$table_alias = table_by_key ('alias');
-$table_domain = table_by_key ('domain');
-$table_domain_admins = table_by_key ('domain_admins');
-$table_log = table_by_key ('log');
-$table_mailbox = table_by_key ('mailbox');
-$table_vacation = table_by_key ('vacation');
-/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

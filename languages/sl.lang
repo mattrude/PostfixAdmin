@@ -4,9 +4,6 @@
 // by Nejc Skoberne <nejc at skoberne dot net>
 // Encoding iso-8859-2
 //
-
-require ('default.lang');
-
 $PALANG['charset'] = 'iso-8859-2';
 $PALANG['YES'] = 'DA';
 $PALANG['NO'] = 'NE';
@@ -91,8 +88,6 @@ $PALANG['pEdit_alias_goto'] = 'Za';
 $PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">V polje "Za" niste vnesli nièesar!</span>';
 $PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">E-po¹tni naslov, ki ste ga vnesli, ni pravilen: ';
 $PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">Izbrana domena ni pod va¹im nadzorom: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
 $PALANG['pEdit_alias_button'] = 'Uredi alias';
 $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Aliasa ni bilo mogoèe spremeniti!</span>';
 
@@ -256,7 +251,6 @@ $PALANG['pAdminEdit_admin_password'] = 'Geslo';
 $PALANG['pAdminEdit_admin_password2'] = 'Geslo (ponovitev)';
 $PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">Vne¹eni gesli se ne ujemata<br />ali pa sta prazni!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Aktiven';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Shrani';
 $PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Administratorja ni bilo mogoèe spremeniti!</span>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Admininstrator je bil uspe¹no spremenjen!';

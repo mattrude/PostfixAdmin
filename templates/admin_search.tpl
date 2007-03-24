@@ -48,14 +48,7 @@ if (sizeof ($tMailbox) > 0)
    if ($CONF['quota'] == 'YES') print "      <td>" . $PALANG['pOverview_mailbox_quota'] . "</td>\n";
    print "      <td>" . $PALANG['pOverview_mailbox_modified'] . "</td>\n";
    print "      <td>" . $PALANG['pOverview_mailbox_active'] . "</td>\n";
-   if ($CONF['alias_control'] == 'YES')
-   {
-      print "      <td colspan=\"3\">&nbsp;</td>\n";
-   }
-   else
-   {
-      print "      <td colspan=\"2\">&nbsp;</td>\n";
-   }
+   print "      <td colspan=\"2\">&nbsp;</td>\n";
    print "   </tr>\n";
 
    for ($i = 0; $i < sizeof ($tMailbox); $i++)
@@ -65,14 +58,10 @@ if (sizeof ($tMailbox) > 0)
          print "   <tr class=\"hilightoff\" onMouseOver=\"className='hilighton';\" onMouseOut=\"className='hilightoff';\">\n";
          print "      <td>" . $tMailbox[$i]['username'] . "</td>\n";
          print "      <td>" . $tMailbox[$i]['name'] . "</td>\n";
-         if ($CONF['quota'] == 'YES') print "      <td>" . divide_quota ($tMailbox[$i]['quota']) . "</td>\n";
+         if ($CONF['quota'] == 'YES') print "      <td>" . $tMailbox[$i]['quota'] / $CONF['quota_multiplier'] . "</td>\n";
          print "      <td>" . $tMailbox[$i]['modified'] . "</td>\n";
          $active = ($tMailbox[$i]['active'] == 1) ? $PALANG['YES'] : $PALANG['NO'];
          print "      <td><a href=\"edit-active.php?username=" . urlencode ($tMailbox[$i]['username']) . "&domain=" . $tMailbox[$i]['domain'] . "\">" . $active . "</a></td>\n";
-         if ($CONF['alias_control'] == 'YES')
-         {
-            print "      <td><a href=\"edit-alias.php?address=" . urlencode ($tMailbox[$i]['username']) . "&domain=$fDomain" . "\">" . $PALANG['pOverview_alias_edit'] . "</a></td>\n";
-         }
          print "      <td><a href=\"edit-mailbox.php?username=" . urlencode ($tMailbox[$i]['username']) . "&domain=" . $tMailbox[$i]['domain'] . "\">" . $PALANG['edit'] . "</a></td>\n";
          print "      <td><a href=\"delete.php?table=mailbox&delete=" . urlencode ($tMailbox[$i]['username']) . "&domain=" . $tMailbox[$i]['domain'] . "\"onclick=\"return confirm ('" . $PALANG['confirm'] . $PALANG['pOverview_get_mailboxes'] . ": ". $tMailbox[$i]['username'] . "')\">" . $PALANG['del'] . "</a></td>\n";
          print "   </tr>\n";

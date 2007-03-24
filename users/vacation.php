@@ -3,7 +3,7 @@
 // Postfix Admin 
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: vacation.php
 //
@@ -26,14 +26,13 @@ require ("../functions.inc.php");
 include ("../languages/" . check_language () . ".lang");
 
 $USERID_USERNAME = check_user_session ();
-(($CONF['vacation'] == 'NO') ? header("Location: " . $CONF['postfix_admin_url'] . "/users/main.php") && exit : '1');
 $tmp = preg_split ('/@/', $USERID_USERNAME);     
 $USERID_DOMAIN = $tmp[1];
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
 
-   $result = db_query("SELECT * FROM $table_vacation WHERE email='$USERID_USERNAME'");
+   $result = db_query("SELECT * FROM vacation WHERE email='$USERID_USERNAME'");
    if ($result['rows'] == 1)
    {
       $row = db_array($result['result']);
@@ -62,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
    if (!empty ($fBack))
    {
-      $result = db_query ("DELETE FROM $table_vacation WHERE email='$USERID_USERNAME'");
+      $result = db_query ("DELETE FROM vacation WHERE email='$USERID_USERNAME'");
       if ($result['rows'] != 1)
       {
          $error = 1;
@@ -73,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
          $tMessage = $PALANG['pUsersVacation_result_succes'];
       }
 
-      $result = db_query ("SELECT * FROM $table_alias WHERE address='$USERID_USERNAME'");
+      $result = db_query ("SELECT * FROM alias WHERE address='$USERID_USERNAME'");
       if ($result['rows'] == 1)
       {
          $row = db_array ($result['result']);
@@ -86,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
          }
       }
 
-      $result = db_query ("UPDATE $table_alias SET goto='$goto',modified=NOW() WHERE address='$USERID_USERNAME'");
+      $result = db_query ("UPDATE alias SET goto='$goto',modified=NOW() WHERE address='$USERID_USERNAME'");
       if ($result['rows'] != 1)
       {
          $error = 1;
@@ -101,15 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
    if (!empty ($fAway))
    {
-      $result = db_query ("SELECT * FROM $table_alias WHERE address='$USERID_USERNAME'");
+      $result = db_query ("SELECT * FROM alias WHERE address='$USERID_USERNAME'");
       if ($result['rows'] == 1)
       {
          $row = db_array ($result['result']);
          $tGoto = $row['goto'];
       }
 
-      if ($CONF['database_type']=='pgsql') ? $Active='true' : $Active=1;
-      $result = db_query ("INSERT INTO $table_vacation (email,subject,body,domain,created,active) VALUES ('$USERID_USERNAME','$fSubject','$fBody','$USERID_DOMAIN',NOW(),$Active)");
+      $result = db_query ("INSERT INTO vacation (email,subject,body,domain,created) VALUES ('$USERID_USERNAME','$fSubject','$fBody','$USERID_DOMAIN',NOW())");
       if ($result['rows'] != 1)
       {
          $error = 1;
@@ -118,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
       $goto = $tGoto . "," . "$USERID_USERNAME@$vacation_domain";
       
-      $result = db_query ("UPDATE $table_alias SET goto='$goto',modified=NOW() WHERE address='$USERID_USERNAME'");
+      $result = db_query ("UPDATE alias SET goto='$goto',modified=NOW() WHERE address='$USERID_USERNAME'");
       if ($result['rows'] != 1)
       {
          $error = 1;

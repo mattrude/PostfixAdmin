@@ -3,7 +3,7 @@
 // Postfix Admin 
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: edit-active.php
 //
@@ -28,7 +28,6 @@ $SESSID_USERNAME = check_session();
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
    if (isset ($_GET['username'])) $fUsername = escape_string ($_GET['username']);
-   if (isset ($_GET['alias'])) $fAlias = escape_string ($_GET['alias']); else $fAlias = escape_string ($_GET['username']);
    if (isset ($_GET['domain'])) $fDomain = escape_string ($_GET['domain']);
    
    if (!check_owner ($SESSID_USERNAME, $fDomain))
@@ -38,32 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
    }
    else
    {
-      $setSql=('pgsql'==$CONF['database_type']) ? 'active=NOT active' : 'active=1-active';
-      if ($fUsername != '')
+      $result = db_query ("UPDATE mailbox SET active=1-active WHERE username='$fUsername' AND domain='$fDomain'");
+      if ($result['rows'] != 1)
       {
-         $result = db_query ("UPDATE $table_mailbox SET $setSql WHERE username='$fUsername' AND domain='$fDomain'");
-         if ($result['rows'] != 1)
-         {
-            $error = 1;
-            $tMessage = $PALANG['pEdit_mailbox_result_error'];
-         }
-         else
-         {
-            db_log ($SESSID_USERNAME, $fDomain, "edit active", $fUsername);
-         }
+         $error = 1;
+         $tMessage = $PALANG['pEdit_mailbox_result_error'];
       }
-      if ($fAlias != '')
+      else
       {
-         $result = db_query ("UPDATE $table_alias SET $setSql WHERE address='$fAlias' AND domain='$fDomain'");
-         if ($result['rows'] != 1)
-         {
-            $error = 1;
-            $tMessage = $PALANG['pEdit_mailbox_result_error'];
-         }
-         else
-         {
-            db_log ($SESSID_USERNAME, $fDomain, "edit alias active", $fAlias);
-         }
+         db_log ($SESSID_USERNAME, $fDomain, "edit active", $fUsername);
       }
    }
    
@@ -86,5 +68,4 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    include ("./templates/message.tpl");
    include ("./templates/footer.tpl");
 }
-/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

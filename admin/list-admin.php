@@ -3,7 +3,7 @@
 // Postfix Admin 
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: list-admin.php
 //
@@ -21,9 +21,6 @@ require ("../variables.inc.php");
 require ("../config.inc.php");
 require ("../functions.inc.php");
 include ("../languages/" . check_language () . ".lang");
-
-$SESSID_USERNAME = check_session ();
-(!check_admin($SESSID_USERNAME) ? header("Location: " . $CONF['postfix_admin_url'] . "/main.php") && exit : '1');
 
 $list_admins = list_admins ();
 if ((is_array ($list_admins) and sizeof ($list_admins) > 0))

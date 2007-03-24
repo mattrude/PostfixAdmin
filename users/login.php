@@ -3,7 +3,7 @@
 // Postfix Admin 
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: login.php
 //
@@ -36,23 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    $fUsername = escape_string ($_POST['fUsername']);
    $fPassword = escape_string ($_POST['fPassword']);
 
-   $query = "SELECT password FROM $table_mailbox WHERE username='$fUsername' AND active='1'";
-   if ('pgsql'==$CONF['database_type'])
-   {
-      $query = "SELECT password FROM $table_mailbox WHERE username='$fUsername' AND active=true";
-   }
-   $result = db_query ($query);
+   $result = db_query ("SELECT password FROM mailbox WHERE username='$fUsername' AND active='1'");
    if ($result['rows'] == 1)
    {
       $row = db_array ($result['result']);
       $password = pacrypt ($fPassword, $row['password']);
 
-      $query = "SELECT * FROM $table_mailbox WHERE username='$fUsername' AND password='$password' AND active='1'";
-      if ('pgsql'==$CONF['database_type'])
-      {
-         $query = "SELECT * FROM $table_mailbox WHERE username='$fUsername' AND password='$password' AND active=true";
-      }
-      $result = db_query ($query);
+      $result = db_query ("SELECT * FROM mailbox WHERE username='$fUsername' AND password='$password' AND active='1'");
       if ($result['rows'] != 1)
       {
          $error = 1;
@@ -79,6 +69,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    include ("../templates/header.tpl");
    include ("../templates/users_login.tpl");
    include ("../templates/footer.tpl");
-}
-/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
+} 
 ?>

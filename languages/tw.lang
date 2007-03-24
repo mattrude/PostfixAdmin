@@ -3,9 +3,6 @@
 // Language file Traditional Chinese
 // by Bruce Chou <bruce at thumb dot cx>
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = '是';
 $PALANG['NO'] = '否';
 $PALANG['edit'] = '編輯';
@@ -44,7 +41,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = '執行';
@@ -285,14 +282,14 @@ $PALANG['pUsersVacation_button_back'] = '關閉自動回覆';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">更新自動回覆失敗!</span>';
 $PALANG['pUsersVacation_result_succes'] = '您的自動回覆已經關閉!';
 
-$PALANG['pCreate_dbLog_createmailbox'] = '新建信箱';     
-$PALANG['pCreate_dbLog_createalias'] = '新建別名';
-$PALANG['pDelete_dbLog_deletealias'] = '刪除別名';
-$PALANG['pDelete_dbLog_deletemailbox'] = '刪除信箱';
+$PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';     
+$PALANG['pCreate_dbLog_createalias'] = 'create alias';
+$PALANG['pDelete_dbLog_deletealias'] = 'delete alias';
+$PALANG['pDelete_dbLog_deletemailbox'] = 'delete mailbox';
 
-$PALANG['pEdit_dbLog_editactive'] = '變更啟動狀態';
-$PALANG['pEdit_dbLog_editalias'] = '編輯別名';
-$PALANG['pEdit_dbLog_editmailbox'] = '編輯信箱';
+$PALANG['pEdit_dbLog_editactive'] = 'change active state';
+$PALANG['pEdit_dbLog_editalias'] = 'edit alias';
+$PALANG['pEdit_dbLog_editmailbox'] = 'edit mailbox';
 
-$PALANG['pSearch_welcome'] = '搜尋: ';
+$PALANG['pSearch_welcome'] = 'Searching for: ';
 ?>

@@ -2,32 +2,8 @@
 # Postfix Admin
 # by Mischa Peters <mischa at high5 dot net>
 # Copyright (c) 2002 - 2005 High5!
-# Licensed under GPL for more info check GPL-LICENSE.TXT
+# License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 #
-Version 2.1.1 -- TBD
---------------------
-  - Added: Do not store local copy when forward mail. (Mihau) [24] 
-  - Added: Virtual Vacation for PostgreSQL. (Tarvin)
-  - Added: Virtual Vacation 3.2 (Thanx David)
-  - Added: SUBJECT tag for Virtual Vacation.         
-  - Added: Dovecot setup document for Postfix Admin. (Thanx Massimo)
-  - Added: SquirrelMail plugin to change_password.
-  - Changed: Starting to merge /admin in root. (Mihau)
-  - Changed: Moved some TXT files to DOCUMENTS.   
-  - Changed: Updated tw.lang. (Thanx Bruce)
-  - Fixed: Usage of mysql_real_escape_string(). (Mihau)
-  - Fixed: Calculating of quotas. (Mihau)
-  - Fixed: Password generation when creating a new account. (Mihau)
-  - Fixed: PostgreSQL patches. (Tarvin)
-  - Fixed: Adding of multiple aliases. (Mihau)
-  - Fixed: CSS Menu width. (Mihau)
-  - Fixed: Overview when upgrading from 2.0.4. (Mihau)
-  - Fixed: smtp_mail() to wait for response from server.
-  - Fixed: pacrypt() so system works properly. (Thanx Npaufler)
-  - Fixed: quoting an email address when sending mail in vacation.pl. (Thanx Marc)
-  - Fixed: vacation.pl has a clean exit when it encounters an error. (Thanx Brian)
-  - Fixed: descriptions for quota={-1|0} in admin section (Mihau)
-
 
 Version 2.1.0 -- 2005/01/07
 ---------------------------

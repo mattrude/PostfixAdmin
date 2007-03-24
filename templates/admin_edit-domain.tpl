@@ -33,23 +33,8 @@
    <?php } if ($CONF['transport'] == 'YES') { ?>
    <tr>
       <td><?php print $PALANG['pAdminEdit_domain_transport'] . ":"; ?></td>
-      <td><select class="flat" name="fTransport">
-      <?php
-      for ($i = 0; $i < sizeof ($CONF['transport_options']); $i++)
-      {
-         if ($CONF['transport_options'][$i] == $tTransport)
-         {
-            print "<option value=\"" . $CONF['transport_options'][$i] . "\" selected>" . $CONF['transport_options'][$i] . "</option>\n";
-         }
-         else
-         {
-            print "<option value=\"" . $CONF['transport_options'][$i] . "\">" . $CONF['transport_options'][$i] . "</option>\n";
-         }
-      }
-      ?>
-      </select>
-      </td>
-      <td><?php print $PALANG['pAdminEdit_domain_transport_text']; ?></td>
+      <td><input class="flat" type="text" name="fTransport" value="<?php print $tTransport; ?>" /></td>
+      <td><?php $PALANG['pAdminEdit_domain_transport_text']; ?></td>
    </tr>
    <?php } ?>
    <tr>

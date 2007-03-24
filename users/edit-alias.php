@@ -3,7 +3,7 @@
 // Postfix Admin 
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: edit-alias.php
 //
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
    $vacation_domain = $CONF['vacation_domain'];
    
-   $result = db_query ("SELECT * FROM $table_alias WHERE address='$USERID_USERNAME'");
+   $result = db_query ("SELECT * FROM alias WHERE address='$USERID_USERNAME'");
    if ($result['rows'] == 1)
    {
       $row = db_array ($result['result']);
@@ -58,53 +58,41 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
    if (isset ($_POST['fVacation'])) $fVacation = $_POST['fVacation'];   
    if (isset ($_POST['fGoto'])) $fGoto = escape_string ($_POST['fGoto']);
-   if (isset ($_POST['fForward_and_store'])) $fForward_and_store = escape_string ($_POST['fForward_and_store']);
+   $fGoto = strtolower ($fGoto);
 
-   $goto = strtolower ($fGoto);
-   $goto = preg_replace ('/\\\r\\\n/', ',', $goto);
-   $goto = preg_replace ('/\r\n/', ',', $goto);
-   $goto = preg_replace ('/[\s]+/i', '', $goto);
-   $goto = preg_replace ('/\,*$/', '', $goto);
-   ( $fForward_and_store == "YES" ) ? $goto = $USERID_USERNAME . "," . $goto : '';
-   $goto = explode(",",$goto);
-   $goto = array_merge(array_unique($goto));
-   $goto = implode(",",$goto);
+   $goto = preg_replace ('/\\\r\\\n/', ',', $fGoto);
+	$goto = preg_replace ('/\r\n/', ',', $fGoto);
+	$goto = preg_replace ('/[\s]+/i', '', $goto);
+	$goto = preg_replace ('/\,*$/', '', $goto);
+	$array = preg_split ('/,/', $goto);
 
-   $array = preg_split ('/,/', $goto);
-
-   for ($i = 0; $i < sizeof ($array); $i++) {
-      if (in_array ("$array[$i]", $CONF['default_aliases'])) continue;
-      if (empty ($array[$i]) && $fForward_and_store == "NO")
-      {
-         $error = 1;
-         $tGoto = $goto;
-         $tMessage = $PALANG['pEdit_alias_goto_text_error1'];
-      }
-      if (empty ($array[$i])) continue;
-      if (!check_email ($array[$i]))
-      {
-         $error = 1;
-         $tGoto = $goto;
-         $tMessage = $PALANG['pEdit_alias_goto_text_error2'] . "$array[$i]</font>";
-      }
+	for ($i = 0; $i < sizeof ($array); $i++) {
+		if (in_array ("$array[$i]", $CONF['default_aliases'])) continue;
+		if (empty ($array[$i])) continue;
+		if (!check_email ($array[$i]))
+		{
+   		$error = 1;
+   		$tGoto = $goto;
+   		$tMessage = $PALANG['pEdit_alias_goto_text_error2'] . "$array[$i]</font>";
+	   }
    }
-
+   
    if ($error != 1)
    {
       if (empty ($goto))
       {
          $goto = $USERID_USERNAME;
       }
-/*      else
+      else
       {
          $goto = $USERID_USERNAME . "," . $goto;
-      }*/
+      }
       if ($fVacation == "YES")
       {
          $goto .= "," . $USERID_USERNAME . "@" . $vacation_domain;
       }
       
-      $result = db_query ("UPDATE $table_alias SET goto='$goto',modified=NOW() WHERE address='$USERID_USERNAME'");
+      $result = db_query ("UPDATE alias SET goto='$goto',modified=NOW() WHERE address='$USERID_USERNAME'");
       if ($result['rows'] != 1)
       {
          $tMessage = $PALANG['pEdit_alias_result_error'];

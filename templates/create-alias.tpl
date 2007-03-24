@@ -32,11 +32,6 @@
       <td><?php print $pCreate_alias_goto_text; ?></td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pCreate_alias_active'] . ":"; ?></td>
-      <td><input class="flat" type="checkbox" name="fActive" checked /></td>
-      <td>&nbsp;</td>
-   </tr>
-   <tr>
       <td colspan="3" class="hlp_center"><input class="button" type="submit" name="submit" value="<?php print $PALANG['pCreate_alias_button']; ?>" /></td>
    </tr>
    <tr>
@@ -46,5 +41,4 @@
       <td colspan="3" class="help_text"><?php print $PALANG['pCreate_alias_catchall_text']; ?></td>
    </tr>
 </table>
-</form>
 </div>

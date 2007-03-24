@@ -1,9 +1,9 @@
 <?php
-//
-// Postfix Admin
+// 
+// Postfix Admin 
 // by Mischa Peters <mischa at high5 dot net>
 // Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
+// License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 //
 // File: sendmail.php
 //
@@ -28,7 +28,6 @@ require ("./functions.inc.php");
 include ("./languages/" . check_language () . ".lang");
 
 $SESSID_USERNAME = check_session ();
-(($CONF['sendmail'] == 'NO') ? header("Location: " . $CONF['postfix_admin_url'] . "/main.php") && exit : '1');
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
@@ -40,11 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
-   if (isset ($_POST['fTo'])) $fTo = escape_string ($_POST['fTo']);
+   $fTo = escape_string ($_POST['fTo']);
    $fFrom = $SESSID_USERNAME;
-   if (isset ($_POST['fTo'])) $fHeaders = "To: " . $fTo . "\n";
-   if (isset ($_POST['fTo'])) $fHeaders .= "From: " . $fFrom . "\n";
-
+   $fHeaders = "To: " . $fTo . "\n";
+   $fHeaders .= "From: " . $fFrom . "\n";
+   
    if (!empty ($PALANG['charset']))
    {
       $fHeaders .= "Subject: " . encode_header (escape_string ($_POST['fSubject']), $PALANG['charset']) . "\n";
@@ -56,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    {
       $fHeaders .= "Subject: " . escape_string ($_POST['fSubject']) . "\n\n";
    }
-
+   
    $fHeaders .= escape_string ($_POST['fBody']);
 
    if (empty ($fTo) or !check_email ($fTo))

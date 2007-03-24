@@ -13,10 +13,6 @@ ADDITIONS
 
 In this directory you will find additional scripts that are build by others.
 
-- change_password.tgz
-by George Vieira <george at citadelcomputer dot com dot au>
-SquirrelMail plugin to change your passwor
-
 - cleanupdirs.pl
 by jared bell <jared at beol dot net>
 Displays a list of mailboxes that need to be deleted
@@ -41,12 +37,3 @@ vacation status/message and password.
 - virtualmaildel.php
 by George Vieira <george at citadelcomputer dot com dot au>
 Deletes all unused mailboxes
-
-- postfixadmin-mailbox-postcreation.sh
-- postfixadmin-mailbox-postdeletion.sh
-- postfixadmin-domain-postdeletion.sh
-by Troels Arvin <troels@arvin.dk>
-Examples of scripts relevant to the optional 
-$CONF['mailbox_postcreation_script'],
-$CONF['mailbox_postdeletion_script'] and
-$CONF['domain_postdeletion_script']  configuration options.

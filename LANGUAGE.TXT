@@ -2,7 +2,7 @@
 # Postfix Admin
 # by Mischa Peters <mischa at high5 dot net>
 # Copyright (c) 2002 - 2005 High5!
-# Licensed under GPL for more info check GPL-LICENSE.TXT
+# License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 #
 
 READ THIS FIRST!
@@ -22,7 +22,7 @@ $PALANG['pOverview_unlimited'] = 'Unlimited';
 $PALANG['pOverview_title'] = ':: Defined Domains';
 $PALANG['pOverview_up_arrow'] = 'Go Top';
 $PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';  
 $PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 

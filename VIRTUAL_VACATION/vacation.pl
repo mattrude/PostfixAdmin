@@ -1,30 +1,22 @@
 #!/usr/bin/perl -w
 #
-# Virtual Vacation 3.2
+# Virtual Vacation 3.1
 # by Mischa Peters <mischa at high5 dot net>
 # Copyright (c) 2002 - 2005 High5!
-# Licensed under GPL for more info check GPL-LICENSE.TXT
+# License Info: http://www.postfixadmin.com/?file=LICENSE.TXT
 #
 # Additions:
-# 2004/07/13   David Osborn <ossdev at daocon.com>
-#               Uses strict, processes domain level aliases, more
-#               subroutines, send reply from original to address
-# 2004/11/09   David Osborn <ossdev at daocon.com>
-#               Added syslog support          
-#               Slightly better logging which includes messageid
-#               Avoid infinite loops with domain aliases
+# 2004/07/13  David Osborn <ossdev at daocon.com>
+#             strict, processes domain level aliases, more
+#             subroutines, send reply from original to address
 #
-# 2005/07/20   David Osborn <ossdev at daocon.com>
-#               Added threading headers to reply
-#               Fixed problem of sending reply to wrong To:
-#
-# 2005/07/21   Brian Taber <btaber at diversecg.com>
-#               Added error handling in case of database errors
-#               to prevent bounced email
+# 2004/11/09  David Osborn <ossdev at daocon.com>
+#             Added syslog support          
+#             Slightly better logging which includes messageid
+#             Avoid infinite loops with domain aliases
 #
 use DBI;
 use strict;
-use Sys::Syslog;
 
 my $db_type = 'mysql';
 my $db_host = 'localhost';
@@ -36,21 +28,14 @@ my $logfile = "";    # specify a file name here for example: vacation.log
 my $debugfile = "";  # sepcify a file name here for example: vacation.debug
 my $syslog = 0;   # 1 if log entries should be sent to syslog
 
-
-my $dbh = DBI->connect("DBI:$db_type:$db_name:$db_host", "$db_user", "$db_pass", { RaiseError => 1 }) or &exit_error($DBI::errstr);
-
-# make sure vacation.pl exists cleanly when it encounters an error
-sub exit_error {
-	syslog('mail|warning', 'virtual vacation failure: %s', shift);
-	exit (0);
-}
+my $dbh = DBI->connect("DBI:$db_type:$db_name:$db_host", "$db_user", "$db_pass", { RaiseError => 1 });
 
 # used to detect infinite address lookup loops
 my $loopcount=0;
 
 sub do_query {
    my ($query) = @_;
-   my $sth = $dbh->prepare($query) or &exit_error("Can't prepare $query: $dbh->errstr");
+   my $sth = $dbh->prepare($query) or die "Can't prepare $query: $dbh->errstr\n";
    $sth->execute or die "Can't execute the query: $sth->errstr";
    return $sth;
 }
@@ -58,12 +43,12 @@ sub do_query {
 sub do_debug {
    my ($in1, $in2, $in3, $in4, $in5, $in6) = @_;
    if ( $debugfile ) {
-      my $date;
-      open (DEBUG, ">> $debugfile") or &exit_error("Unable to open debug file");
-      chop ($date = `date "+%Y/%m/%d %H:%M:%S"`);
-      print DEBUG "====== $date ======\n";
+   my $date;
+   open (DEBUG, ">> $debugfile") or die ("Unable to open debug file");
+   chop ($date = `date "+%Y/%m/%d %H:%M:%S"`);
+   print DEBUG "====== $date ======\n";
       printf DEBUG "%s | %s | %s | %s | %s | %s\n", $in1, $in2, $in3, $in4, $in5, $in6;
-      close (DEBUG); 
+   close (DEBUG);
    }
 }
 
@@ -88,29 +73,22 @@ sub do_log {
        close (SYSLOG); 
    }
    if ( $logfile ) {
-       open (LOG, ">> $logfile") or die ("Unable to open log file");
-       chop ($date = `date "+%Y/%m/%d %H:%M:%S"`);
+   open (LOG, ">> $logfile") or die ("Unable to open log file");
+   chop ($date = `date "+%Y/%m/%d %H:%M:%S"`);
        print LOG "$date: To: $to From: $from Subject: $subject MessageID: $messageid \n";
-       close (LOG);
+   close (LOG);
    }
 }
 
 sub do_mail {
-   my ($from, $to, $subject, $body, $orig_msgID) = @_;
-   # clean up the email address since we pass it to the commandline
-   my $fromemail = $from;
-   if ($fromemail =~ /([\w\-.%]+\@[\w.-]+)/) { $fromemail = $1; }
-   open (MAIL, "| $sendmail -t -f \"$fromemail\"") or die ("Unable to open sendmail");
+   my ($from, $to, $subject, $body) = @_;
+   open (MAIL, "| $sendmail -t -f $from") or die ("Unable to open sendmail");
    print MAIL "From: $from\n";
    print MAIL "To: $to\n";
    print MAIL "Subject: $subject\n";
-   if ( $orig_msgID ) {
-        print MAIL "References: $orig_msgID\n";
-        print MAIL "In-Reply-To: $orig_msgID\n";
-   }
    print MAIL "X-Loop: Postfix Admin Virtual Vacation\n\n";
    print MAIL "$body";
-   close (MAIL) or die ("Unable to close sendmail");
+   close (MAIL);
 }
 
 sub find_real_address {
@@ -127,15 +105,15 @@ sub find_real_address {
 
    # Recipient has vacation
    if ($rv == 1) {
-        $realemail = $email;
+      $realemail = $email;
 
    } else {
       $query = qq{SELECT goto FROM alias WHERE address='$email'};
       $sth = do_query ($query);
       $rv = $sth->rows;
 
-      #  Recipient is an alias, check if mailbox has vacation
-      if ($rv == 1) {  
+      # Recipient is an alias, check if mailbox has vacation
+      if ($rv == 1) { 
          my @row = $sth->fetchrow_array;
          my $alias = $row[0];
          $query = qq{SELECT email FROM vacation WHERE email='$alias' and active=1};
@@ -144,30 +122,30 @@ sub find_real_address {
 
          # Alias has vacation
          if ($rv == 1) {
-             $realemail = $alias;
+            $realemail = $alias;
          }
 
       # We still have to look for domain level aliases...
-      } else {
-        my ($user, $domain) = split(/@/, $email);
-        $query = qq{SELECT goto FROM alias WHERE address='\@$domain'};
-        $sth = do_query ($query);
-        $rv = $sth->rows;
+      } else { 
+         my ($user, $domain) = split(/@/, $email);
+         $query = qq{SELECT goto FROM alias WHERE address='\@$domain'};
+         $sth = do_query ($query);
+         $rv = $sth->rows;
+         
+         # The receipient has a domain level alias
+         if ($rv == 1) { 
+            my @row = $sth->fetchrow_array;
+            my $wildcard_dest = $row[0];
+            my ($wilduser, $wilddomain) = split(/@/, $wildcard_dest);
 
-        # The receipient has a domain level alias
-        if ($rv == 1) {  
-         my @row = $sth->fetchrow_array;
-         my $wildcard_dest = $row[0];
-         my ($wilduser, $wilddomain) = split(/@/, $wildcard_dest);
-
-         # Check domain alias
-         if ($wilduser) { 
-           ($rv, $realemail) = find_real_address ($wildcard_dest);
-         } else {  
-           my $new_email = $user . '@' . $wilddomain;
-           ($rv, $realemail) = find_real_address ($new_email);
+            # Check domain alias
+            if ($wilduser) { 
+               ($rv, $realemail) = find_real_address ($wildcard_dest);	
+            } else {
+               my $new_email = $user . '@' . $wilddomain;
+               ($rv, $realemail) = find_real_address ($new_email);	
+            }
          }
-        }
       }
    }
    return ($rv, $realemail);
@@ -181,12 +159,11 @@ sub send_vacation_email {
    if ($rv == 1) {
       my @row = $sth->fetchrow_array;
       if (do_cache ($email, $orig_from)) { return; }
-      $row[0] =~ s/\$SUBJECT/$orig_subject/g;
-      $row[1] =~ s/\$SUBJECT/$orig_subject/g;
       do_debug ("[SEND RESPONSE] for $orig_messageid:\n", "FROM: $email (orig_to: $orig_to)\n", "TO: $orig_from\n", "SUBJECT: $orig_subject\n", "VACATION SUBJECT: $row[0]\n", "VACATION BODY: $row[1]\n");
-      do_mail ($orig_to, $orig_from, $row[0], $row[1], $orig_messageid);
+      do_mail ($orig_to, $orig_from, $row[0], $row[1]);
       do_log ($orig_messageid, $orig_to, $orig_from, $orig_subject); 
    }
+
 }
 
 ########################### main #################################
@@ -225,17 +202,17 @@ my @search_array;
 # Strip email address from headers
 for (@strip_to_array) {
    if ($_ =~ /([\w\-.%]+\@[\w.-]+)/) { 
-        push (@search_array, $1); 
-        #do_debug ("[STRIP RECIPIENTS]: ", $messageid, $1, "-", "-", "-");
+	push (@search_array, $1); 
+  	do_debug ("[STRIP RECIPIENTS]: ", $messageid, $1, "-", "-", "-");
    }
 }
 
 # Search for email address which has vacation
-for my $to (@search_array) {
-   my ($rv, $email) = find_real_address ($to);
+for (@search_array) {
+   my ($rv, $email) = find_real_address ($_);
    if ($rv == 1) {
          do_debug ("[FOUND VACATION]: ", $messageid, $from, $to, $email, $subject);
-         send_vacation_email( $email, $subject, $from, $to, $messageid);
+	 send_vacation_email( $email, $subject, $from, $to, $messageid);
    }
 }
 

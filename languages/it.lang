@@ -3,9 +3,6 @@
 // Language file Italian
 // by Massimiliano Stucchi <max at gufi dot org>
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = 'SI';
 $PALANG['NO'] = 'NO';
 $PALANG['edit'] = 'modifica';
@@ -39,14 +36,14 @@ $PALANG['pMain_password'] = 'Cambia la password per il tuo account di amministra
 $PALANG['pMain_viewlog'] = 'Guarda i files di log.';
 $PALANG['pMain_logout'] = 'Esci dal sistema';
 
-$PALANG['pOverview_disabled'] = 'Disabilitato';
-$PALANG['pOverview_unlimited'] = 'Illimitato';
-$PALANG['pOverview_title'] = ':: Domini definiti';
-$PALANG['pOverview_up_arrow'] = 'Go top';
-$PALANG['pOverview_right_arrow'] = 'Pagina successiva';
-$PALANG['pOverview_left_arrow'] = 'Pagina precedente';
+$PALANG['pOverview_disabled'] = 'Disabled';
+$PALANG['pOverview_unlimited'] = 'Unlimited';
+$PALANG['pOverview_title'] = ':: Defined Domains';
+$PALANG['pOverview_up_arrow'] = 'Go Top';
+$PALANG['pOverview_right_arrow'] = 'Next Page';
+$PALANG['pOverview_left_arrow'] = 'Previus Page';
 $PALANG['pOverview_alias_title'] = ':: Alias';
-$PALANG['pOverview_mailbox_title'] = ':: Caselle di posta';
+$PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Vai';
 $PALANG['pOverview_welcome'] = 'Resoconto per ';
 $PALANG['pOverview_alias_alias_count'] = 'Alias';
@@ -95,7 +92,7 @@ $PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Impossibile modif
 $PALANG['pCreate_mailbox_welcome'] = 'Crea una nuova casella di posta locale per il tuo dominio.';
 $PALANG['pCreate_mailbox_username'] = 'Nome utente';
 $PALANG['pCreate_mailbox_username_text_error1'] = '<br /><span class="error_msg">L\'indirizzo EMAIL non &egrave; valido!</span>';
-$PALANG['pCreate_mailbox_username_text_error2'] = '<br /><span class="error_msg">Questo indirizzo email esiste gi&agrave;, per favore scegline uno diverso!</span>';
+$PALANG['pCreate_mailbox_username_text_error2'] = '<br /><span class="error_msg">Questo indirizzo email esiste gi&agrave;, perfavore scegline uno diverso!</span>';
 $PALANG['pCreate_mailbox_username_text_error3'] = '<br /><span class="error_msg">Hai raggiunto il limite per creare caselle di posta!</span>';
 $PALANG['pCreate_mailbox_password'] = 'Password';
 $PALANG['pCreate_mailbox_password2'] = 'Password (ripeti)';
@@ -157,7 +154,7 @@ $PALANG['pSendmail_subject_text'] = 'Benvenuto';
 $PALANG['pSendmail_body'] = 'Corpo';
 $PALANG['pSendmail_button'] = 'Spedisci messaggio';
 $PALANG['pSendmail_result_error'] = '<span class="error_msg">Impossibile creare la casella di posta!</span>';
-$PALANG['pSendmail_result_succes'] = 'La casella di posta &egrave; stata creata!';
+$PALANG['pSendmail_result_succes'] = 'La casella di posta&egrave; stata creata!';
 
 $PALANG['pAdminMenu_list_admin'] = 'Lista degli amministratori';
 $PALANG['pAdminMenu_list_domain'] = 'Lista dei domini';
@@ -197,7 +194,7 @@ $PALANG['pAdminList_virtual_mailbox_username'] = 'Email';
 $PALANG['pAdminList_virtual_mailbox_name'] = 'Nome';
 $PALANG['pAdminList_virtual_mailbox_quota'] = 'Quota (MB)';
 $PALANG['pAdminList_virtual_mailbox_modified'] = 'Ultima modifica';
-$PALANG['pAdminList_virtual_mailbox_active'] = 'Attivo';
+$PALANG['pAdminList_virtual_mailbox_active'] = 'Acttivo';
 
 $PALANG['pAdminCreate_domain_welcome'] = 'Aggiungi nuovo dominio';
 $PALANG['pAdminCreate_domain_domain'] = 'Dominio';
@@ -280,8 +277,8 @@ $PALANG['pUsersVacation_body_text'] = <<<EOM
 Sar&ograve; via dal <data> al <data>.
 Per problemi urgenti potete contattare <persona da contattare>.
 EOM;
-$PALANG['pUsersVacation_button_away'] = 'Imposta autorisponditore';
-$PALANG['pUsersVacation_button_back'] = 'Rimuovi autorisponditore';
+$PALANG['pUsersVacation_button_away'] = 'Sto andando via';
+$PALANG['pUsersVacation_button_back'] = 'Sto tornando';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Impossibile aggiornare i tuoi dettagli di away!</span>';
 $PALANG['pUsersVacation_result_succes'] = 'La tua risposta automatica &egrave; stata tolta!';
 
