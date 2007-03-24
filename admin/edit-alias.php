@@ -1,9 +1,4 @@
 <?php
-// 
-// Postfix Admin 
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
 //
 // File: edit-alias.php
 //
@@ -23,20 +18,17 @@
 require ("../variables.inc.php");
 require ("../config.inc.php");
 require ("../functions.inc.php");
-include ("../languages/" . check_language () . ".lang");
-
-$SESSID_USERNAME = check_session ();
-(!check_admin($SESSID_USERNAME) ? header("Location: " . $CONF['postfix_admin_url'] . "/main.php") && exit : '1');
+include ("../languages/" . $CONF['language'] . ".lang");
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-   if (isset ($_GET['address'])) $fAddress = escape_string ($_GET['address']);
-   if (isset ($_GET['domain'])) $fDomain = escape_string ($_GET['domain']);
-   
-   $result = db_query ("SELECT * FROM $table_alias WHERE address='$fAddress' AND domain='$fDomain'");
+   $fAddress = $_GET['address'];
+   $fDomain = $_GET['domain'];
+
+   $result = db_query ("SELECT * FROM alias WHERE address='$fAddress' AND domain='$fDomain'");
    if ($result['rows'] == 1)
    {
-      $row = db_array ($result['result']);
+      $row = mysql_fetch_array ($result['result']);
       $tGoto = $row['goto'];
    }
    else
@@ -54,11 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
    $pEdit_alias_goto = $PALANG['pEdit_alias_goto'];
    
-   if (isset ($_GET['address'])) $fAddress = escape_string ($_GET['address']);
-   $fAddress = strtolower ($fAddress);
-   if (isset ($_GET['domain'])) $fDomain = escape_string ($_GET['domain']);
-   if (isset ($_POST['fGoto'])) $fGoto = escape_string ($_POST['fGoto']);
-   $fGoto = strtolower ($fGoto);
+   $fAddress = $_GET['address'];
+   $fDomain = $_GET['domain'];
+
+   $fGoto = $_POST['fGoto'];
 
    if (empty ($fGoto))
    {
@@ -67,8 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       $tMessage = $PALANG['pEdit_alias_goto_text_error1'];
    }
 
-	$goto = preg_replace ('/\\\r\\\n/', ',', $fGoto);
-	$goto = preg_replace ('/\r\n/', ',', $goto);
+	$goto = preg_replace ('/\r\n/', ',', $fGoto);
 	$goto = preg_replace ('/[\s]+/i', '', $goto);
 	$goto = preg_replace ('/\,*$/', '', $goto);
 	$array = preg_split ('/,/', $goto);
@@ -80,13 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 		{
    		$error = 1;
    		$tGoto = $goto;
-   		$tMessage = $PALANG['pEdit_alias_goto_text_error2'] . "$array[$i]</span>";
+   		$tMessage = $PALANG['pEdit_alias_goto_text_error2'] . "$array[$i]</font>";
 	   }
    }
    
    if ($error != 1)
    {
-      $result = db_query ("UPDATE $table_alias SET goto='$goto',modified=NOW() WHERE address='$fAddress' AND domain='$fDomain'");
+      $result = db_query ("UPDATE alias SET goto='$goto',modified=NOW() WHERE address='$fAddress' AND domain='$fDomain'");
       if ($result['rows'] != 1)
       {
          $tMessage = $PALANG['pEdit_alias_result_error'];

@@ -1,9 +1,4 @@
 <?php
-// 
-// Postfix Admin 
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
 //
 // File: viewlog.php
 //
@@ -21,44 +16,48 @@
 require ("../variables.inc.php");
 require ("../config.inc.php");
 require ("../functions.inc.php");
-include ("../languages/" . check_language () . ".lang");
-
-$SESSID_USERNAME = check_session ();
-(!check_admin($SESSID_USERNAME) ? header("Location: " . $CONF['postfix_admin_url'] . "/main.php") && exit : '1');
+include ("../languages/" . $CONF['language'] . ".lang");
 
 $list_domains = list_domains ();
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-   if ((is_array ($list_domains) and sizeof ($list_domains) > 0)) $fDomain = $list_domains[0];
-}
-else
-{
-   if (isset ($_POST['fDomain'])) $fDomain = escape_string ($_POST['fDomain']);
-}
+   $fDomain = $list_domains[0];
 
-$query = "SELECT timestamp,username,domain,action,substring(data from 1 for 36) as data FROM $table_log WHERE domain='$fDomain' ORDER BY timestamp DESC LIMIT 10";
-if ('pgsql'==$CONF['database_type'])
-{
-   $query = "SELECT extract(epoch from timestamp) as timestamp,username,domain,action,substring(data from 1 for 36) as data FROM $table_log WHERE domain='$fDomain' ORDER BY timestamp DESC LIMIT 10";
-}
-
-$result = db_query ($query);
-if ($result['rows'] > 0)
-{
-   while ($row = db_array ($result['result']))
+   if ($error != 1)
    {
-      if ('pgsql'==$CONF['database_type'])
+      $result = db_query ("SELECT * FROM log WHERE domain='$fDomain' ORDER BY timestamp DESC LIMIT 10");
+      if ($result['rows'] > 0)
       {
-         $row['timestamp']=gmstrftime('%c %Z',$row['timestamp']);
+         while ($row = mysql_fetch_array ($result['result']))
+         {
+            $tLog[] = $row;
+         }
       }
-      $tLog[] = $row;
    }
+   
+   include ("../templates/header.tpl");
+   include ("../templates/admin_menu.tpl");
+   include ("../templates/viewlog.tpl");
+   include ("../templates/footer.tpl");
 }
 
-include ("../templates/header.tpl");
-include ("../templates/admin_menu.tpl");
-include ("../templates/viewlog.tpl");
-include ("../templates/footer.tpl");
-/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
+if ($_SERVER['REQUEST_METHOD'] == "POST")
+{
+   $fDomain = $_POST['fDomain'];
+   
+   $result = db_query ("SELECT * FROM log WHERE domain='$fDomain' ORDER BY timestamp DESC LIMIT 10");
+   if ($result['rows'] > 0)
+   {
+      while ($row = mysql_fetch_array ($result['result']))
+      {
+         $tLog[] = $row;
+      }
+   }
+
+   include ("../templates/header.tpl");
+   include ("../templates/admin_menu.tpl");
+   include ("../templates/viewlog.tpl");
+   include ("../templates/footer.tpl");
+}
 ?>

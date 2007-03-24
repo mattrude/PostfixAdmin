@@ -1,113 +1,10 @@
+#############################
+# Postfix Admin Release 2.x #
+#############################
 #
-# Postfix Admin
-# by Mischa Peters <mischa at high5 dot net>
-# Copyright (c) 2002 - 2005 High5!
-# Licensed under GPL for more info check GPL-LICENSE.TXT
+# 2004 (c) High5!
+# Created by: Mischa Peters <mischa at high5 dot net>
 #
-Version 2.1.1 -- TBD
---------------------
-  - Added: Do not store local copy when forward mail. (Mihau) [24] 
-  - Added: Virtual Vacation for PostgreSQL. (Tarvin)
-  - Added: Virtual Vacation 3.2 (Thanx David)
-  - Added: SUBJECT tag for Virtual Vacation.         
-  - Added: Dovecot setup document for Postfix Admin. (Thanx Massimo)
-  - Added: SquirrelMail plugin to change_password.
-  - Changed: Starting to merge /admin in root. (Mihau)
-  - Changed: Moved some TXT files to DOCUMENTS.   
-  - Changed: Updated tw.lang. (Thanx Bruce)
-  - Fixed: Usage of mysql_real_escape_string(). (Mihau)
-  - Fixed: Calculating of quotas. (Mihau)
-  - Fixed: Password generation when creating a new account. (Mihau)
-  - Fixed: PostgreSQL patches. (Tarvin)
-  - Fixed: Adding of multiple aliases. (Mihau)
-  - Fixed: CSS Menu width. (Mihau)
-  - Fixed: Overview when upgrading from 2.0.4. (Mihau)
-  - Fixed: smtp_mail() to wait for response from server.
-  - Fixed: pacrypt() so system works properly. (Thanx Npaufler)
-  - Fixed: quoting an email address when sending mail in vacation.pl. (Thanx Marc)
-  - Fixed: vacation.pl has a clean exit when it encounters an error. (Thanx Brian)
-  - Fixed: descriptions for quota={-1|0} in admin section (Mihau)
-
-
-Version 2.1.0 -- 2005/01/07
----------------------------
-  - Added: Traditional Chinese language. (Thanx Bruce)
-  - Added: Traditional Bulgarian language. (Thanx Plamen)
-  - Added: Macedonian language. (Thanx Damjan)
-  - Added: Estonian language. (Thanx Peeter)
-  - Added: Slovenian language. (Thanx Nejc)
-  - Added: Check for update link in footer.
-  - Added: Additional language strings. Check LANGUAGE.TXT
-  - Added: Transport support. (read postfix transport for more information)
-  - Added: Additional language string for transport support.
-  - Added: MySQL 4.1 support.
-  - Added: PostgreSQL support. (Big Thanx WhiteFox!)
-  - Added: Setup Checker script. (Thanx Fenrir)
-  - Added: Database prefix. (Thanx Decramy)
-  - Added: Template tags. (Thanx Nelson)
-  - Added: admin/domain/alias/mailbox in delete dialog box.
-  - Added: $CONF['postfix_admin_url'] variable.
-  - Added: $CONF['postfix_admin_path'] variable.
-  - Added: $CONF['vacation_domain'] variable.
-  - Added: $CONF['welcome_text'] variable.
-  - Added: $CONF['special_alias_control'] variable. (Thanx Mihau)
-  - Added: Virtual Vacation 3.1 (Thanx David)
-  - Added: ADDITIONS directory with third party scripts and plugins.
-  - Added: Search function for aliases and mailboxes.
-  - Changed: Postfix Admin has now it's own license.
-  - Changed: New menu and color scheme. (Thanx Nelson)
-  - Changed: Disable number and unlimited number for aliases/mailboxes/quota.
-  - Changed: Virtual Vacation to have it's own transport. (Big Thanx Npaufler!)
-  - Changed: Removed the welcome text for a new mailbox from the language files.
-  - Changed: backup.php to be a more secure. (Thanx John)
-  - Fixed: Cleaned up stylesheet.
-  - Fixed: Default quota multiplier.
-  - Fixed: All POST/GET strings are escaped.
-  - Fixed: Corrected smtp_mail() to wait for result. (Thanx Patrice)
-  - Fixed: Pagination with alias_control switched on.
-  - Fixed: Swedish language. (Thanx Bjorne)
-  - Fixed: Polish language. (Thanx Piotr)
-  - Fixed: Minor Virtual Vacation bugs. (Thanx David)
-  - Fixed: check_quota().
-  - Fixed: Minor encode_header() issue. (Thanx Matthew)
-  - Fixed: edit-alias.php when running with magic_quotes_gpc = off
-
-
-Version 2.0.5 -- 2004/08/21
----------------------------
-  - Added: Chinese language. (Thanx Matthew)
-  - Added: Catalan language. (Thanx Jaume)
-  - Added: Czech language. (Thanx Jakub)
-  - Added: Dynamic language detection.
-  - Added: Header in header.tpl to set charset header from language file.
-  - Added: More subroutines and alias checking for Vacation. (Thanx David)
-  - Added: Domain pass-through with certain pages.
-  - Added: Backup MX option for domain.
-  - Added: Log contains IP address of admin.
-  - Added: Pagination for alias/mailbox listing.
-  - Added: 2 additional language strings to support Backup MX.
-  - Added: Support for motd.txt (Domain Admins only).
-  - Added: Support for motd-admin.txt (Site Admins only).
-  - Added: Support for motd-users.txt (Users only).
-  - Added: Optional hostname for vacation.
-  - Added: generate_password() to generating random passwords for mailboxes.
-  - Changed: dk -> da, se -> sv, no-nn -> nn
-  - Changed: All email addresses are now converted to lowercase, strtolower().
-  - Changed: Moved onMouseOver to the CSS stylesheet.
-  - Changed: Moved font color to the CSS styleheet.
-  - Changed: PHP mail() is replaced by an internal function, smtp_mail().
-  - Changed: mysql_fetch_array() replaced with internal function db_array().
-  - Changed: mysql_fetch_assoc() replaced with internal function db_assoc().
-  - Changed: mysql_fetch_row() replaced with internal function db_row().
-  - Changed: Quota multiplier is now a configuration option.
-  - Fixed: Login didn't check for active flag.
-  - Fixed: Minor html table errors.
-  - Fixed: Row count by using COUNT(*).
-  - Fixed: Locked down subdirectories.
-  - Fixed: Create admin properly populates the domain_admins table.
-  - Fixed: Cleaned up stylesheet.css.
-  - Fixed: Delete mailbox properly removes vacation entries.
-
 
 Version 2.0.4  -- 2004/02/26
 ----------------------------
@@ -209,7 +106,7 @@ Version 1.5.1  -- 2003/06/04
 ----------------------------
   - Added: Optional mailbox per domain directory structure. (Thanx Jim)
   - Added: Option to completely control the stored aliases. (Thanx Alex)
-  - Changed: config.inc.php is renamed to config.inc.php.sample. (Thanx Alex)
+  - Change: config.inc.php is renamed to config.inc.php.sample. (Thanx Alex)
   - Fixed: $PHP_SELF in config.inc.php and my_lib.php. (Thanx Jim)
   
 
@@ -242,8 +139,8 @@ Version 1.4.0  -- 2003/04/07
   - Added: Add standard aliases for every domain that is created.
     These aliases can point to the main "local" administrator.
     The aliases are configured in the config.php in the admin directory.
-  - Changed: The layout of my_lib.php and site_lib.php have been changed.
-  - Changed: Modifying an alias is now done with TEXTAREA for more
+  - Change: The layout of my_lib.php and site_lib.php have been changed.
+  - Change: Modifying an alias is now done with TEXTAREA for more
     flexibility.
   - Fixed: Minor bugs and cosmetic fixes.
 
