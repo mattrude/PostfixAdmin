@@ -1,9 +1,4 @@
 <?php
-// 
-// Postfix Admin 
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
 //
 // File: edit-active.php
 //
@@ -22,17 +17,11 @@ require ("../config.inc.php");
 require ("../functions.inc.php");
 include ("../languages/" . check_language () . ".lang");
 
-$SESSID_USERNAME = check_session ();
-(!check_admin($SESSID_USERNAME) ? header("Location: " . $CONF['postfix_admin_url'] . "/main.php") && exit : '1');
-
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-   if (isset ($_GET['username'])) $fUsername = escape_string ($_GET['username']);
-
-   $sqlSet='active=1-active';
-   if ('pgsql'==$CONF['database_type']) $sqlSet='active=NOT active';
-
-   $result = db_query ("UPDATE $table_admin SET $sqlSet,modified=NOW() WHERE username='$fUsername'");
+   if (isset ($_GET['username'])) $fUsername = $_GET['username'];
+   
+   $result = db_query ("UPDATE admin SET active=1-active WHERE username='$fUsername'");
    if ($result['rows'] != 1)
    {
       $error = 1;
@@ -58,7 +47,4 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    include ("../templates/message.tpl");
    include ("../templates/footer.tpl");
 }
-
-/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
-
 ?>

@@ -1,1 +1,2 @@
-<?php print $tMessage; ?>
+<center>
+<?php print $tMessage . "\n"; ?>

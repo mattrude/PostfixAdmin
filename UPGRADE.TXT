@@ -1,16 +1,17 @@
+#############################
+# Postfix Admin Release 2.x #
+#############################
 #
-# Postfix Admin
-# by Mischa Peters <mischa at high5 dot net>
-# Copyright (c) 2002 - 2005 High5!
-# Licensed under GPL for more info check GPL-LICENSE.TXT
+# Copyright (c) 2002, 2003, 2004 High5!
+# Created by: Mischa Peters <mischa at high5 dot net>
 #
 
 REQUIRED!!
 ----------
 - You are using Postfix 2.0 or higher.
-- You are using Apache 1.3.27 / Lighttpd 1.3.15 or higher.
-- You are using PHP 4.1 or higher.
-- You are using MySQL 3.23 or higher.
+- You are using Apache 1.3.27 or higher.
+- You are using PHP 4.1 or higher (PHP 5.x or higher is not supported yet).
+- You are using MySQL 3.23.xx or higher. (MySQL 4.1.xx or higher is not supported yet).
 
 
 READ THIS FIRST!
@@ -19,9 +20,9 @@ It's recommened that you install Postfix Admin in a new folder and not
 on-top of the old install!!
 
 When you are upgrading from Postfix Admin 1.5x (or older), make sure you
-backup your database before you run the DOCUMENTS/TABLE_CHANGES.TXT on your database.
+backup your database before you run the TABLE_CHANGES.TXT on your database.
 
-When you are upgrading from Postfix Admin 2.0.x, please read the DOCUMENTS/BACKUP_MX.TXT.
+When you are upgrading from Postfix Admin 2.0.x, please read the BACKUP_MX.TXT.
 
 
 1. Backup the Database
@@ -44,7 +45,14 @@ Postfix Admin archive (whatever the filename is):
 3. Change permissions
 ----------------------
 Since the database  password is stored in the config.inc.php it's a good idea
-to have change the permissions for Postfix Admin.
+to have Postfix Admin set to the permission of the webserver. In this
+example, we assume that user "www" and group "www" are the web server as is
+often the case with Apache.
+
+  $ cd /usr/local/www
+  $ chown -R www:www postfixadmin-2.0.0
+
+This is also a good idea for the file permissions.
 
   $ cd /usr/local/www/postfixadmin-2.0.0
   $ chmod 640 *.php *.css
@@ -59,12 +67,16 @@ to have change the permissions for Postfix Admin.
   $ cd /usr/local/www/postfixadmin-2.0.0/users/
   $ chmod 640 *.php
   
+Additionally, if "chown user:group" doesn't work, you can use "chown user"
+and "chgrp group" instead. See the man pages for these commands for more
+information.
+
 
 4. Modify the MySQL Tables
 --------------------------
 In TABLE_CHANGES.TXT or TABLE_BACKUP_MX.TXT you can find the table structure that you need in order
 to configure Postfix Admin 2.0.0 and Postfix in general to work with Virtual
-Domains and Users. You can find these in DOCUMENTS/
+Domains and Users
 
 
 5. Configure

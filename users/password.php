@@ -1,9 +1,4 @@
 <?php
-// 
-// Postfix Admin 
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
 //
 // File: password.php
 //
@@ -38,19 +33,19 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
-   $fPassword_current = escape_string ($_POST['fPassword_current']);
-   $fPassword = escape_string ($_POST['fPassword']);
-   $fPassword2 = escape_string ($_POST['fPassword2']);
+   $fPassword_current = $_POST['fPassword_current'];
+   $fPassword = $_POST['fPassword'];
+   $fPassword2 = $_POST['fPassword2'];
 
    $username = $USERID_USERNAME;
      
-  	$result = db_query ("SELECT * FROM $table_mailbox WHERE username='$username'");
+  	$result = db_query ("SELECT * FROM mailbox WHERE username='$username'");
    if ($result['rows'] == 1)
    {
       $row = db_array ($result['result']);
       $checked_password = pacrypt ($fPassword_current, $row['password']);
 
-		$result = db_query ("SELECT * FROM $table_mailbox WHERE username='$username' AND password='$checked_password'");      
+		$result = db_query ("SELECT * FROM mailbox WHERE username='$username' AND password='$checked_password'");      
       if ($result['rows'] != 1)
       {
          $error = 1;
@@ -72,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    if ($error != 1)
    {
       $password = pacrypt ($fPassword);
-      $result = db_query ("UPDATE $table_mailbox SET password='$password',modified=NOW() WHERE username='$username'");
+      $result = db_query ("UPDATE mailbox SET password='$password',modified=NOW() WHERE username='$username'");
       if ($result['rows'] == 1)
       {
          $tMessage = $PALANG['pPassword_result_succes'];

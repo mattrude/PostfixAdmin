@@ -1,10 +1,10 @@
+#############################
+# Postfix Admin Release 2.x #
+#############################
 #
-# Postfix Admin
-# by Mischa Peters <mischa at high5 dot net>
-# Copyright (c) 2002 - 2005 High5!
-# Licensed under GPL for more info check GPL-LICENSE.TXT
+# Copyright (c) 2002, 2003, 2004 High5!
+# Created by: Mischa Peters <mischa at high5 dot net>
 #
-
 # mysql -u root [-p] < TABLE_CHANGES.TXT
 
 #
@@ -85,7 +85,7 @@ ALTER TABLE mailbox ADD INDEX (username);
 #
 ALTER TABLE vacation ADD domain VARCHAR(255) DEFAULT '' NOT NULL AFTER cache;
 ALTER TABLE vacation ADD created DATETIME DEFAULT '0000-00-00 00:00:00' NOT NULL AFTER domain;
-ALTER TABLE vacation ADD active TINYINT(1) DEFAULT '1' NOT NULL AFTER created;
+ALTER TABLE vacation ADD active TINYINT(1) DEFAULT '' NOT NULL AFTER created;
 ALTER TABLE vacation DROP PRIMARY KEY, ADD PRIMARY KEY(email);
 
 #

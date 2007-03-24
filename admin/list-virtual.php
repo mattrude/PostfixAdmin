@@ -1,9 +1,4 @@
 <?php
-// 
-// Postfix Admin 
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
 //
 // File: list-virtual.php
 //
@@ -24,9 +19,6 @@ require ("../config.inc.php");
 require ("../functions.inc.php");
 include ("../languages/" . check_language () . ".lang");
 
-$SESSID_USERNAME = check_session ();
-(!check_admin($SESSID_USERNAME) ? header("Location: " . $CONF['postfix_admin_url'] . "/main.php") && exit : '1');
-
 $list_domains = list_domains ();
 
 $tAlias = array();
@@ -37,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
    $fDisplay = 0;
    $page_size = $CONF['page_size'];
    
-   if (isset ($_GET['domain'])) $fDomain = escape_string ($_GET['domain']);
-   if (isset ($_GET['limit'])) $fDisplay = intval ($_GET['limit']);
+   if (isset ($_GET['domain'])) $fDomain = $_GET['domain'];
+   if (isset ($_GET['limit'])) $fDisplay = $_GET['limit'];
 
    if ((is_array ($list_domains) and sizeof ($list_domains) > 0)) if (empty ($fDomain)) $fDomain = $list_domains[0];
    
@@ -46,42 +38,29 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
 
    if ((is_array ($list_domains) and sizeof ($list_domains) > 0)) if (empty ($fDomain)) $fDomain = $list_domains[1];
    
-   $query = "SELECT $table_alias.address,$table_alias.goto,$table_alias.modified,$table_alias.active FROM $table_alias LEFT JOIN $table_mailbox ON $table_alias.address=$table_mailbox.username WHERE $table_alias.domain='$fDomain' AND $table_mailbox.maildir IS NULL ORDER BY $table_alias.address LIMIT $fDisplay, $page_size";
-   if ('pgsql'==$CONF['database_type'])
+   if ($CONF['alias_control'] == "YES")
    {
-      $query = "SELECT address,goto,extract(epoch from modified) as modified,active FROM $table_alias WHERE domain='$fDomain' AND NOT EXISTS(SELECT 1 FROM $table_mailbox WHERE username=$table_alias.address) ORDER BY address LIMIT $page_size OFFSET $fDisplay";
+      $query = "SELECT alias.address,alias.goto,alias.modified FROM alias WHERE alias.domain='$fDomain' ORDER BY alias.address LIMIT $fDisplay, $page_size";
+   }
+   else
+   {
+      $query = "SELECT alias.address,alias.goto,alias.modified FROM alias LEFT JOIN mailbox ON alias.address=mailbox.username WHERE alias.domain='$fDomain' AND mailbox.maildir IS NULL ORDER BY alias.address LIMIT $fDisplay, $page_size";
    }
 
-   $result = db_query ($query);
+   $result = db_query ("$query");
    if ($result['rows'] > 0)
    {
       while ($row = db_array ($result['result']))
       {
-         if ('pgsql'==$CONF['database_type'])
-         {
-            $row['modified']=gmstrftime('%c %Z',$row['modified']);
-            $row['active']=('t'==$row['active']) ? 1 : 0;
-         }
          $tAlias[] = $row;
       }
    }
 
-   $query = "SELECT * FROM $table_mailbox WHERE domain='$fDomain' ORDER BY username LIMIT $fDisplay, $page_size";
-   if ('pgsql'==$CONF['database_type'])
-   {
-      $query = "SELECT *,extract(epoch from created) as uts_created,extract(epoch from modified) as uts_modified FROM $table_mailbox WHERE domain='$fDomain' ORDER BY username LIMIT $page_size OFFSET $fDisplay";
-   }
-   $result = db_query ($query);
+   $result = db_query ("SELECT * FROM mailbox WHERE domain='$fDomain' ORDER BY username LIMIT $fDisplay, $page_size");
    if ($result['rows'] > 0)
    {
       while ($row = db_array ($result['result']))
       {
-         if ('pgsql'==$CONF['database_type'])
-         {
-            $row['created']=gmstrftime('%c %Z',$row['uts_created']);
-            $row['modified']=gmstrftime('%c %Z',$row['uts_modified']);
-            $row['active']=('t'==$row['active']) ? 1 : 0;
-         }
          $tMailbox[] = $row;
       }
    }
@@ -115,58 +94,34 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    $fDisplay = 0;
    $page_size = $CONF['page_size'];
 
-   if (isset ($_POST['fDomain'])) $fDomain = escape_string ($_POST['fDomain']);
-   if (isset ($_POST['limit'])) $fDisplay = intval ($_POST['limit']);
+   $fDomain = $_POST['fDomain'];
+   if (isset ($_POST['limit'])) $fDisplay = $_POST['limit'];
 
    $limit = get_domain_properties ($fDomain);
 
    if ($CONF['alias_control'] == "YES")
    {
-      $query = "SELECT address,goto,modified,active FROM alias WHERE domain='$fDomain' ORDER BY address LIMIT $fDisplay, $page_size";
-      if ('pgsql'==$CONF['database_type'])
-      {
-         $query = "SELECT address,goto,extract(epoch from modified) as modified,active FROM alias WHERE domain='$fDomain' ORDER BY alias.address LIMIT $page_size OFFSET $fDisplay";
-      }
+      $query = "SELECT alias.address,alias.goto,alias.modified FROM alias WHERE alias.domain='$fDomain' ORDER BY alias.address LIMIT $fDisplay, $page_size";
    }
    else
    {
-      $query = "SELECT $table_alias.address,$table_alias.goto,$table_alias.modified,$table_alias.active FROM $table_alias LEFT JOIN $table_mailbox ON $table_alias.address=$table_mailbox.username WHERE $table_alias.domain='$fDomain' AND $table_mailbox.maildir IS NULL ORDER BY $table_alias.address LIMIT $fDisplay, $page_size";
-      if ('pgsql'==$CONF['database_type'])
-      {
-         $query = "SELECT $table_alias.address,$table_alias.goto,extract(epoch from $table_alias.modified) as modified,$table_alias.active FROM $table_alias LEFT JOIN $table_mailbox ON $table_alias.address=$table_mailbox.username WHERE $table_alias.domain='$fDomain' AND $table_mailbox.maildir IS NULL ORDER BY $table_alias.address LIMIT $page_size OFFSET $fDisplay";
-      }
+      $query = "SELECT alias.address,alias.goto,alias.modified FROM alias LEFT JOIN mailbox ON alias.address=mailbox.username WHERE alias.domain='$fDomain' AND mailbox.maildir IS NULL ORDER BY alias.address LIMIT $fDisplay, $page_size";
    }
 
-   $result = db_query ($query);
+   $result = db_query ("$query");
    if ($result['rows'] > 0)
    {
       while ($row = db_array ($result['result']))
       {
-         if ('pgsql'==$CONF['database_type'])
-         {
-            $row['modified']=gmstrftime('%c %Z',$row['modified']);
-            $row['active']=('t'==$row['active']) ? 1 : 0;
-         }
          $tAlias[] = $row;
       }
    }
 
-   $query="SELECT * FROM $table_mailbox WHERE domain='$fDomain' ORDER BY username LIMIT $fDisplay, $page_size";
-   if ('pgsql'==$CONF['database_type'])
-   {
-      $query="SELECT *,extract(epoch from created) as uts_created,extract(epoch from modified) as uts_modified FROM $table_mailbox WHERE domain='$fDomain' ORDER BY username LIMIT $page_size OFFSET $fDisplay";
-   }
-   $result = db_query ($query);
+   $result = db_query ("SELECT * FROM mailbox WHERE domain='$fDomain' ORDER BY username LIMIT $fDisplay, $page_size");
    if ($result['rows'] > 0)
    {
       while ($row = db_array ($result['result']))
       {
-         if ('pgsql'==$CONF['database_type'])
-         {
-            $row['created']=gmstrftime('%c %Z',$row['uts_created']);
-            $row['modified']=gmstrftime('%c %Z',$row['uts_modified']);
-            $row['active']=('t'==$row['active']) ? 1 : 0;
-         }
          $tMailbox[] = $row;
       }
    }
@@ -193,6 +148,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    include ("../templates/admin_menu.tpl");
    include ("../templates/admin_list-virtual.tpl");
    include ("../templates/footer.tpl");
-/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 }
 ?>

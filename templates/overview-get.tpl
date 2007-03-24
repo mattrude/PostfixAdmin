@@ -1,6 +1,6 @@
-<div id="overview">
-<form name="overview" method="get">
-<select class="flat" name="domain" onChange="this.form.submit();">
+<center>
+<form name="overview" method="post">
+<select name="fDomain" onChange="this.form.submit()";>
 <?php
 for ($i = 0; $i < sizeof ($list_domains); $i++)
 {
@@ -15,45 +15,33 @@ for ($i = 0; $i < sizeof ($list_domains); $i++)
 }
 ?>
 </select>
-<input class="button" type="submit" name="go" value="<?php print $PALANG['pOverview_button']; ?>" />
+<input type="submit" name="go" value="<?php print $PALANG['pOverview_button']; ?>" />
 </form>
-<form name="search" method="post" action="search.php">
-<input type="textbox" name="search" size="10">
-</form>
-</div>
-
+<p />
 <?php
-   print "<table id=\"overview_table\">\n";
-   print "   <tr>\n";
-   print "      <td colspan=\"5\"><h3>".$PALANG['pOverview_title']."</h3></td>";
-   print "   </tr>";
-   print "   <tr class=\"header\">\n";
-   print "      <td>" . $PALANG['pOverview_get_domain'] . "</td>\n";
-   print "      <td>" . $PALANG['pOverview_get_aliases'] . "</td>\n";
-   print "      <td>" . $PALANG['pOverview_get_mailboxes'] . "</td>\n";
-   if ($CONF['quota'] == 'YES') print "      <td>" . $PALANG['pOverview_get_quota'] . "</td>\n";
-   print "   </tr>\n";
+print "<center>\n";
+print "<table border=\"1\">\n";
+print "   <tr class=\"header\">\n";
+print "      <td>" . $PALANG['pOverview_get_domain'] . "</td>\n";
+print "      <td>" . $PALANG['pOverview_get_aliases'] . "</td>\n";
+print "      <td>" . $PALANG['pOverview_get_mailboxes'] . "</td>\n";
+if ($CONF['quota'] == 'YES') print "      <td>" . $PALANG['pOverview_get_quota'] . "</td>\n";
+print "   </tr>\n";
 
-   for ($i = 0; $i < sizeof ($list_domains); $i++)
+for ($i = 0; $i < sizeof ($list_domains); $i++)
+{
+   if ((is_array ($list_domains) and sizeof ($list_domains) > 0))
    {
-      if ((is_array ($list_domains) and sizeof ($list_domains) > 0))
-      {
-         $limit = get_domain_properties ($list_domains[$i]);
-
-         if ($limit['aliases'] == 0) $limit['aliases'] = $PALANG['pOverview_unlimited'];
-         if ($limit['mailboxes'] == 0) $limit['mailboxes'] = $PALANG['pOverview_unlimited'];
-         if ($limit['maxquota'] == 0) $limit['maxquota'] = $PALANG['pOverview_unlimited'];
-         if ($limit['aliases'] < 0) $limit['aliases'] = $PALANG['pOverview_disabled'];
-         if ($limit['mailboxes'] < 0) $limit['mailboxes'] = $PALANG['pOverview_disabled'];
-         if ($limit['maxquota'] < 0) $limit['maxquota'] = $PALANG['pOverview_disabled'];
-
-         print "   <tr class=\"hilightoff\" onMouseOver=\"className='hilighton';\" onMouseOut=\"className='hilightoff';\">\n";
-         print "      <td><a href=\"overview.php?domain=" . $list_domains[$i] . "\">" . $list_domains[$i] . "</a></td>\n";
-         print "      <td>" . $limit['alias_count'] . " / " . $limit['aliases'] . "</td>\n";
-         print "      <td>" . $limit['mailbox_count'] . " / " . $limit['mailboxes'] . "</td>\n";
-         if ($CONF['quota'] == 'YES') print "      <td>" . $limit['maxquota'] . "</td>\n";
-         print "   </tr>\n";
-      }
+      $limit = get_domain_properties ($list_domains[$i]);
+      
+      print "   <tr class=\"hilightoff\" onMouseOver=\"className='hilighton';\" onMouseOut=\"className='hilightoff';\">\n";
+      print "      <td><a href=\"overview.php?domain=" . $list_domains[$i] . "\">" . $list_domains[$i] . "</a></td>\n";
+      print "      <td>" . $limit['alias_count'] . " / " . $limit['aliases'] . "</td>\n";
+      print "      <td>" . $limit['mailbox_count'] . " / " . $limit['mailboxes'] . "</td>\n";
+      if ($CONF['quota'] == 'YES') print "      <td>" . $limit['maxquota'] . "</td>\n";
+      print "   </tr>\n";
    }
-   print "</table>\n";
+}
+print "</table>\n";
+print "<p />\n";
 ?>
