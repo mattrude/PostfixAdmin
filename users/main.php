@@ -1,9 +1,4 @@
 <?php
-// 
-// Postfix Admin 
-// by Mischa Peters <mischa at high5 dot net>
-// Copyright (c) 2002 - 2005 High5!
-// Licensed under GPL for more info check GPL-LICENSE.TXT
 //
 // File: main.php
 //
@@ -19,7 +14,7 @@
 //
 require ("../config.inc.php");
 require ("../functions.inc.php");
-include ("../languages/" . check_language () . ".lang");
+include ("../languages/" . $CONF['language'] . ".lang");
 
 $USERID_USERNAME = check_user_session ();
 

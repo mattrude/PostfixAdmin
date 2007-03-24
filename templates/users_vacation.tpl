@@ -1,29 +1,42 @@
-<div id="edit_form">
-<form name="vacation" method="post">
-<table>
+<center>
+<?php print $tMessage; ?>
+<table class="form">
    <tr>
-      <td colspan="3"><h3><?php print $PALANG['pUsersVacation_welcome']; ?></h3></td>
+      <td align="center" colspan="3">
+         <?php print $PALANG['pUsersVacation_welcome'] . "\n"; ?>
+         <br />
+         <br />
+      </td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pUsersVacation_subject'] . ":"; ?></td>
-      <td><input type="text" name="fSubject" value="<?php print $PALANG['pUsersVacation_subject_text']; ?>" /></td>
-      <td>&nbsp;</td>
+      <td>
+         <form name="vacation" method="post">
+         <?php print $PALANG['pUsersVacation_subject'] . ":\n"; ?>
+      </td>
+      <td>
+         <input type="text" name="fSubject" value="<?php print $PALANG['pUsersVacation_subject_text']; ?>" />
+      </td>
+      <td>
+         &nbsp;
+      </td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pUsersVacation_body'] . ":"; ?></td>
+      <td>
+         <?php print $PALANG['pUsersVacation_body'] . ":\n"; ?>
+      </td>
       <td>
 <textarea rows="10" cols="80" name="fBody">
-<?php print $PALANG['pUsersVacation_body_text']; ?>
+<?php print $PALANG['pUsersVacation_body_text'] . "\n"; ?>
 </textarea>
       </td>
-      <td>&nbsp;</td>
+      <td>
+         &nbsp;
+      </td>
    </tr>
    <tr>
-      <td colspan="3" class="hlp_center"><input class="button" type="submit" name="fAway" value="<?php print $PALANG['pUsersVacation_button_away']; ?>" /></td>
-   </tr>
-   <tr>
-      <td colspan="3" class="standout"><?php print $tMessage; ?></td>
+      <td align="center" colspan="3">
+         <input type="submit" name="fAway" value="<?php print $PALANG['pUsersVacation_button_away']; ?>" />
+         </form>
+      </td>
    </tr>
 </table>
-</form>
-</div>

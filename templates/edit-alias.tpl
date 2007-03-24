@@ -1,18 +1,31 @@
-<div id="edit_form">
-<form name="alias" method="post">
-<table>
+<center>
+<?php print $tMessage; ?>
+<table class="form">
    <tr>
-      <td colspan="3"><h3><?php print $PALANG['pEdit_alias_welcome']; ?></h3></td>
+      <td align="center" colspan="3">
+         <?php print $PALANG['pEdit_alias_welcome'] . "\n"; ?>
+         <br />
+         <br />
+      </td>
    </tr>
    <tr>
-      <td><?php print $PALANG['pEdit_alias_address'] . ":"; ?></td>
-      <td><?php print $fAddress; ?></td>
-      <td>&nbsp;</td>
-   </tr>
-   <tr>
-      <td><?php print $PALANG['pEdit_alias_goto'] . ":"; ?></td>
       <td>
-<textarea class="flat" rows="10" cols="60" name="fGoto">
+         <form name="mailbox" method="post">
+         <?php print $PALANG['pEdit_alias_address'] . ":\n"; ?>
+      </td>
+      <td>
+         <?php print $fAddress; ?>
+      </td>
+      <td>
+         &nbsp;
+      </td>
+   </tr>
+   <tr>
+      <td>
+         <?php print $PALANG['pEdit_alias_goto'] . ":\n"; ?>
+      </td>
+      <td>
+<textarea rows="24" cols="80" name="fGoto">
 <?php
 $array = preg_split ('/,/', $tGoto);
 for ($i = 0 ; $i < sizeof ($array) ; $i++)
@@ -23,14 +36,14 @@ for ($i = 0 ; $i < sizeof ($array) ; $i++)
 ?>
 </textarea>
       </td>
-      <td>&nbsp;</td>
+      <td>
+         &nbsp;
+      </td>
    </tr>
    <tr>
-      <td colspan="3" class="hlp_center"><input class="button" type="submit" name="submit" value="<?php print $PALANG['pEdit_alias_button']; ?>" /></td>
-   </tr>
-   <tr>
-      <td colspan="3" class="standout"><?php print $tMessage; ?></td>
+      <td align="center" colspan="3">
+         <input type="submit" name="submit" value="<?php print $PALANG['pEdit_alias_button']; ?>" />
+         </form>
+      </td>
    </tr>
 </table>
-</form>
-</div>

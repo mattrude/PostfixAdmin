@@ -3,7 +3,7 @@
 <table class="form">
    <tr>
       <td align="center" colspan="3">
-         <?php print $PALANG['pPassword_welcome'] . "\n"; ?>
+         <?php print $PALANG['pVcp_welcome'] . "\n"; ?>
          <br />
          <br />
       </td>
@@ -11,40 +11,40 @@
    <tr>
       <td>
          <form name="mailbox" method="post">
-         <?php print $PALANG['pPassword_admin'] . ":\n"; ?>
+         <?php print $PALANG['pVcp_username'] . ":\n"; ?>
       </td>
       <td>
-         <?php print $USERID_USERNAME; ?>
+         <input type="text" name="fUsername" value="<?php print $tUsername; ?>" />
       </td>
       <td>
-         <?php print $pPassword_admin_text . "\n"; ?>
+         <?php print $pVcp_username_text . "\n"; ?>
       </td>
    </tr>
    <tr>
       <td>
-         <?php print $PALANG['pPassword_password_current'] . ":\n"; ?>
+         <?php print $PALANG['pVcp_password_current'] . ":\n"; ?>
       </td>
       <td>
          <input type="password" name="fPassword_current">
       </td>
       <td>
-         <?php print "$pPassword_password_current_text\n"; ?>
+         <?php print "$pVcp_password_current_text\n"; ?>
       </td>
    </tr>
    <tr>
       <td>
-         <?php print $PALANG['pPassword_password'] . ":\n"; ?>
+         <?php print $PALANG['pVcp_password'] . ":\n"; ?>
       </td>
       <td>
          <input type="password" name="fPassword">
       </td>
       <td>
-         <?php print "$pPassword_password_text\n"; ?>
+         <?php print "$pVcp_password_text\n"; ?>
       </td>
    </tr>
    <tr>
       <td>
-         <?php print $PALANG['pPassword_password2'] . ":\n"; ?>
+         <?php print $PALANG['pVcp_password2'] . ":\n"; ?>
       </td>
       <td>
          <input type="password" name="fPassword2">
@@ -55,7 +55,7 @@
    </tr>
    <tr>
       <td align="center" colspan="3">
-         <input type="submit" name="submit" value="<?php print $PALANG['pPassword_button']; ?>" />
+         <input type="submit" name="submit" value="<?php print $PALANG['pVcp_button']; ?>" />
          </form>
       </td>
    </tr>
