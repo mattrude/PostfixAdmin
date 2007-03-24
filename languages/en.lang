@@ -1,25 +1,20 @@
 <?php
 //
 // Language file English
-// by Mischa <mischa at high5 dot net>
 //
-
-require ('default.lang');
-
 $PALANG['YES'] = 'YES';
 $PALANG['NO'] = 'NO';
 $PALANG['edit'] = 'edit';
 $PALANG['del'] = 'del';
-$PALANG['confirm'] = 'Are you sure you want to delete this?\n';
-$PALANG['confirm_domain'] = 'Do you really want to delete all records for this domain? This can not be undone!\n';
-$PALANG['check_update'] = 'Check for update';
+$PALANG['confirm'] = 'Are you sure you want to delete this?';
+$PALANG['confirm_domain'] = 'Do you really want to delete all records for this domain? This can not be undone!';
 
-$PALANG['pLogin_welcome'] = 'Mail admins login here to administer your domain.';
+$PALANG['pLogin_welcome'] = 'Mail admins login here to administrate your domain.';
 $PALANG['pLogin_username'] = 'Login (email)';
 $PALANG['pLogin_password'] = 'Password';
 $PALANG['pLogin_button'] = 'Login';
-$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Your login is not correct. Make sure that you login with your email address!</span>';
-$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Your password is not correct!</span>';
+$PALANG['pLogin_username_incorrect'] = 'Your login is not correct. Make sure that you login with your email address!';
+$PALANG['pLogin_password_incorrect'] = 'Your password is not correct!';
 $PALANG['pLogin_login_users'] = 'Users click here to login to the user section.';
 
 $PALANG['pMenu_overview'] = 'Overview';
@@ -39,14 +34,6 @@ $PALANG['pMain_password'] = 'Change the password for your admin account.';
 $PALANG['pMain_viewlog'] = 'View the log files.';
 $PALANG['pMain_logout'] = 'Logout from the system';
 
-$PALANG['pOverview_disabled'] = 'Disabled';
-$PALANG['pOverview_unlimited'] = 'Unlimited';
-$PALANG['pOverview_title'] = ':: Defined Domains';
-$PALANG['pOverview_up_arrow'] = 'Go Top';
-$PALANG['pOverview_right_arrow'] = 'Next Page';
-$PALANG['pOverview_left_arrow'] = 'Previous Page';
-$PALANG['pOverview_alias_title'] = ':: Alias';
-$PALANG['pOverview_mailbox_title'] = ':: Mailboxes';
 $PALANG['pOverview_button'] = 'Go';
 $PALANG['pOverview_welcome'] = 'Overview for ';
 $PALANG['pOverview_alias_alias_count'] = 'Aliases';
@@ -59,7 +46,6 @@ $PALANG['pOverview_mailbox_name'] = 'Name';
 $PALANG['pOverview_mailbox_quota'] = 'Quota (MB)';
 $PALANG['pOverview_mailbox_modified'] = 'Last Modified';
 $PALANG['pOverview_mailbox_active'] = 'Active';
-$PALANG['pOverview_vacation_edit'] = 'Vacation';
 
 $PALANG['pOverview_get_domain'] = 'Domain';
 $PALANG['pOverview_get_aliases'] = 'Aliases';
@@ -67,80 +53,76 @@ $PALANG['pOverview_get_mailboxes'] = 'Mailboxes';
 $PALANG['pOverview_get_quota'] = 'Mailbox Quota (MB)';
 $PALANG['pOverview_get_modified'] = 'Last Modified';
 
-$PALANG['pDelete_delete_error'] = '<span class="error_msg">Unable to delete the entry ';
-$PALANG['pDelete_postdelete_error'] = '<span class="error_msg">Unable to remove mailbox ';
-$PALANG['pDelete_domain_error'] = '<span class="error_msg">This domain is not yours ';
+$PALANG['pDelete_delete_error'] = '<font color="red">Unable to delete the entry ';
+$PALANG['pDelete_domain_error'] = '<font color="red">This domain is not yours ';
 
 $PALANG['pCreate_alias_welcome'] = 'Create a new alias for your domain.';
 $PALANG['pCreate_alias_address'] = 'Alias';
-$PALANG['pCreate_alias_address_text_error1'] = '<br /><span class="error_msg">The ALIAS is not valid!</span>';
-$PALANG['pCreate_alias_address_text_error2'] = '<br /><span class="error_msg">This email address already exists, please choose a different one!</span>';
-$PALANG['pCreate_alias_address_text_error3'] = '<br /><span class="error_msg">You have reached your limit to create aliases!</span>';
+$PALANG['pCreate_alias_address_text_error1'] = '<br /><font color="red">The ALIAS is not valid!</font>';
+$PALANG['pCreate_alias_address_text_error2'] = '<br /><font color="red">This email address already exists, please choose a different one!</font>';
+$PALANG['pCreate_alias_address_text_error3'] = '<br /><font color="red">You have reached your limit to create aliases!</font>';
 $PALANG['pCreate_alias_goto'] = 'To';
 $PALANG['pCreate_alias_button'] = 'Add Alias';
 $PALANG['pCreate_alias_goto_text'] = 'Where the mail needs to be send to.';
-$PALANG['pCreate_alias_goto_text_error'] = 'Where the email needs to go.<br /><span class="error_msg">The TO is not valid!</span>';
-$PALANG['pCreate_alias_result_error'] = '<span class="error_msg">Unable to add the alias to the alias table!</span>';
+$PALANG['pCreate_alias_goto_text_error'] = 'Where the email needs to go.<br /><font color="red">The TO is not valid!</font>';
+$PALANG['pCreate_alias_result_error'] = '<font color="red">Unable to add the alias to the alias table!</font>';
 $PALANG['pCreate_alias_result_succes'] = 'The alias has been added to the alias table!';
 $PALANG['pCreate_alias_catchall_text'] = 'To create a catch-all use an "*" as alias.<br />For domain to domain forwarding use "*@domain.tld" as to.';
 
 $PALANG['pEdit_alias_welcome'] = 'Edit an alias for your domain.<br />One entry per line.';
 $PALANG['pEdit_alias_address'] = 'Alias';
-$PALANG['pEdit_alias_address_error'] = '<span class="error_msg">Unable to locate alias!</span>';
+$PALANG['pEdit_alias_address_error'] = '<font color="red">Unable to locate alias!</font>';
 $PALANG['pEdit_alias_goto'] = 'To';
-$PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">You didn\'t enter anything at To</span>';
-$PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">The email address that you have entered is not valid: ';
-$PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">This domain is not yours: ';
-$PALANG['pEdit_alias_forward_and_store'] = 'Deliver to the local mailbox.';
-$PALANG['pEdit_alias_forward_only'] = 'Forward to given email addresses only.';
+$PALANG['pEdit_alias_goto_text_error1'] = '<font color="red">You didn\'t enter anything at To</font>';
+$PALANG['pEdit_alias_goto_text_error2'] = '<font color="red">The email address that you have entered is not valid: ';
+$PALANG['pEdit_alias_domain_error'] = '<font color="red">This domain is not yours: ';
 $PALANG['pEdit_alias_button'] = 'Edit Alias';
-$PALANG['pEdit_alias_result_error'] = '<span class="error_msg">Unable to modify the alias!</span>';
+$PALANG['pEdit_alias_result_error'] = '<font color="red">Unable to modify the alias!</font>';
 
-$PALANG['pCreate_mailbox_welcome'] = 'Create a new mailbox for your domain.';
+$PALANG['pCreate_mailbox_welcome'] = 'Create a new local mailbox for your domain.';
 $PALANG['pCreate_mailbox_username'] = 'Username';
-$PALANG['pCreate_mailbox_username_text_error1'] = '<br /><span class="error_msg">The EMAIL is not valid!</span>';
-$PALANG['pCreate_mailbox_username_text_error2'] = '<br /><span class="error_msg">This email address already exists, please choose a different one!</span>';
-$PALANG['pCreate_mailbox_username_text_error3'] = '<br /><span class="error_msg">You have reached your limit to create mailboxes!</span>';
+$PALANG['pCreate_mailbox_username_text_error1'] = '<br /><font color="red">The EMAIL is not valid!</font>';
+$PALANG['pCreate_mailbox_username_text_error2'] = '<br /><font color="red">This email address already exists, please choose a different one!</font>';
+$PALANG['pCreate_mailbox_username_text_error3'] = '<br /><font color="red">You have reached your limit to create mailboxes!</font>';
 $PALANG['pCreate_mailbox_password'] = 'Password';
 $PALANG['pCreate_mailbox_password2'] = 'Password (again)';
 $PALANG['pCreate_mailbox_password_text'] = 'Password for POP3/IMAP';
-$PALANG['pCreate_mailbox_password_text_error'] = 'Password for POP3/IMAP<br /><span class="error_msg">The passwords that you supplied don\'t match!<br />Or are empty!</span>';
+$PALANG['pCreate_mailbox_password_text_error'] = 'Password for POP3/IMAP<br /><font color="red">The passwords that you supplied don\'t match!<br />Or are empty!</font>';
 $PALANG['pCreate_mailbox_name'] = 'Name';
 $PALANG['pCreate_mailbox_name_text'] = 'Full name';
 $PALANG['pCreate_mailbox_quota'] = 'Quota';
 $PALANG['pCreate_mailbox_quota_text'] = 'MB';
-$PALANG['pCreate_mailbox_quota_text_error'] = 'MB<br /><span class="error_msg">The quota that you specified is to high!</span>';
+$PALANG['pCreate_mailbox_quota_text_error'] = 'MB<br /><font color="red">The quota that you specified is to high!</font>';
 $PALANG['pCreate_mailbox_active'] = 'Active';
-$PALANG['pCreate_mailbox_mail'] = 'Send Welcome mail';
+$PALANG['pCreate_mailbox_mail'] = 'Create mailbox';
 $PALANG['pCreate_mailbox_button'] = 'Add Mailbox';
-$PALANG['pCreate_mailbox_result_error'] = '<span class="error_msg">Unable to add the mailbox to the mailbox table!</span>';
+$PALANG['pCreate_mailbox_result_error'] = '<font color="red">Unable to add the mailbox to the mailbox table!</font>';
 $PALANG['pCreate_mailbox_result_succes'] = 'The mailbox has been added to the mailbox table!';
-$PALANG['pCreate_mailbox_result_succes_nosubfolders'] = 'The mailbox has been added to the mailbox table, but none (or only some) of the predefined sub-folders could be created';
 
 $PALANG['pEdit_mailbox_welcome'] = 'Edit a mailbox for your domain.';
 $PALANG['pEdit_mailbox_username'] = 'Username';
-$PALANG['pEdit_mailbox_username_error'] = '<span class="error_msg">Unable to locate mailbox!</span>';
+$PALANG['pEdit_mailbox_username_error'] = '<font color="red">Unable to locate mailbox!</font>';
 $PALANG['pEdit_mailbox_password'] = 'New Password';
 $PALANG['pEdit_mailbox_password2'] = 'New Password (again)';
-$PALANG['pEdit_mailbox_password_text_error'] = '<span class="error_msg">The passwords that you supplied don\'t match!</span>';
+$PALANG['pEdit_mailbox_password_text_error'] = '<font color="red">The passwords that you supplied don\'t match!</font>';
 $PALANG['pEdit_mailbox_name'] = 'Name';
 $PALANG['pEdit_mailbox_quota'] = 'Quota';
 $PALANG['pEdit_mailbox_quota_text'] = 'MB';
-$PALANG['pEdit_mailbox_quota_text_error'] = 'MB<br /><span class="error_msg">The quota that you specified is to high!</span>';
-$PALANG['pEdit_mailbox_domain_error'] = '<span class="error_msg">This domain is not yours: ';
+$PALANG['pEdit_mailbox_quota_text_error'] = 'MB<br /><font color="red">The quota that you specified is to high!</font>';
+$PALANG['pEdit_mailbox_domain_error'] = '<font color="red">This domain is not yours: ';
 $PALANG['pEdit_mailbox_button'] = 'Edit Mailbox';
-$PALANG['pEdit_mailbox_result_error'] = '<span class="error_msg">Unable to modify the mailbox!</span>';
+$PALANG['pEdit_mailbox_result_error'] = '<font color="red">Unable to change the password!</font>';
 
 $PALANG['pPassword_welcome'] = 'Change your login password.';
 $PALANG['pPassword_admin'] = 'Login';
-$PALANG['pPassword_admin_text_error'] = '<span class="error_msg">The LOGIN that you supplied doesn\'t match a mailbox!</span>';
+$PALANG['pPassword_admin_text_error'] = '<font color="red">The LOGIN that you supplied doesn\'t match a mailbox!</font>';
 $PALANG['pPassword_password_current'] = 'Current Password';
-$PALANG['pPassword_password_current_text_error'] = '<span class="error_msg">You didn\'t supply your current password!</span>';
+$PALANG['pPassword_password_current_text_error'] = '<font color="red">You didn\'t supply your current password!</font>';
 $PALANG['pPassword_password'] = 'New Password';
 $PALANG['pPassword_password2'] = 'New Password (again)';
-$PALANG['pPassword_password_text_error'] = '<span class="error_msg">The passwords that you supplied don\'t match!<br />Or are empty!</span>';
+$PALANG['pPassword_password_text_error'] = '<font color="red">The passwords that you supplied don\'t match!<br />Or are empty!</font>';
 $PALANG['pPassword_button'] = 'Change Password';
-$PALANG['pPassword_result_error'] = '<span class="error_msg">Unable to change your password!</span>';
+$PALANG['pPassword_result_error'] = '<font color="red">Unable to change your password!</font>';
 $PALANG['pPassword_result_succes'] = 'Your password has been changed!';
 
 $PALANG['pViewlog_welcome'] = 'View the last 10 actions for ';
@@ -151,18 +133,35 @@ $PALANG['pViewlog_action'] = 'Action';
 $PALANG['pViewlog_data'] = 'Data';
 
 $PALANG['pViewlog_button'] = 'Go';
-$PALANG['pViewlog_result_error'] = '<span class="error_msg">Unable to find the logs!</span>';
+$PALANG['pViewlog_result_error'] = '<font color="red">Unable to find the logs!</font>';
 
 $PALANG['pSendmail_welcome'] = 'Send an email.';
 $PALANG['pSendmail_admin'] = 'From';
 $PALANG['pSendmail_to'] = 'To';
-$PALANG['pSendmail_to_text_error'] = '<span class="error_msg">To is empty or is not a valid email address!</span>';
+$PALANG['pSendmail_to_text_error'] = '<font color="red">To is empty or is not a valid email address!</font>';
 $PALANG['pSendmail_subject'] = 'Subject';
 $PALANG['pSendmail_subject_text'] = 'Welcome';
 $PALANG['pSendmail_body'] = 'Body';
+$PALANG['pSendmail_body_text'] = <<<EOM
+Hi,
+
+Welcome to your new account.
+EOM;
 $PALANG['pSendmail_button'] = 'Send Message';
-$PALANG['pSendmail_result_error'] = '<span class="error_msg">Unable to create mailbox!</span>';
+$PALANG['pSendmail_result_error'] = '<font color="red">Unable to create mailbox!</font>';
 $PALANG['pSendmail_result_succes'] = 'The mailbox has been created!';
+
+$PALANG['pVcp_welcome'] = 'Change your mailbox password.';
+$PALANG['pVcp_username'] = 'Email';
+$PALANG['pVcp_username_text_error'] = '<font color="red">The EMAIL that you supplied doesn\'t match a mailbox!</font>';
+$PALANG['pVcp_password_current'] = 'Current Password';
+$PALANG['pVcp_password_current_text_error'] = '<font color="red">You didn\'t supply your current password!</font>';
+$PALANG['pVcp_password'] = 'New Password';
+$PALANG['pVcp_password2'] = 'New Password (again)';
+$PALANG['pVcp_password_text_error'] = '<font color="red">The passwords that you supplied don\'t match!<br />Or are empty!</font>';
+$PALANG['pVcp_button'] = 'Change Password';
+$PALANG['pVcp_result_error'] = '<font color="red">Unable to change your password!</font>';
+$PALANG['pVcp_result_succes'] = 'Your password has been changed!';
 
 $PALANG['pAdminMenu_list_admin'] = 'Admin List';
 $PALANG['pAdminMenu_list_domain'] = 'Domain List';
@@ -185,9 +184,7 @@ $PALANG['pAdminList_domain_domain'] = 'Domain';
 $PALANG['pAdminList_domain_description'] = 'Description';
 $PALANG['pAdminList_domain_aliases'] = 'Aliases';
 $PALANG['pAdminList_domain_mailboxes'] = 'Mailboxes';
-$PALANG['pAdminList_domain_maxquota'] = 'Quota (MB)';
-$PALANG['pAdminList_domain_transport'] = 'Transport';
-$PALANG['pAdminList_domain_backupmx'] = 'Backup MX';
+$PALANG['pAdminList_domain_maxquota'] = 'Max Quota (MB)';
 $PALANG['pAdminList_domain_modified'] = 'Last Modified';
 $PALANG['pAdminList_domain_active'] = 'Active';
 
@@ -206,51 +203,42 @@ $PALANG['pAdminList_virtual_mailbox_active'] = 'Active';
 
 $PALANG['pAdminCreate_domain_welcome'] = 'Add a new domain';
 $PALANG['pAdminCreate_domain_domain'] = 'Domain';
-$PALANG['pAdminCreate_domain_domain_text_error'] = '<span class="error_msg">The domain already exists!</span>';
-$PALANG['pAdminCreate_domain_domain_text_error2'] = '<span class="error_msg">The domain is invalid!</span>';
+$PALANG['pAdminCreate_domain_domain_text_error'] = '<font color="red">The domain already exists!</font>';
 $PALANG['pAdminCreate_domain_description'] = 'Description';
 $PALANG['pAdminCreate_domain_aliases'] = 'Aliases';
-$PALANG['pAdminCreate_domain_aliases_text'] = '-1 = disable | 0 = unlimited';
+$PALANG['pAdminCreate_domain_aliases_text'] = '0 = disable | -1 = unlimited';
 $PALANG['pAdminCreate_domain_mailboxes'] = 'Mailboxes';
-$PALANG['pAdminCreate_domain_mailboxes_text'] = '-1 = disable | 0 = unlimited';
+$PALANG['pAdminCreate_domain_mailboxes_text'] = '0 = disable | -1 = unlimited';
 $PALANG['pAdminCreate_domain_maxquota'] = 'Max Quota';
-$PALANG['pAdminCreate_domain_maxquota_text'] = 'MB<br /> -1 = disable | 0 = unlimited';
-$PALANG['pAdminCreate_domain_transport'] = 'Transport';
-$PALANG['pAdminCreate_domain_transport_text'] = 'Define transport';
+$PALANG['pAdminCreate_domain_maxquota_text'] = 'MB<br /> 0 = disable | -1 = unlimited';
 $PALANG['pAdminCreate_domain_defaultaliases'] = 'Add default mail aliases';
-$PALANG['pAdminCreate_domain_backupmx'] = 'Mail server is backup MX';
 $PALANG['pAdminCreate_domain_button'] = 'Add Domain';
-$PALANG['pAdminCreate_domain_result_error'] = '<span class="error_msg">Unable to add domain!</span>';
+$PALANG['pAdminCreate_domain_result_error'] = '<font color="red">Unable to add domain!</font>';
 $PALANG['pAdminCreate_domain_result_succes'] = 'Domain has been added!';
-
-$PALANG['pAdminDelete_domain_error'] = '<span class="error_msg">Unable to remove domain!</span>';
 
 $PALANG['pAdminEdit_domain_welcome'] = 'Edit a domain';
 $PALANG['pAdminEdit_domain_domain'] = 'Domain';
 $PALANG['pAdminEdit_domain_description'] = 'Description';
 $PALANG['pAdminEdit_domain_aliases'] = 'Aliases';
-$PALANG['pAdminEdit_domain_aliases_text'] = '-1 = disable | 0 = unlimited';
+$PALANG['pAdminCreate_domain_aliases_text'] = '0 = disable | -1 = unlimited';
 $PALANG['pAdminEdit_domain_mailboxes'] = 'Mailboxes';
-$PALANG['pAdminEdit_domain_mailboxes_text'] = '-1 = disable | 0 = unlimited';
+$PALANG['pAdminCreate_domain_mailboxes_text'] = '0 = disable | -1 = unlimited';
 $PALANG['pAdminEdit_domain_maxquota'] = 'Max Quota';
-$PALANG['pAdminEdit_domain_maxquota_text'] = 'MB<br /> -1 = disable | 0 = unlimited';
-$PALANG['pAdminEdit_domain_transport'] = 'Transport';
-$PALANG['pAdminEdit_domain_transport_text'] = 'Define transport';
-$PALANG['pAdminEdit_domain_backupmx'] = 'Mail server is backup MX';
+$PALANG['pAdminCreate_domain_maxquota_text'] = 'MB<br /> 0 = disable | -1 = unlimited';
 $PALANG['pAdminEdit_domain_active'] = 'Active';
 $PALANG['pAdminEdit_domain_button'] = 'Edit Domain';
-$PALANG['pAdminEdit_domain_result_error'] = '<span class="error_msg">Unable to modify domain!</span>';
+$PALANG['pAdminEdit_domain_result_error'] = '<font color="red">Unable to modify domain!</font>';
 
 $PALANG['pAdminCreate_admin_welcome'] = 'Add a new domain admin';
 $PALANG['pAdminCreate_admin_username'] = 'Admin';
 $PALANG['pAdminCreate_admin_username_text'] = 'Email address';
-$PALANG['pAdminCreate_admin_username_text_error1'] = 'Email address<br /><span class="error_msg">Admin is not a valid email address!</span>';
-$PALANG['pAdminCreate_admin_username_text_error2'] = 'Email address<br /><span class="error_msg">The admin already exists or is not valid</span>';
+$PALANG['pAdminCreate_admin_username_text_error1'] = 'Email address<br /><font color="red">Admin is not a valid email address!</font>';
+$PALANG['pAdminCreate_admin_username_text_error2'] = 'Email address<br /><font color="red">The admin already exists or is not valid</font>';
 $PALANG['pAdminCreate_admin_password'] = 'Password';
 $PALANG['pAdminCreate_admin_password2'] = 'Password (again)';
-$PALANG['pAdminCreate_admin_password_text_error'] = '<span class="error_msg">The passwords that you supplied don\'t match!<br />Or are empty!</span>';
+$PALANG['pAdminCreate_admin_password_text_error'] = '<font color="red">The passwords that you supplied don\'t match!<br />Or are empty!</font>';
 $PALANG['pAdminCreate_admin_button'] = 'Add Admin';
-$PALANG['pAdminCreate_admin_result_error'] = '<span class="error_msg">Unable to add admin!</span>';
+$PALANG['pAdminCreate_admin_result_error'] = '<font color="red">Unable to add admin!</font>';
 $PALANG['pAdminCreate_admin_result_succes'] = 'Admin has been added!';
 $PALANG['pAdminCreate_admin_address'] = 'Domain';
 
@@ -258,11 +246,10 @@ $PALANG['pAdminEdit_admin_welcome'] = 'Edit a domain admin';
 $PALANG['pAdminEdit_admin_username'] = 'Admin';
 $PALANG['pAdminEdit_admin_password'] = 'Password';
 $PALANG['pAdminEdit_admin_password2'] = 'Password (again)';
-$PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">The passwords that you supplied don\'t match!<br />Or are empty!</span>';
+$PALANG['pAdminEdit_admin_password_text_error'] = '<font color="red">The passwords that you supplied don\'t match!<br />Or are empty!</font>';
 $PALANG['pAdminEdit_admin_active'] = 'Active';
-$PALANG['pAdminEdit_admin_super_admin'] = 'Super admin';
 $PALANG['pAdminEdit_admin_button'] = 'Edit Admin';
-$PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Unable to modify admin!</span>';
+$PALANG['pAdminEdit_admin_result_error'] = '<font color="red">Unable to modify admin!</font>';
 $PALANG['pAdminEdit_admin_result_succes'] = 'Admin has been modified!';
 
 $PALANG['pUsersLogin_welcome'] = 'Mailbox users login to change your password and aliases.';
@@ -276,6 +263,7 @@ $PALANG['pUsersMenu_vacation'] = 'Auto Response';
 $PALANG['pUsersMenu_edit_alias'] = 'Change your forward';
 $PALANG['pUsersMenu_password'] = 'Change Password';
 
+$PALANG['pUsersMain_welcome'] = 'Change your mailbox settings here!';
 $PALANG['pUsersMain_vacation'] = 'Set an "out of office" message or auto responder for your mail.';
 $PALANG['pUsersMain_edit_alias'] = 'Change your email forwarding.';
 $PALANG['pUsersMain_password'] = 'Change your current password.';
@@ -291,17 +279,6 @@ For urgent matters you can contact <contact person>.
 EOM;
 $PALANG['pUsersVacation_button_away'] = 'Going Away';
 $PALANG['pUsersVacation_button_back'] = 'Coming Back';
-$PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Unable to update your auto response settings!</span>';
+$PALANG['pUsersVacation_result_error'] = '<font color="red">Unable to update your auto response settings!</font>';
 $PALANG['pUsersVacation_result_succes'] = 'Your auto response has been removed!';
-
-$PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';
-$PALANG['pCreate_dbLog_createalias'] = 'create alias';
-$PALANG['pDelete_dbLog_deletealias'] = 'delete alias';
-$PALANG['pDelete_dbLog_deletemailbox'] = 'delete mailbox';
-
-$PALANG['pEdit_dbLog_editactive'] = 'change active state';
-$PALANG['pEdit_dbLog_editalias'] = 'edit alias';
-$PALANG['pEdit_dbLog_editmailbox'] = 'edit mailbox';
-
-$PALANG['pSearch_welcome'] = 'Searching for: ';
 ?>
