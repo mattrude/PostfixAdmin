@@ -1,0 +1,10 @@
+PATH=/bin:/usr/bin:/usr/local/bin
+#LOGFILE=$HOME/procmail.log
+
+:0 h
+* !^FROM_DAEMON
+* !^X-Loop: Postfix Vacation
+| formail -X "From" -X "To:" -X "Cc:" -X "Subject:" | $HOME/vacation.pl
+
+:0:
+/dev/null

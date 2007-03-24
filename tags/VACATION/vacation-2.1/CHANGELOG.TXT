@@ -1,0 +1,36 @@
+##################################################
+# Virtual Vacation for Postfix Admin Release 2.x #
+##################################################
+#
+# 2003 (c) High5!
+# Created by: Mischa Peters <mischa at high5 dot net>
+#
+
+Version 2.1 -- 2003/09/04
+-------------------------
+  - Fixed: All email addresses are now converted to lower case.
+
+
+Version 2.0 -- 2003/08/13
+-------------------------
+  - Added: Debug capabilities.
+  - Change: The per-user cache is now builtin vacation.pl and no longer done
+    with formail.
+  - Changed: Log file format.
+  - Changed: Complete rewrite of vacation.pl.
+  - Fixed: Multiple recipients in either TO or CC are now handled correctly.
+  - Fixed: Multiple recipients that have set an "Out of the Office" message
+  - Fixed: Return-Path is now set correctly when sending the "Out of the
+    Office" message.
+    are now handled correctly.
+  - Removed: Cache rules in .procmailrc.
+
+
+Version 1.1 -- 2003/07/17
+-------------------------
+  - Changed: The vacation.cache is replaced with a per-user cache.
+
+
+Version 1.0 -- 2003/06/16
+-------------------------
+  - Initial public release of Virtual Vacation.
