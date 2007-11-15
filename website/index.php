@@ -21,6 +21,13 @@ require_once('header.php');
 <li>IRC - #postfixadmin on irc.freenode.net </li>
 </ul>
 
+<h3>Requirements</h3>
+<ul>
+<li><a href="http://www.postfix.org">Postfix</a> (success has been reported with Exim!)</li>
+<li><a href="http://mysql.org">MySQL</a> or <a href="http://postgresql.org">PostgreSQL</a></li>
+<li><a href="http://php.net">PHP</a></li>
+<li>And presumably a compatible IMAP/POP3 server (dovecot, courier or cyrus?)</li>
+</ul>
 <h3>Download - Stable release</h3>
 
 <p>The latest stable release is 2.1.0. You can download it <a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300&release_id=495972">here</a></p>
