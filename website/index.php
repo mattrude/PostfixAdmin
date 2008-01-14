@@ -60,7 +60,8 @@ require_once('header.php');
 <h3>Other Relevant links and related projects</h3>
 
 <ul>
-<li><a href="http://postfixadmin-squirrelmail.palepurple.co.uk">Postfixadmin/Squirrelmail plugin</a> - Integrate together <A href="http://squirrelmail.org">Squirrelmail</a> with Postfixadmin</a></li>
+<li><a href="http://squirrelmail-postfixadmin.palepurple.co.uk">Postfixadmin/Squirrelmail plugin</a> - Integrate together <A href="http://squirrelmail.org">Squirrelmail</a> with Postfixadmin</a></li>
+<li><a href="http://codepoets.co.uk/postfixadmin-postgresql-courier-squirrelmail-debian-etch-howto-tutorial@">Guide to installation on Etch with PostgreSQL and Courier</a></li>
 </ul>
 
 (If you would like to add links to any other relevant projects, please poke GingerDog on irc)
