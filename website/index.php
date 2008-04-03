@@ -35,10 +35,12 @@ require_once('header.php');
 <h3>Download - Not so stable release</h3>
 
 <p>We've created a .deb package to make installation slightly easier, based on revision 207 of Subversion (11th November 2007). </p>
+<p>RPM packages for Fedora and openSUSE are available via openSUSE buildservice and usually contain the latest Subversion version.</p>
 <p>This should be judged as being a <b>snapshot</b>, and although it <u>should work</u> - it may not - or some features may be lacking suitable documentation.</p>
 <p>As this is based on the development branch, it's setup is slightly different from that for v2.1.0; but you should be able to figure that out when you visit http://yoursever/postfixadmin after installing it. Note, the .deb does not setup your database in any useful way - so you'll need to do this manually (see /usr/share/doc/postfixadmin)</p>
 
 <p><a href="http://downloads.sourceforge.net/postfixadmin/postfixadmin_2.2.0-1rc1_all.deb?use_mirror=osdn">GingerDog's experimental .deb</a> for installation (based on Subversion revision 207).</p>
+<p><a href="http://software.opensuse.org/search?q=postfixadmin">RPM packages for openSUSE and Fedora</a> (usually latest Subversion revision).</p>
 
 <h3>Download - Development release</h3>
 
