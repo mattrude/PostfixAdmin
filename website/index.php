@@ -23,30 +23,33 @@ require_once('header.php');
 
 <h3>Requirements</h3>
 <ul>
-<li><a href="http://www.postfix.org">Postfix</a> (success has been reported with Exim!)</li>
-<li><a href="http://mysql.org">MySQL</a> or <a href="http://postgresql.org">PostgreSQL</a></li>
-<li><a href="http://php.net">PHP</a></li>
-<li>And presumably a compatible IMAP/POP3 server (dovecot, courier or cyrus?)</li>
+	<li><a href="http://www.postfix.org">Postfix</a> (success has been reported with Exim!)</li>
+	<li><a href="http://mysql.org">MySQL</a> or <a href="http://postgresql.org">PostgreSQL</a></li>
+	<li><a href="http://php.net">PHP</a></li>
+	<li>And presumably a compatible IMAP/POP3 server (dovecot, courier or cyrus?)</li>
 </ul>
-<h3>Download - Stable release</h3>
 
-<p>The latest stable release is 2.1.0. You can download it <a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300&release_id=495972">here</a></p>
+<h3>Download - Nearly stable release</h3>
 
-<h3>Download - Not so stable release</h3>
-
-<p>We've created a .deb package to make installation slightly easier, based on revision 207 of Subversion (11th November 2007). </p>
+<p>We've created a .deb and .rpm packages to try and make installation easier. </p>
 <p>RPM packages for Fedora and openSUSE are available via openSUSE buildservice and usually contain the latest Subversion version.</p>
 <p>This should be judged as being a <b>snapshot</b>, and although it <u>should work</u> - it may not - or some features may be lacking suitable documentation.</p>
 <p>As this is based on the development branch, it's setup is slightly different from that for v2.1.0; but you should be able to figure that out when you visit http://yoursever/postfixadmin after installing it. Note, the .deb does not setup your database in any useful way - so you'll need to do this manually (see /usr/share/doc/postfixadmin)</p>
 
-<p><a href="http://downloads.sourceforge.net/postfixadmin/postfixadmin_2.2.0-1rc1_all.deb?use_mirror=osdn">GingerDog's experimental .deb</a> for installation (based on Subversion revision 207).</p>
+<p><a href="http://downloads.sourceforge.net/postfixadmin/postfixadmin_2.2.0-1rc4_all.deb?use_mirror=osdn">GingerDog's experimental .deb</a> for installation (based on Subversion revision 337) (built on 20th April 2008)</p>
 <p><a href="http://software.opensuse.org/search?q=postfixadmin">RPM packages for openSUSE and Fedora</a> (usually latest Subversion revision).</p>
 
-<h3>Download - Development release</h3>
+<h3>Download - Previous stable release</h3>
 
-<p>The development team expect the codebase in Subversion to become 2.2.0 before the end of 2007. There are a number of show stopping bugs still in place (for instance, no automated way of performing an upgrade, and a number of translations are missing). It should however work!</p>
+<p>Note: This version is pretty much unsupported; you are strongly encouraged to use one of the newer builds off the 2.2 development cycle.</p>
 
-<p>We would recommend that all new users use the version from Subversion, as it has a number of new features and bug fixes. However, it <strong>may contain bugs</strong>. </p>
+<p>If you still want to use it, try <a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300&release_id=495972">here</a></p>
+
+<h3>Download - Development/Subversion release</h3>
+
+<p>The development team expected the codebase in Subversion to become 2.2.0 before the end of 2007. Suffice to say, they're not very good at estimating release dates, but as of April 2008, they think 2.2.0rc4 is probably pretty close to the final release.</p>
+
+<p>We would recommend that all new users use one of the 2.2.0rc releases, or run from Subversion. Use of v2.1.0 will probably cause you unnecessary headaches. </p>
 
 
 <p>You can download the source code to Postfixadmin using Subversion :</p>
@@ -56,8 +59,7 @@ require_once('header.php');
 
 <h3>Upgrading Postfixadmin</h3>
 
-<p>The database schema between version 2.1.0 and what is in Subversion has changed - mostly for vacation related tables, and with the addition of UTF8 support. If you use neither, you <em>probably</em> won't need to do anything.</p>
-<p>We are currently working on an 'upgrade.php' script which will take care of the database changes between revisions. This is still work in progress, and at the time of writing only MySQL is supported for this (due to GingerDog being lazy, and not doing the PostgreSQL changes)</p>
+<p>The database schema between version 2.1.0 and anything later has changed in a number of ways, you should therefore run the 'upgrade.php' script which should take care of all database changes between revisions. </p>
 
 <h3>Other Relevant links and related projects</h3>
 
