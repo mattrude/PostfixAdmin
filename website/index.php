@@ -36,7 +36,7 @@ require_once('header.php');
 <p>This should be judged as being a <b>snapshot</b>, and although it <u>should work</u> - it may not - or some features may be lacking suitable documentation.</p>
 <p>As this is based on the development branch, it's setup is slightly different from that for v2.1.0; but you should be able to figure that out when you visit http://yoursever/postfixadmin after installing it. Note, the .deb does not setup your database in any useful way - so you'll need to do this manually (see /usr/share/doc/postfixadmin)</p>
 
-<p><a href="http://downloads.sourceforge.net/postfixadmin/postfixadmin_2.2.0-1rc4_all.deb?use_mirror=osdn">GingerDog's experimental .deb</a> for installation (based on Subversion revision 337) (built on 20th April 2008)</p>
+<p><a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300">GingerDog's experimental .deb</a> for installation</p>
 <p><a href="http://software.opensuse.org/search?q=postfixadmin">RPM packages for openSUSE and Fedora</a> (usually latest Subversion revision).</p>
 
 <h3>Download - Previous stable release</h3>
