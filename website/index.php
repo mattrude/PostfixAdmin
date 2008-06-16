@@ -16,46 +16,33 @@ require_once('header.php');
 <h3>Community</h3>
 
 <ul>
-<li><a href="http://sourceforge.net/forum/forum.php?forum_id=676076">Postfixadmin Discussion Forum</a></li>
-<li><a href="http://sourceforge.net/mail/?group_id=191583">Mailing lists</a></li>
-<li>IRC - #postfixadmin on irc.freenode.net </li>
+	<li><a href="http://sourceforge.net/forum/forum.php?forum_id=676076">Postfixadmin Discussion Forum</a></li>
+	<li><a href="http://sourceforge.net/mail/?group_id=191583">Mailing lists</a></li>
+	<li>IRC - #postfixadmin on irc.freenode.net </li>
 </ul>
 
 <h3>Requirements</h3>
 <ul>
 	<li><a href="http://www.postfix.org">Postfix</a> (success has been reported with Exim!)</li>
 	<li><a href="http://mysql.org">MySQL</a> or <a href="http://postgresql.org">PostgreSQL</a></li>
-	<li><a href="http://php.net">PHP</a></li>
-	<li>And presumably a compatible IMAP/POP3 server (dovecot, courier or cyrus?)</li>
+	<li><a href="http://php.net">PHP</a> v4 or v5 should both work</li>
+	<li>And presumably a compatible IMAP/POP3 server (dovecot and courier seem to be the most popular)</li>
 </ul>
 
-<h3>Download - Nearly stable release</h3>
+<h3>Download - version 2.2.0</h3>
 
-<p>We've created a .deb and .rpm packages to try and make installation easier. </p>
-<p>RPM packages for Fedora and openSUSE are available via openSUSE buildservice and usually contain the latest Subversion version.</p>
-<p>This should be judged as being a <b>snapshot</b>, and although it <u>should work</u> - it may not - or some features may be lacking suitable documentation.</p>
-<p>As this is based on the development branch, it's setup is slightly different from that for v2.1.0; but you should be able to figure that out when you visit http://yoursever/postfixadmin after installing it. Note, the .deb does not setup your database in any useful way - so you'll need to do this manually (see /usr/share/doc/postfixadmin)</p>
+<p>v2.2.0 was released in April 2008. It is the latest version and we'd recommend users of previous versions upgrade.</p>
 
-<p><a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300">GingerDog's experimental .deb</a> for installation</p>
-<p><a href="http://software.opensuse.org/search?q=postfixadmin">RPM packages for openSUSE and Fedora</a> (usually latest Subversion revision).</p>
+<p>v2.2.0 includes more language translations, support for fetchmail, a better upgrade procedure, improved vacation support, UTF8 support, broadcast message and many bug fixes.</p>
 
-<h3>Download - Previous stable release</h3>
+<p>You can download the software <a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300">here</a>, with the 2.2.0 release we also provide a .deb package (and there are <a href=""http://software.opensuse.org/search?q=postfixadmin">RPM packages elsewhere</a>) to hopefully make installation somewhat easier.</p>
 
-<p>Note: This version is pretty much unsupported; you are strongly encouraged to use one of the newer builds off the 2.2 development cycle.</p>
-
-<p>If you still want to use it, try <a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300&release_id=495972">here</a></p>
 
 <h3>Download - Development/Subversion release</h3>
 
-<p>The development team expected the codebase in Subversion to become 2.2.0 before the end of 2007. Suffice to say, they're not very good at estimating release dates, but as of April 2008, they think 2.2.0rc4 is probably pretty close to the final release.</p>
-
-<p>We would recommend that all new users use one of the 2.2.0rc releases, or run from Subversion. Use of v2.1.0 will probably cause you unnecessary headaches. </p>
-
-
-<p>You can download the source code to Postfixadmin using Subversion :</p>
+<p>Since release of v2.2.0, not much has happened (yet). If you wish to live on the edge and run from Subversion, feel free to do so. You may occassionally experience breakage, and we'd suggest you join the IRC channel before 'svn update'ing any important installations.</p>
 
 <code>svn co https://postfixadmin.svn.sourceforge.net/svnroot/postfixadmin postfixadmin</code>
-
 
 <h3>Upgrading Postfixadmin</h3>
 
@@ -65,10 +52,11 @@ require_once('header.php');
 
 <ul>
 <li><a href="http://squirrelmail-postfixadmin.palepurple.co.uk">Postfixadmin/Squirrelmail plugin</a> - Integrate together <A href="http://squirrelmail.org">Squirrelmail</a> with Postfixadmin</a></li>
-<li><a href="http://codepoets.co.uk/postfixadmin-postgresql-courier-squirrelmail-debian-etch-howto-tutorial@">Guide to installation on Etch with PostgreSQL and Courier</a></li>
+<li><a href="http://nejc.skoberne.net/rcpfa">Postfixadmin/Roundcube plugin</a> - Integrate together <A href="http://roundcube.net">RoundCube</a> with Postfixadmin</a></li>
+<li><a href="http://codepoets.co.uk/postfixadmin-postgresql-courier-squirrelmail-debian-etch-howto-tutorial">Guide to installation on Etch with PostgreSQL and Courier</a></li>
 </ul>
 
-(If you would like to add links to any other relevant projects, please poke GingerDog on irc)
+(If you would like to add links to any other relevant projects or documentation, please poke GingerDog on irc)
 
 <?php
 require_once('footer.php');
