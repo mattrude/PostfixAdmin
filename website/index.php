@@ -29,24 +29,27 @@ require_once('header.php');
 	<li>And presumably a compatible IMAP/POP3 server (dovecot and courier seem to be the most popular)</li>
 </ul>
 
-<h3>Download - version 2.2.0</h3>
+<h3>Download - version 2.2.1.1</h3>
 
-<p>v2.2.0 was released in April 2008. It is the latest version and we'd recommend users of previous versions upgrade.</p>
+<p>v2.2.1.1 was released in July 2008. It's the latest stable version and is basically all bug fixes from 'trunk' since 2.2.0 was released, without the new features (i.e. domain-domain aliasing). It is the latest version and we'd recommend users of previous versions upgrade.</p>
 
-<p>v2.2.0 includes more language translations, support for fetchmail, a better upgrade procedure, improved vacation support, UTF8 support, broadcast message and many bug fixes.</p>
+<p><small>2.2.1 was a slightly broken release, in that it displayed the wrong revision number; hence 2.2.1.1</small></p>
 
-<p>You can download the software <a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300">here</a>, with the 2.2.0 release we also provide a .deb package (and there are <a href=""http://software.opensuse.org/search?q=postfixadmin">RPM packages elsewhere</a>) to hopefully make installation somewhat easier.</p>
-
+<p>You can download the software <a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300">here</a>; the release contains .deb and .rpm (SuSE) packages and of course a .tar.gz.</p>
 
 <h3>Download - Development/Subversion release</h3>
 
-<p>Since release of v2.2.0, not much has happened (yet). If you wish to live on the edge and run from Subversion, feel free to do so. You may occassionally experience breakage, and we'd suggest you join the IRC channel before 'svn update'ing any important installations.</p>
+<p>'trunk' currently contains a working domain-domain aliasing implementation, but to use it, you'll need to alter some Postfix settings first. Once this is finished, it will probably form 2.3.0, which may be released within the next month or so.</p>
 
-<code>svn co https://postfixadmin.svn.sourceforge.net/svnroot/postfixadmin postfixadmin</code>
+<p>In the near future, we plan to refactor the codebase to allow for XMLRPC/SOAP integration, allowing e.g. Squirrelmail and RoundCube to integrate with Postfixadmin without having to talk to e.g. a database. This should eventually allow PostfixAdmin to work with e.g. LDAP or a.n.other backend data store without having to change the front end code. This will almost certainly mean the minimum requirements will by PHP5 and probably a dependence on the Zend Framework.</p>
+
+<p>If you wish to get involved, or try out 'trunk' try :</p>
+
+<code>svn co https://postfixadmin.svn.sourceforge.net/svnroot/postfixadmin/trunk postfixadmin</code>
 
 <h3>Upgrading Postfixadmin</h3>
 
-<p>The database schema between version 2.1.0 and anything later has changed in a number of ways, you should therefore run the 'upgrade.php' script which should take care of all database changes between revisions. </p>
+<p>The database schema between version 2.1.0 and anything later has changed in a number of ways, you should therefore run the 'upgrade.php' script which should take care of all database changes between revisions. This should run automatically when you hit the application, unless you've deleted 'setup.php'.</p>
 
 <h3>Other Relevant links and related projects</h3>
 
