@@ -1700,9 +1700,12 @@ function db_log ($username,$domain,$action,$data)
 function table_by_key ($table_key)
 {
     global $CONF;
-    $table = $CONF['database_prefix'].$CONF['database_tables'][$table_key];
-    if (empty($table)) $table = $table_key;
-    return $table;
+    if(isset($CONF['database_tables'][$table_key])) {
+        return $CONF['database_prefix'].$CONF['database_tables'][$table_key];
+    }
+    else {
+        return $table_key;
+    }
 }
 
 
