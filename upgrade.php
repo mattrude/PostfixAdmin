@@ -3,6 +3,8 @@ if(!defined('POSTFIXADMIN')) {
     require_once('common.php');
 }
 
+error_reporting(E_ALL|E_STRICT);
+
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 
 # Note: run with upgrade.php?debug=1 to see all SQL error messages
@@ -59,13 +61,13 @@ function _mysql_field_exists($table, $field) {
     return false;
 }
 
-$table = table_by_key('config');
+$table_config = table_by_key('config');
 if($CONF['database_type'] == 'pgsql') {
     // check if table already exists, if so, don't recreate it
-    $r = db_query("SELECT relname FROM pg_class WHERE relname = '$table'");
+    $r = db_query("SELECT relname FROM pg_class WHERE relname = '$table_config'");
     if($r['rows'] == 0) {
         $pgsql = "
-            CREATE TABLE  $table ( 
+            CREATE TABLE  $table_config ( 
                     id SERIAL,
                     name VARCHAR(20) NOT NULL UNIQUE,
                     value VARCHAR(20) NOT NULL,
@@ -76,7 +78,7 @@ if($CONF['database_type'] == 'pgsql') {
 }
 else {
     $mysql = "
-        CREATE TABLE {IF_NOT_EXISTS} $table (
+        CREATE TABLE {IF_NOT_EXISTS} $table_config (
         `id` {AUTOINCREMENT} {PRIMARY},
         `name`  VARCHAR(20) {LATIN1} NOT NULL DEFAULT '',
         `value` VARCHAR(20) {LATIN1} NOT NULL DEFAULT '',
@@ -86,7 +88,12 @@ else {
     db_query_parsed($mysql, 0, " ENGINE = MYISAM COMMENT = 'PostfixAdmin settings'");
 }
 
-$sql = "SELECT * FROM $table WHERE name = 'version'";
+// XXX make sure this gets removed!!!
+//
+// DANGER WILL ROBINSON!!
+db_query_parsed("update $table_config set VALUE = 546 WHERE name ='version'");
+
+$sql = "SELECT * FROM $table_config WHERE name = 'version'";
 
 // insert into config('version', '01');
 
@@ -1299,5 +1306,242 @@ function upgrade_547_mysql() {
 
 function upgrade_547_pgsql() {
     // amavis tables
+    $table_awl = table_by_key('awl');
+    $table_bayes_expire = table_by_key('bayes_expire');
+    $table_bayes_global_vars = table_by_key('bayes_global_vars');
+    $table_bayes_seen = table_by_key('bayes_seen');
+    $table_bayes_token = table_by_key('bayes_token');
+    $table_bayes_vars = table_by_key('bayes_vars');
+
+    if(!_pgsql_object_exists($table_awl)) {
+        db_query_parsed("CREATE TABLE $table_awl (
+          username varchar(100) NOT NULL ,
+          email varchar(200) NOT NULL,
+          ip varchar(10) NOT NULL ,
+          count int(11) default '0',
+          totscore float default '0',
+          lastupdate timestamp NOT NULL default now(),
+          PRIMARY KEY (username,email,ip) ) ");
+        /* Note: we need to use triggers etc if we want lastupdate to get modified FOR US automatically; I can't be bothered to do this. */
+    }
+    if(!_pgsql_object_exists($table_bayes_expire)) {
+        /* in mysql there seems to be no primary key on this table... why? */
+        db_query_parsed(
+            "CREATE TABLE $table_bayes_expire (
+              id int not null primary key,
+              runtime int(11) NOT NULL)");
+    }
+
+    if(!_pgsql_object_exists($table_bayes_global_vars)) {
+        db_query_parsed(
+            "CREATE TABLE $table_bayes_global_vars (
+              variable varchar(30) NOT NULL primary key,
+              value varchar(200) NOT NULL default '')");
+    }
+ 
+    if(!_pgsql_object_exists($table_bayes_seen)) {
+        db_query_parsed("CREATE TABLE $table_bayes_seen (
+          id int(11) NOT NULL default '0',
+          msgid varchar(200) NOT NULL default '',
+          flag char(1) NOT NULL default '',
+          PRIMARY KEY  (id,msgid))");
+    }
+
+    if(!_pgsql_object_exists($table_bayes_token)) {
+        db_query_parsed("
+            CREATE TABLE $table_bayes_token (
+              id int(11) NOT NULL ,
+              token char(5) NOT NULL default '',
+              spam_count int(11) NOT NULL default '0',
+              ham_count int(11) NOT NULL default '0',
+              atime int(11) NOT NULL default '0',
+              PRIMARY KEY  (id,token))");
+        db_query_parsed("CREATE INDEX bayes_token_idx1 ON $table_bayes_token (token)");
+        db_query_parsed("CREATE INDEX bayes_token_idx2 ON $table_bayes_token (id, atime)");
+    }
+    if(!_pgsql_object_exists($table_bayes_vars)) {
+        db_query_parsed("
+            CREATE TABLE $table_bayes_vars (
+              id serial,
+              username varchar(200) NOT NULL,
+              spam_count int(11) NOT NULL,
+              ham_count int(11) NOT NULL,
+              token_count int(11) NOT NULL,
+              last_expire int(11) NOT NULL,
+              last_atime_delta int(11) NOT NULL,
+              last_expire_reduce int(11) NOT NULL,
+              oldest_token_age int(11) NOT NULL default '2147483647',
+              newest_token_age int(11) NOT NULL default '0')");
+        db_query_parsed("CREATE INDEX bayes_vars_idx1 ON $table_bayes_vars (username)");
+    }
+
+    $table_maddr = table_by_key('maddr');
+    if(!_pgsql_object_exists($table_maddr)) {
+        db_query_parsed("
+            CREATE TABLE $table_maddr (
+              id serial,
+              email varchar(255) NOT NULL,
+              domain varchar(255) NOT NULL,
+              PRIMARY KEY (id)) ");
+        db_query_parsed("CREATE UNIQUE INDEX maddr_email ON $table_maddr (email)");
+    }
+
+    $table_mailaddr = table_by_key('mailaddr');
+    
+    if(!_pgsql_object_exists($table_mailaddr)) {
+        db_query_parsed("
+            CREATE TABLE $table_mailaddr (
+              id serial,
+              priority int(11) NOT NULL default 7,
+              email varchar(255) NOT NULL,
+              PRIMARY KEY  (id))");
+        db_query_parsed("CREATE UNIQUE INDEX mailaddr_email ON $table_mailaddr (email)");
+    }
+
+    $table_msgrcpt = table_by_key('msgrcpt');
+    if(!_pgsql_object_exists($table_msgrcpt)) {
+        db_query_parsed("
+            CREATE TABLE $table_msgrcpt (
+              mail_id varchar(12) NOT NULL,
+              rid int(11) NOT NULL,
+              ds char(1) NOT NULL,
+              rs char(1) NOT NULL,
+              bl char(1) default '',
+              wl char(1) default '',
+              bspam_level float default NULL,
+              smtp_resp varchar(255) default '')");
+       db_query_parsed("CREATE INDEX msgrcpt_idx_mail_id on $table_msgrcpt (mail_id)");
+       db_query_parsed("CREATE INDEX msgrcpt_idx_rid on $table_msgrcpt (rid)");
+    }
+
+    
+    $table_msgs = table_by_key('msgs');
+    if(!_pgsql_object_exists($table_msgs)) {
+        db_query_parsed("CREATE TABLE $table_msgs (
+          mail_id varchar(12) NOT NULL primary key,
+          secret_id varchar(12) default '',
+          am_id varchar(20) NOT NULL,
+          time_num int(11) NOT NULL,
+          time_iso timestamp NOT NULL,
+          sid int(11) NOT NULL,
+          policy varchar(255) default '',
+          client_addr varchar(255) default '',
+          size int(11) NOT NULL,
+          content char(1) default NULL,
+          quar_type char(1) default NULL,
+          quar_loc varchar(255) default '',
+          dsn_sent char(1) default NULL,
+          spam_level float default NULL,
+          message_id varchar(255) default '',
+          from_addr varchar(255) default '',
+          subject varchar(255) default '',
+          host varchar(255) NOT NULL)");
+        db_query_parsed("CREATE INDEX msgs_idx_sid on $table_msgs (sid)");
+        db_query_parsed("CREATE INDEX msgs_idx_time_iso on $table_msgs (time_iso)");
+    }
+    /*
+
+        $table_policy = table_by_key('policy');
+        db_query_parsed("CREATE TABLE IF NOT EXISTS $table_policy (
+          `id` int(10) unsigned NOT NULL auto_increment,
+          `policy_name` varchar(32) default NULL,
+          `virus_lover` char(1) default NULL,
+          `spam_lover` char(1) default NULL,
+          `banned_files_lover` char(1) default NULL,
+          `bad_header_lover` char(1) default NULL,
+          `bypass_virus_checks` char(1) default NULL,
+          `bypass_spam_checks` char(1) default NULL,
+          `bypass_banned_checks` char(1) default NULL,
+          `bypass_header_checks` char(1) default NULL,
+          `spam_modifies_subj` char(1) default NULL,
+          `virus_quarantine_to` varchar(64) default NULL,
+          `spam_quarantine_to` varchar(64) default NULL,
+          `banned_quarantine_to` varchar(64) default NULL,
+          `bad_header_quarantine_to` varchar(64) default NULL,
+          `spam_tag_level` float default NULL,
+          `spam_tag2_level` float default NULL,
+          `spam_kill_level` float default NULL,
+          `spam_dsn_cutoff_level` float default NULL,
+          `spam_quarantine_cutoff_level` float(10,2) default NULL,
+          `addr_extension_virus` varchar(64) default NULL,
+          `addr_extension_spam` varchar(64) default NULL,
+          `addr_extension_banned` varchar(64) default NULL,
+          `addr_extension_bad_header` varchar(64) default NULL,
+          `warnvirusrecip` char(1) default NULL,
+          `warnbannedrecip` char(1) default NULL,
+          `warnbadhrecip` char(1) default NULL,
+          `newvirus_admin` varchar(64) default NULL,
+          `virus_admin` varchar(64) default NULL,
+          `banned_admin` varchar(64) default NULL,
+          `bad_header_admin` varchar(64) default NULL,
+          `spam_admin` varchar(64) default NULL,
+          `spam_subject_tag` varchar(64) default NULL,
+          `spam_subject_tag2` varchar(64) default NULL,
+          `message_size_limit` int(11) default NULL,
+          `banned_rulenames` varchar(64) default NULL,
+          PRIMARY KEY  (`id`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ");
+
+        db_query_parsed("DELETE FROM $table_policy WHERE policy_name IN ('All Off', 'Normal', 'Virus Filtering Only', 'Spam Filtering Only', 'Low', 'High')");
+
+        $insert_fields = "INSERT INTO $table_policy (policy_name, virus_lover, spam_lover, banned_files_lover, bad_header_lover, bypass_virus_checks, bypass_spam_checks, bypass_banned_checks, bypass_header_checks, spam_modifies_subj, virus_quarantine_to, spam_quarantine_to, banned_quarantine_to, bad_header_quarantine_to, spam_tag_level, spam_tag2_level, spam_kill_level, spam_dsn_cutoff_level, spam_quarantine_cutoff_level, addr_extension_virus, addr_extension_spam, addr_extension_banned, addr_extension_bad_header, warnvirusrecip, warnbannedrecip, warnbadhrecip, newvirus_admin, virus_admin, banned_admin, bad_header_admin, spam_admin, spam_subject_tag, spam_subject_tag2, message_size_limit, banned_rulenames)";
+        db_query_parsed("$insert_fields VALUES ('All Off', 'Y', 'Y', 'Y', 'Y', 'N', 'N', 'N', 'N', 'N', NULL, NULL, NULL, NULL, -999, 999, 999, 999, 0.00, NULL, NULL, NULL, NULL, 'N', 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, '[SPAM]', 0, NULL)");
+
+        db_query_parsed("$insert_fields VALUES ('Normal',  'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'Y', NULL, NULL, NULL, NULL, -999, 2.5, 4.7, 10, 20.00, NULL, NULL, NULL, NULL, 'Y', 'Y', 'Y', NULL, NULL, NULL, NULL, NULL, NULL, '[SPAM]', 0, NULL)");
+
+        db_query_parsed("$insert_fields VALUES ('Virus Filtering Only', 'N', 'Y', 'Y', 'Y', 'N', 'Y', 'Y', 'Y', 'N', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 0.00, NULL, NULL, NULL, NULL, 'Y', 'N', 'N', NULL, NULL, NULL, NULL, NULL, NULL, '[SPAM]', 0, NULL)");
+
+        db_query_parsed("$insert_fields VALUES ('Spam Filtering Only', 'Y', 'N', 'Y', 'Y', 'Y', 'N', 'Y', 'Y', 'Y', NULL, NULL, NULL, NULL, -999, 2.5, 5, 10, 20.00, NULL, NULL, NULL, NULL, 'N', 'Y', 'Y', NULL, NULL, NULL, NULL, NULL, NULL,'[SPAM]', 0, NULL)");
+
+        db_query_parsed("$insert_fields VALUES ('Low', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'Y', NULL, NULL, NULL, NULL, -999, 4.5, 7, 10, 20.00, NULL, NULL, NULL, NULL, 'Y', 'Y', 'Y', NULL, NULL, NULL, NULL, NULL, NULL, '[SPAM]', 0, NULL)");
+
+        db_query_parsed("$insert_fields VALUES ('High', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'Y', NULL, NULL, NULL, NULL, -999, 2.5, 3, 10, 20.00, NULL, NULL, NULL, NULL, 'Y', 'Y', 'Y', NULL, NULL, NULL, NULL, NULL, NULL, '[SPAM]', 0, NULL)");
+
+
+        $table_quarantine = table_by_key('quarantine');
+        db_query_parsed("CREATE TABLE IF NOT EXISTS $table_quarantine (
+          `mail_id` varchar(12) NOT NULL,
+          `chunk_ind` int(10) unsigned NOT NULL,
+          `mail_text` blob,
+          PRIMARY KEY  (`mail_id`,`chunk_ind`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1");
+
+        $table_sa_rules = table_by_key('sa_rules');
+        db_query_parsed("CREATE TABLE IF NOT EXISTS $table_sa_rules (
+          `rule` varchar(100) NOT NULL default '',
+          `rule_desc` varchar(200) NOT NULL default '',
+          PRIMARY KEY  (`rule`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=latin1");
+
+
+        $table_users = table_by_key('users');
+        db_query_parsed("CREATE TABLE IF NOT EXISTS $table_users (
+          `id` int(10) unsigned NOT NULL auto_increment,
+          `priority` int(11) NOT NULL default '7',
+          `policy_id` int(10) unsigned NOT NULL default '1',
+          `email` varchar(255) NOT NULL,
+          `fullname` varchar(255) default NULL,
+          `local` char(1) default NULL,
+          PRIMARY KEY  (`id`),
+          UNIQUE KEY `email` (`email`)
+        ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 ");
+
+
+        $table_wblist = table_by_key('wblist');
+        db_query_parsed("CREATE TABLE IF NOT EXISTS $table_wblist (
+          `rid` int(10) unsigned NOT NULL,
+          `sid` int(10) unsigned NOT NULL,
+          `wb` varchar(10) NOT NULL,
+          PRIMARY KEY  (`rid`,`sid`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=latin1");
+
+        db_query_parsed("ALTER TABLE $table_msgrcpt ADD CONSTRAINT `msgrcpt_maddr_fk1` FOREIGN KEY (`rid`) REFERENCES $table_maddr (`id`),
+                          ADD CONSTRAINT `msgrcpt_msgs_fk1` FOREIGN KEY (`mail_id`) REFERENCES $table_msgs (`mail_id`) ON DELETE CASCADE");
+
+        db_query_parsed("ALTER TABLE $table_msgs ADD CONSTRAINT `msgs_ibfk_fk1` FOREIGN KEY (`sid`) REFERENCES $table_maddr (`id`)");
+
+        db_query_parsed("ALTER TABLE $table_quarantine ADD CONSTRAINT `quarantine_msgs_fk1` FOREIGN KEY (`mail_id`) REFERENCES $table_msgs (`mail_id`) ON DELETE CASCADE");
+
+         */
 }
 
