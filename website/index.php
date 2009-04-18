@@ -17,7 +17,6 @@ require_once('header.php');
 
 <ul>
 	<li><a href="http://sourceforge.net/forum/forum.php?forum_id=676076">Postfixadmin Discussion Forum</a></li>
-	<li><a href="http://sourceforge.net/mail/?group_id=191583">Mailing lists</a></li>
 	<li>IRC - #postfixadmin on irc.freenode.net </li>
 </ul>
 
@@ -27,6 +26,12 @@ require_once('header.php');
 	<li><a href="http://mysql.org">MySQL</a> or <a href="http://postgresql.org">PostgreSQL</a></li>
 	<li><a href="http://php.net">PHP</a> v4 or v5 should both work</li>
 	<li>And presumably a compatible IMAP/POP3 server (dovecot and courier seem to be the most popular)</li>
+</ul>
+
+<h3>Plans...</h3>
+<ul>
+<li>Release 2.3 - May 2009 - Aliased domains, bug fixes, better Debian installer. See changelog/announcement when it arrives :)</li>
+<li>Release 3.0 - ???????????? - Smarty / Doctrine refactoring, better vacation functionality, user controllable fetchmail</li>
 </ul>
 
 <h3>Download - version 2.2.1.1</h3>
@@ -41,9 +46,7 @@ require_once('header.php');
 
 <p>'trunk' currently contains a working domain-domain aliasing implementation, but to use it, you'll need to alter some Postfix settings first. Once this is finished, it will probably form 2.3.0, which may be released within the next month or so.</p>
 
-<p>In the near future, we plan to refactor the codebase to allow for XMLRPC/SOAP integration, allowing e.g. Squirrelmail and RoundCube to integrate with Postfixadmin without having to talk to e.g. a database. This should eventually allow PostfixAdmin to work with e.g. LDAP or a.n.other backend data store without having to change the front end code. This will almost certainly mean the minimum requirements will by PHP5 and probably a dependence on the Zend Framework.</p>
-
-<p>If you wish to get involved, or try out 'trunk' try :</p>
+<p>The 2.3 code base will allow for XMLRPC access - this will allow third party software to integrate (allowing users to change their password, set their vacation message etc)</p>
 
 <code>svn co https://postfixadmin.svn.sourceforge.net/svnroot/postfixadmin/trunk postfixadmin</code>
 
