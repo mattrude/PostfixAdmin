@@ -16,7 +16,7 @@ require_once('header.php');
 <h3>Community</h3>
 
 <ul>
-	<li><a href="http://sourceforge.net/forum/forum.php?forum_id=676076">Postfixadmin Discussion Forum</a></li>
+	<li><a href="https://sourceforge.net/projects/postfixadmin/forums/forum/676076">Postfixadmin Discussion Forum</a></li>
 	<li>IRC - #postfixadmin on irc.freenode.net </li>
 </ul>
 
@@ -30,7 +30,7 @@ require_once('header.php');
 
 <h3>Plans...</h3>
 <ul>
-<li>Release 2.3 - May 2009 - Aliased domains, bug fixes, better Debian installer. See changelog/announcement when it arrives :)</li>
+<li>Release 2.3 - May 2009 - Aliased domains, bug fixes, better Debian installer. See changelog/announcement when it arrives :) (Ooops, we kind of missed May 2009... it's nearly there, we just keep adding new tweaks and fixing bugs)</li>
 <li>Release 3.0 - ???????????? - Smarty / Doctrine refactoring, better vacation functionality, user controllable fetchmail</li>
 </ul>
 
@@ -59,7 +59,7 @@ require_once('header.php');
 <ul>
 <li><a href="http://squirrelmail-postfixadmin.palepurple.co.uk">Postfixadmin/Squirrelmail plugin</a> - Integrate together <A href="http://squirrelmail.org">Squirrelmail</a> with Postfixadmin</a></li>
 <li><a href="http://nejc.skoberne.net/rcpfa">Postfixadmin/Roundcube plugin</a> - Integrate together <A href="http://roundcube.net">RoundCube</a> with Postfixadmin</a></li>
-<li><a href="http://codepoets.co.uk/postfixadmin-postgresql-courier-squirrelmail-debian-etch-howto-tutorial">Guide to installation on Etch with PostgreSQL and Courier</a></li>
+<li><a href="http://codepoets.co.uk/2009/postfixadmin-setupinstall-guide-for-virtual-mail-users-on-postfix/">Guide to installation on Debian with PostgreSQL and Courier</a></li>
 </ul>
 
 (If you would like to add links to any other relevant projects or documentation, please poke GingerDog on irc)
