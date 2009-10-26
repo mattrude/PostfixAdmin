@@ -1,7 +1,7 @@
 <?php
 require_once('header.php');
 
-$latest = "2.3 rc2";
+$latest = "2.3";
 
 if(!isset($_GET['version'])) {
 	echo "Invalid usage";	
