@@ -36,9 +36,11 @@ require_once('header.php');
 
 <h3>Download - version 2.3</h3>
 
-Released October 2009...
+<p><a href='https://sourceforge.net/projects/postfixadmin/files/'>Download the latest release</a></p>
 
-New features/changes/things of significance :
+<p>Version 2.3 was released October 26th 2009...</p>
+
+<p>New features/changes/things of significance :</p>
 <ul>
 <li>Improved Aliased domains support (no longer relying on catch-all domains) - Note this requires Postfix configuration changes; old configuration(s) will continue to work.</li>
 <li>Security fix for setup.php (password required to access; setup.php can generate this and help you)</li>
@@ -53,7 +55,7 @@ New features/changes/things of significance :
 <li>Lots of small updates and random new minor features</li>
 <li>bug fixes, better Debian installer. </li>
 </ul>
-
+<p>Many thanks to all those who submitted patches and feedback during this release cycle. There are too many to easily name - we'd like to thank you all for taking the time to help make Postfixadmin better</p>
 
 <h3>Download - Development/Subversion release</h3>
 
