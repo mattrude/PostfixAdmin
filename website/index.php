@@ -30,23 +30,34 @@ require_once('header.php');
 
 <h3>Plans...</h3>
 <ul>
-<li>Release 2.3 - May 2009 - Aliased domains, bug fixes, better Debian installer. See changelog/announcement when it arrives :) (Ooops, we kind of missed May 2009... it's nearly there, we just keep adding new tweaks and fixing bugs)</li>
+<li>Release 2.4 - Merge in the Smarty branch - this should bring protection against XSS etc - November 2009?</li>
 <li>Release 3.0 - ???????????? - Smarty / Doctrine refactoring, better vacation functionality, user controllable fetchmail</li>
 </ul>
 
-<h3>Download - version 2.2.1.1</h3>
+<h3>Download - version 2.3</h3>
 
-<p>v2.2.1.1 was released in July 2008. It's the latest stable version and is basically all bug fixes from 'trunk' since 2.2.0 was released, without the new features (i.e. domain-domain aliasing). It is the latest version and we'd recommend users of previous versions upgrade.</p>
+Released October 2009...
 
-<p><small>2.2.1 was a slightly broken release, in that it displayed the wrong revision number; hence 2.2.1.1</small></p>
+New features/changes/things of significance :
+<ul>
+<li>Improved Aliased domains support (no longer relying on catch-all domains) - Note this requires Postfix configuration changes; old configuration(s) will continue to work.</li>
+<li>Security fix for setup.php (password required to access; setup.php can generate this and help you)</li>
+<li>Superadmin can now setup fetchmail for all users</li>
+<li>Enhanced fetchmail.pl script (file locking, syslog logging, configuration file etc)</li>
+<li>Added dovecot quota support (documentation + viewing in Postfixadmin) for dovecot 1.0/1.1 and &gt;= 1.2</li>
+<li>Vacation re-notification after defineable timeout (default remains to notify only once)</li>
+<li>Refactoring of /users (see /model) and XmlRpc interface for remote mail clients (E.g. <a href='http://squirrelmail-postfixadmin.palepurple.co.uk'>squirrelmail-postfixadmin</a>)</li>
+<li>Add dovecot password support (see <a href='https://sourceforge.net/tracker/index.php?func=detail&aid=2607332&group_id=191583&atid=937966'>here</a>)</li>
+<li>Added support for courier authlib authentication flavours ($CONF['authlib_default_flavor'])</li>
+<li>update.php should handle all database updates for you</li>
+<li>Lots of small updates and random new minor features</li>
+<li>bug fixes, better Debian installer. </li>
+</ul>
 
-<p>You can download the software <a href="http://sourceforge.net/project/showfiles.php?group_id=191583&package_id=225300">here</a>; the release contains .deb and .rpm (SuSE) packages and of course a .tar.gz.</p>
 
 <h3>Download - Development/Subversion release</h3>
 
 <p>'trunk' currently contains a working domain-domain aliasing implementation, but to use it, you'll need to alter some Postfix settings first. Once this is finished, it will probably form 2.3.0, which may be released within the next month or so.</p>
-
-<p>The 2.3 code base will allow for XMLRPC access - this will allow third party software to integrate (allowing users to change their password, set their vacation message etc)</p>
 
 <code>svn co https://postfixadmin.svn.sourceforge.net/svnroot/postfixadmin/trunk postfixadmin</code>
 
