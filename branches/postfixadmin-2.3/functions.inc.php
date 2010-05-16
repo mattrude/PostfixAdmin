@@ -81,7 +81,12 @@ function authentication_require_role($role) {
     if(authentication_has_role($role)) {
         return True;
     }
-    header("Location: " . $CONF['postfix_admin_url'] . "/login.php");
+    if($role === 'user') {
+        header("Location: " . $CONF['postfix_admin_url'] . '/users/login.php');
+    }
+    else {
+        header("Location: " . $CONF['postfix_admin_url'] . "/login.php");
+    }
     exit(0);
 }
 /**
@@ -1199,6 +1204,7 @@ function pacrypt ($pw, $pw_db="")
         $split_method = preg_split ('/:/', $CONF['encrypt']);
         $method       = strtoupper($split_method[1]);
         if (! preg_match("/^[A-Z0-9-]+$/", $method)) { die("invalid dovecot encryption method"); }  # TODO: check against a fixed list?
+        if (strtolower($method) == md5-crypt) die("\$CONF[encrypt] = dovecot:md5-crypt will not work because dovecotpw generates a random salt each time. Please use \$CONF[encrypt] = md5crypt instead."); 
 
         $dovecotpw = "dovecotpw";
         if (!empty($CONF['dovecotpw'])) $dovecotpw = $CONF['dovecotpw'];

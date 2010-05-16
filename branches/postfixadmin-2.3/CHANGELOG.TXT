@@ -28,6 +28,16 @@ Version ***svn 2.3 branch*** - 2009/12/26 - SVN r***
     superadmins)
   - add in_array() check to avoid that superadmins can enter invalid domains
   - fix delete link for alias domains (when on target domain)
+  - fix hardcoded table names in list-domain.php
+  - fixed edit-alias.php not to drop alias to the mailbox if
+    special_alias_control = NO
+  - fix typo in upgrade.php that broke index creation and deletion when using
+    non-default table names
+  - fix creating 'ALL' domain (dummy for superadmins) when using non-default
+    table names
+  - check for $CONF['encrypt'] = 'dovecot:md5-crypt' (postfixadmin login not
+    working because dovecotpw uses a new salt each time), recommend
+    internal md5crypt instead
 
 Version 2.3 - 2009/10/24 - SVN r739
 -----------------------------------
