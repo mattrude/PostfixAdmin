@@ -1774,7 +1774,16 @@ function db_log ($username,$domain,$action,$data)
     }
 }
 
-
+/**
+ * db_in_clause
+ * Action: builds and returns the "field in(x, y)" clause for database queries
+ * Call: db_in_clause (string field, array values)
+ */
+function db_in_clause($field, $values) {
+    return " $field IN ('"
+    . implode("','",escape_string(array_values($values))) 
+    . "') "; 
+}
 
 //
 // table_by_key
@@ -2099,6 +2108,7 @@ function create_mailbox_subfolders($login,$cleartext_password)
         $f='{'.$s_host.'}'.$s_prefix.$f;
         $res=imap_createmailbox($i,$f);
         if (!$res) {
+            error_log('Could not create IMAP folder $f: '.imap_last_error());
             @imap_close($i);
             return FALSE;
         }
@@ -2357,8 +2367,6 @@ function boolconf($setting) {
         return false;
     }
 }
-
-
 
 $table_admin = table_by_key ('admin');
 $table_alias = table_by_key ('alias');
