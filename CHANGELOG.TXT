@@ -10,11 +10,15 @@
 # Last update:
 # $Id$
 
-Version ***svn 2.3 branch*** - 2009/12/26 - SVN r***
------------------------------------
+Version 2.3.1 - 2010/05/18 - SVN r*** (postfixadmin-2.3 branch)
+---------------------------------------------------------------
 
-  - NOTE: this release is based on the 2.3 branch
-  - NOTE: this is a bugfix-only release for Postfix Admin 2.3
+  - SUMMARY: PostfixAdmin 2.3.1 is a bugfix-only release for Postfix Admin 2.3.
+    The only visible change is displaying the alias target for mailboxes which
+    was a longstanding issue/"missing feature".
+    The ADDITIONS directory contains some new scripts.
+  - display alias targets for mailboxes (if $CONF['special_alias_control'] = YES)
+  - add hook for custom maildir path generation
   - add import_users_from_csv.py script (by Simone Piccardi)
   - add mailbox_post* scripts for cyrus
   - handle dovecot passwords without any tempfile (prevents safe_mode issues)
@@ -117,8 +121,8 @@ Version 2.3 Beta - 2009/01/15 - SVN r527
 
   - added support for domain aliases (from lenix) (can be disabled with $CONF['alias_domain'])
     Important: If you update from a previous version, you'll have to adapt your postfix 
-	configuration (see DOCUMENTS/POSTFIX_CONF.txt) - or just disable alias domain support,
-	your postfix configuration will continue to work
+    configuration (see DOCUMENTS/POSTFIX_CONF.txt) - or just disable alias domain support,
+    your postfix configuration will continue to work
   - updated postfix example configuration for domain aliases and to use the new mysql map format
   - vacation.pl:
     - add option for re-notification after definable timeout (patch from Luxten)
