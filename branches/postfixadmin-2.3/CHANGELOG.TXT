@@ -16,6 +16,7 @@ Version ***svn 2.3 branch*** - 2009/12/26 - SVN r***
   - NOTE: this release is based on the 2.3 branch
   - NOTE: this is a bugfix-only release for Postfix Admin 2.3
   - add import_users_from_csv.py script (by Simone Piccardi)
+  - add mailbox_post* scripts for cyrus
   - handle dovecot passwords without any tempfile (prevents safe_mode issues)
   - fix MySQL 6.0 compatibility
   - fix quota display (for dovecot >= 1.2)
@@ -38,6 +39,8 @@ Version ***svn 2.3 branch*** - 2009/12/26 - SVN r***
   - check for $CONF['encrypt'] = 'dovecot:md5-crypt' (postfixadmin login not
     working because dovecotpw uses a new salt each time), recommend
     internal md5crypt instead
+  - replaced terribly outdated, broken squirrelmail plugin with a fresh version.
+    Note: The new plugin version requires the Zend framework.
 
 Version 2.3 - 2009/10/24 - SVN r739
 -----------------------------------
