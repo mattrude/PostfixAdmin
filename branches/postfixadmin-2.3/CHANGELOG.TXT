@@ -17,6 +17,9 @@ Version 2.3.1 - 2010/05/18 - SVN r*** (postfixadmin-2.3 branch)
     The only visible change is displaying the alias target for mailboxes which
     was a longstanding issue/"missing feature".
     The ADDITIONS directory contains some new scripts.
+  - SECURITY: users could bypass checking the old password when changing the
+	password by entering a too short new password. Fortunately only
+	"exploitable" by authentificated users.
   - display alias targets for mailboxes (if $CONF['special_alias_control'] = YES)
   - add hook for custom maildir path generation
   - add import_users_from_csv.py script (by Simone Piccardi)
@@ -33,13 +36,18 @@ Version 2.3.1 - 2010/05/18 - SVN r*** (postfixadmin-2.3 branch)
     superadmins)
   - add in_array() check to avoid that superadmins can enter invalid domains
   - fix delete link for alias domains (when on target domain)
+  - delete values from quota and quota2 table when deleting a mailbox
   - fix hardcoded table names in list-domain.php
   - fixed edit-alias.php not to drop alias to the mailbox if
     special_alias_control = NO
+  - fix alias handling for mailboxes (special_alias_control vs.
+    alias_control_admin confusion)
   - fix typo in upgrade.php that broke index creation and deletion when using
     non-default table names
   - fix creating 'ALL' domain (dummy for superadmins) when using non-default
     table names
+  - fix: db_query did not return number of SELECTed rows if query starts with
+    with whitespace
   - check for $CONF['encrypt'] = 'dovecot:md5-crypt' (postfixadmin login not
     working because dovecotpw uses a new salt each time), recommend
     internal md5crypt instead
