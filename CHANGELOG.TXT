@@ -10,7 +10,7 @@
 # Last update:
 # $Id$
 
-Version 2.3.1 - 2010/05/18 - SVN r*** (postfixadmin-2.3 branch)
+Version 2.3.1 - 2010/07/08 - SVN r846 (postfixadmin-2.3 branch)
 ---------------------------------------------------------------
 
   - SUMMARY: PostfixAdmin 2.3.1 is a bugfix-only release for Postfix Admin 2.3.
@@ -20,6 +20,7 @@ Version 2.3.1 - 2010/05/18 - SVN r*** (postfixadmin-2.3 branch)
   - SECURITY: users could bypass checking the old password when changing the
 	password by entering a too short new password. Fortunately only
 	"exploitable" by authentificated users.
+  - merge in changes to /debain (thanks normes) from trunk
   - display alias targets for mailboxes (if $CONF['special_alias_control'] = YES)
   - add hook for custom maildir path generation
   - add import_users_from_csv.py script (by Simone Piccardi)
