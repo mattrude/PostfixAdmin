@@ -195,7 +195,7 @@ if ($result['rows'] > 0)
 # mailboxes
 #
 
-$display_mailbox_aliases = boolconf('special_alias_control'); # TODO: is this condition correct? - I'm slightly confused with alias_control, alias_control_admin and special_alias_control
+$display_mailbox_aliases = boolconf('alias_control_admin');
 
 # build the sql query
 $sql_select = " SELECT $table_mailbox.* ";
