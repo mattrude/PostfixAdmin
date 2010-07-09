@@ -10,7 +10,7 @@
 # Last update:
 # $Id$
 
-Version 2.3.1 - 2010/07/08 - SVN r846 (postfixadmin-2.3 branch)
+Version 2.3.1 - 2010/07/09 - SVN r847 (postfixadmin-2.3 branch)
 ---------------------------------------------------------------
 
   - SUMMARY: PostfixAdmin 2.3.1 is a bugfix-only release for Postfix Admin 2.3.
