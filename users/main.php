@@ -35,8 +35,11 @@ else
 {
    $tummVacationtext = $PALANG['pUsersMain_vacation'];
 }
-	$smarty->assign ('tummVacationtext', $tummVacationtext);
-	$smarty->assign ('smarty_template', 'users_main');
-	$smarty->display ('index.tpl');
+
+include ("../templates/header.php");
+include ("../templates/users_menu.php");
+include ("../templates/users_main.php");
+include ("../templates/footer.php");
+
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

@@ -15,7 +15,7 @@
  * File: edit-active.php 
  * Responsible for toggling the active status of a mailbox. 
  *
- * Template File: message.tp
+ * Template File: message.php
  *
  * Template Variables:
  *
@@ -112,9 +112,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
    }
 }
 
-$smarty->assign ('tMessage', $tMessage);
-$smarty->assign ('smarty_template', 'message');
-$smarty->display ('index.tpl');
-
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/message.php");
+include ("templates/footer.php");
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>
