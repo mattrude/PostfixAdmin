@@ -10,6 +10,20 @@
 # Last update:
 # $Id$
 
+Version 2.3.2 - 2010/08/23 - SVN r858 (postfixadmin-2.3 branch)
+---------------------------------------------------------------
+
+  - SUMMARY: PostfixAdmin 2.3.2 is a bugfix-only release for Postfix Admin 2.3.1
+  - SECURITY: attackers could find out if a admin exists (login pre-filled the
+    username after "only" a wrong password was entered)
+  - alias targets in users/edit-alias are now validated
+  - invalid alias targets in users/edit-alias are shown to the user again
+    instead of dropping them
+  - fix dovecot:* password encryption (was broken in 2.3.1)
+  - fix displaying used quota for dovecot <= 1.1 (was broken in 2.3.1)
+  - when deleting a domain that is an alias domain (on the "from" side), the
+    alias domain is deleted
+
 Version 2.3.1 - 2010/07/09 - SVN r847 (postfixadmin-2.3 branch)
 ---------------------------------------------------------------
 
