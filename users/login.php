@@ -14,7 +14,7 @@
  * 
  * File: login.php
  * Used to authenticate want-to-be users.
- * Template File: login.tpl
+ * Template File: login.php
  *
  * Template Variables:
  *
@@ -30,12 +30,12 @@
 
 require_once("../common.php");
 
-$smarty->assign ('language_selector', language_selector(), false);
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-	$smarty->assign ('smarty_template', 'users_login');
-	$smarty->display ('index.tpl');
+   include ("../templates/header.php");
+   include ("../templates/users_login.php");
+   include ("../templates/footer.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
@@ -65,10 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
          $tMessage = '<span class="error_msg">' . $PALANG['pLogin_failed'] . '</span>';
          $tUsername = $fUsername;
    }
-	$smarty->assign ('tUsername', $tUsername);
-	$smarty->assign ('tMessage', $tMessage, false);
-	$smarty->assign ('smarty_template', 'users_login');
-	$smarty->display ('index.tpl');
+
+   include ("../templates/header.php");
+   include ("../templates/users_login.php");
+   include ("../templates/footer.php");
 }
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

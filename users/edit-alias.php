@@ -15,7 +15,7 @@
  * File: edit-alias.php
  * Users can use this to set forwards etc for their mailbox.
  *
- * Template File: users_edit-alias.tpl
+ * Template File: users_edit-alias.php
  *
  * Template Variables:
  *
@@ -30,7 +30,6 @@
  */
 
 require_once('../common.php');
-$smarty->assign ('smarty_template', 'users_edit-alias');
 
 authentication_require_role('user');
 $USERID_USERNAME = authentication_get_username();
@@ -42,19 +41,16 @@ $vacation_domain = $CONF['vacation_domain'];
 $vacation_goto = preg_replace('/@/', '#', $USERID_USERNAME) . '@' . $vacation_domain;
 
 $ah = new AliasHandler($USERID_USERNAME);
-$smarty->assign ('USERID_USERNAME', $USERID_USERNAME);
-
-
 $tGotoArray = $ah->get();
 $tStoreAndForward = $ah->hasStoreAndForward();
 $vacation_domain = $CONF['vacation_domain'];
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-	($tStoreAndForward) ? $smarty->assign ('forward_and_store', ' checked="checked"') : $smarty->assign ('forward_only', ' checked="checked"');
-
-	$smarty->assign ('tGotoArray', $tGotoArray);
-	$smarty->display ('index.tpl');
+    include ("../templates/header.php");
+    include ("../templates/users_menu.php");
+    include ("../templates/users_edit-alias.php");
+    include ("../templates/footer.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
@@ -79,14 +75,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
     $goto = explode(",",$goto);
 
+    $error = 0;
     $goto = array_merge(array_unique($goto));
     $good_goto = array();
+
     if($fForward_and_store == 'NO' && sizeof($goto) == 1 && $goto[0] == '') {
         $tMessage = $PALANG['pEdit_alias_goto_text_error1'];
         $error += 1;
     }
     if($error === 0) {
         foreach($goto as $address) {
+          if ($address != "") { # $goto[] may contain a "" element
             if(!check_email($address)) {
                 $error += 1;
                 $tMessage = $PALANG['pEdit_alias_goto_text_error2'] . " $address</font>";
@@ -94,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
             else {
                 $good_goto[] = $address;
             }
+          }
         }
-        $goto = $good_goto;
     }
 
     if ($error == 0) {
@@ -103,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         if($fForward_and_store == "YES" ) {
             $flags = 'forward_and_store';
         }
-        $updated = $ah->update($goto, $flags);
+        $updated = $ah->update($good_goto, $flags);
         if($updated) {
             header ("Location: main.php");
             exit;
@@ -113,8 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     else {
         $tGotoArray = $goto;
     }
-    $smarty->assign ('tMessage', $tMessage, false);
-    $smarty->display ('index.tpl');
+    include ("../templates/header.php");
+    include ("../templates/users_menu.php");
+    include ("../templates/users_edit-alias.php");
+    include ("../templates/footer.php");
 }
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

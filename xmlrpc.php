@@ -35,7 +35,6 @@ require_once(dirname(__FILE__) . '/common.php');
 if($CONF['xmlrpc_enabled'] == false) {
     die("xmlrpc support disabled");
 }
-
 require_once('Zend/XmlRpc/Server.php');
 $server = new Zend_XmlRpc_Server();
 

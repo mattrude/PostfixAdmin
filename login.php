@@ -14,12 +14,11 @@
  * 
  * File: login.php
  * Authenticates a user, and populates their $_SESSION as appropriate.
- * Template File: login.tpl
+ * Template File: login.php
  *
  * Template Variables:
  *
  *  tMessage
- *  tUsername
  *
  * Form POST \ GET Variables:
  *
@@ -30,18 +29,16 @@
 
 require_once('common.php');
 
-# force user to delete setup.php (allows creation of superadmins!)
-    if($CONF['configured'] !== true) {
-      print "Installation not yet configured; please edit config.inc.php";
-	  exit;
-    }
-
-	$smarty->assign ('language_selector', language_selector(), false);
+if($CONF['configured'] !== true) {
+  print "Installation not yet configured; please edit config.inc.php";
+  exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-	$smarty->assign ('smarty_template', 'login');
-	$smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/login.php");
+    include ("./templates/footer.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
@@ -67,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         {
             $error = 1;
             $tMessage = '<span class="error_msg">' . $PALANG['pLogin_failed'] . '</span>';
-            $tUsername = $fUsername;
         }
     }
     else
@@ -96,11 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         exit(0);
     }
 
-	$smarty->assign ('tUsername', $tUsername);
-	$smarty->assign ('tMessage', $tMessage, false);
-
-	$smarty->assign ('smarty_template', 'login');
-	$smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/login.php");
+    include ("./templates/footer.php");
 }
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

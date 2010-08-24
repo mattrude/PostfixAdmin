@@ -29,6 +29,7 @@ $CONF['configured'] = false;
 // To create the hash, visit setup.php in a browser and type a password into the field,
 // on submission it will be echoed out to you as a hashed value.
 $CONF['setup_password'] = 'changeme';
+
 // Postfix Admin Path
 // Set the location of your Postfix Admin installation here.
 // YOU MUST ENTER THE COMPLETE URL e.g. http://domain.tld/postfixadmin
@@ -50,11 +51,13 @@ $CONF['database_host'] = 'localhost';
 $CONF['database_user'] = 'postfix';
 $CONF['database_password'] = 'postfixadmin';
 $CONF['database_name'] = 'postfix';
+$CONF['database_prefix'] = '';
 // If you need to specify a different port for a MYSQL database connection, use e.g.
 //   $CONF['database_host'] = '172.30.33.66:3308';
 // If you need to specify a different port for POSTGRESQL database connection
 //   uncomment and change the following
 // $CONF['database_port'] = '5432';
+
 
 // Here, if you need, you can customize table names.
 $CONF['database_prefix'] = '';
@@ -71,7 +74,7 @@ $CONF['database_tables'] = array (
     'vacation' => 'vacation',
     'vacation_notification' => 'vacation_notification',
     'quota' => 'quota',
-	'quota2' => 'quota2',
+    'quota2' => 'quota2',
 );
 
 // Site Admin
@@ -335,6 +338,7 @@ $CONF['show_custom_colors']=array("lightgreen","lightblue");
 // Set to "" to disable this check.
 $CONF['recipient_delimiter'] = "";
 
+
 // Optional:
 // Script to run after creation of mailboxes.
 // Note that this may fail if PHP is run in "safe mode", or if
@@ -420,10 +424,11 @@ $CONF['theme_logo'] = 'images/logo-default.png';
 $CONF['theme_css'] = 'css/default.css';
 
 // XMLRPC Interface.
-// This should be only of use if you wish to use e.g the
+// This should be only of use if you wish to use e.g the 
 // Postfixadmin-Squirrelmail package
 //  change to boolean true to enable xmlrpc
 $CONF['xmlrpc_enabled'] = false;
+
 
 // If you want to keep most settings at default values and/or want to ensure 
 // that future updates work without problems, you can use a separate config 
