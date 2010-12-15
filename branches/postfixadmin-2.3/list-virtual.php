@@ -166,7 +166,7 @@ if ('pgsql'==$CONF['database_type'])
     # TODO: is the different query for pgsql really needed? The mailbox query below also works with both...
     $query = "SELECT address,
         goto,
-        extract(epoch from modified) as modified,
+        modified,
         active
         FROM $table_alias
         WHERE $sql_domain AND NOT EXISTS(SELECT 1 FROM $table_mailbox WHERE username=$table_alias.address $sql_where)
@@ -246,7 +246,7 @@ if ($result['rows'] > 0)
     while ($row = db_array ($result['result']))
     {
         if ($display_mailbox_aliases) {
-            $goto_split = split(",", $row['goto']);
+            $goto_split = explode(",", $row['goto']);
             $row['goto_mailbox'] = 0;
             $row['goto_other'] = array();
             
