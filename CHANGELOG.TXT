@@ -10,6 +10,22 @@
 # Last update:
 # $Id$
 
+Version 2.3.3 - 2010/**/** - SVN r*** (postfixadmin-2.3 branch)
+---------------------------------------------------------------
+
+  - list-virtual: fix displaying of 'modified' column for aliases when using
+	postgres
+  - replaced deprecated split() with preg_split() or explode()
+  - functions.inc.php: better error messages when database functions are missing
+  - create domain: fixed typo in variable name that broke the default value for
+    default aliases
+  - create domain: backup MX checkbox is now XHTML compliant
+  - vacation.pl logged literal $variable instead of the variable content at two
+    places
+  - POSTFIX_CONF.txt: fixed filename for quota map
+  - config.inc.php: removed double $CONF['database_prefix']
+  - config.inc.php: fixed comments about domain_post* script parameters
+
 Version 2.3.2 - 2010/08/24 - SVN r860 (postfixadmin-2.3 branch)
 ---------------------------------------------------------------
 

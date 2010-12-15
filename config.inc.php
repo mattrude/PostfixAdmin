@@ -51,7 +51,6 @@ $CONF['database_host'] = 'localhost';
 $CONF['database_user'] = 'postfix';
 $CONF['database_password'] = 'postfixadmin';
 $CONF['database_name'] = 'postfix';
-$CONF['database_prefix'] = '';
 // If you need to specify a different port for a MYSQL database connection, use e.g.
 //   $CONF['database_host'] = '172.30.33.66:3308';
 // If you need to specify a different port for POSTGRESQL database connection
@@ -368,7 +367,7 @@ $CONF['recipient_delimiter'] = "";
 // Note that this may fail if PHP is run in "safe mode", or if
 // operating system features (such as SELinux) or limitations
 // prevent the web-server from executing external scripts.
-// Parameters: (1) username
+// Parameters: (1) domain
 //$CONF['domain_postcreation_script']='sudo -u courier /usr/local/bin/postfixadmin-domain-postcreation.sh';
 
 // Optional:
@@ -376,7 +375,7 @@ $CONF['recipient_delimiter'] = "";
 // Note that this may fail if PHP is run in "safe mode", or if
 // operating system features (such as SELinux) or limitations
 // prevent the web-server from executing external scripts.
-// Parameters: (1) username
+// Parameters: (1) domain
 // $CONF['domain_postdeletion_script']='sudo -u courier /usr/local/bin/postfixadmin-domain-postdeletion.sh';
 
 // Optional:
