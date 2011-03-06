@@ -17,6 +17,11 @@
  *
  * XXX Probably a hack to save having to declare variables before using them in pages.
  */
+if (ereg ("variables.inc.php", $_SERVER['PHP_SELF']))
+{
+   header ("Location: login.php");
+   exit;
+}
 
 $error = "";
 $escaped_string = "";
@@ -94,6 +99,4 @@ $pEdit_mailbox_username_text = "&nbsp;";
 $pPassword_admin_text = "&nbsp;";
 $pPassword_password_current_text = "&nbsp;";
 $pPassword_password_text = "&nbsp;";
-
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

@@ -21,7 +21,8 @@ $PALANG['pLogin_welcome'] = 'Administratori prijavite se ovdje.';
 $PALANG['pLogin_username'] = 'Korisničko ime (adresa e-pote)';
 $PALANG['pLogin_password'] = 'Lozinka';
 $PALANG['pLogin_button'] = 'Prijavi';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Korisnicko ime nije točno. Morate se prijaviti sa adresom vae e-pote!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Lozinka nije točna!</span>';
 $PALANG['pLogin_login_users'] = 'Korisnici kliknite ovdje za prijavu u korisničku sekciju.';
 
 $PALANG['pMenu_main'] = 'Main'; # XXX
@@ -98,7 +99,6 @@ $PALANG['pCreate_alias_domain_button'] = 'Add Alias Domain'; # XXX
 $PALANG['pCreate_alias_domain_error1'] = 'You are not allowed to create the chosen configuration.'; # XXX
 $PALANG['pCreate_alias_domain_error2'] = 'The chosen configuration is invalid, please choose a different one!'; # XXX
 $PALANG['pCreate_alias_domain_error3'] = 'Database insert failed.'; # XXX
-$PALANG['pCreate_alias_domain_error4'] = 'All domains are already aliased.'; # XXX
 $PALANG['pCreate_alias_domain_success'] = 'The domain alias has been added to the alias domain table!'; # XXX
 
 $PALANG['pCreate_alias_welcome'] = 'Stvori novi alias za domenu.';
@@ -188,9 +188,6 @@ $PALANG['pViewlog_username'] = 'Administrator';
 $PALANG['pViewlog_domain'] = 'Domena';
 $PALANG['pViewlog_action'] = 'Akcija';
 $PALANG['pViewlog_data'] = 'Podaci';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -340,7 +337,7 @@ $PALANG['pUsersVacation_welcome'] = 'Ovdje moete promijeniti obvijest o odsutn
 $PALANG['pUsersVacation_welcome_text'] = 'Obvijest o odsutnosti je već postavljena!';
 $PALANG['pUsersVacation_subject'] = 'Subjekt';
 $PALANG['pUsersVacation_subject_text'] = 'Odsutnost';
-$PALANG['pUsersVacation_body'] = 'Tekst'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Tekst';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 Od <datum> do <datum> sam odsutan.
 Za hitne stvari molim vas da kontaktirate <kontaktna osoba>.
@@ -349,8 +346,6 @@ $PALANG['pUsersVacation_button_away'] = 'Uključi odsutnost';
 $PALANG['pUsersVacation_button_back'] = 'Isključi odsutnost';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Nemoguće promijeniti vae postavke o odsutnosti!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Obvijest o odsutnosti je uklonjena!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'stvori potanski ormarić';
 $PALANG['pCreate_dbLog_createalias'] = 'stvori alias';
@@ -376,9 +371,6 @@ $PALANG['pStatus_undeliverable'] = 'maybe UNDELIVERABLE '; # XXX
 $PALANG['pStatus_custom'] = 'Delivers to '; # XXX
 $PALANG['pStatus_popimap'] = 'POP/IMAP '; # XXX
 $PALANG['pPasswordTooShort'] = "Password is too short - requires %s characters"; # XXX
-$PALANG['pInvalidDomainRegex'] = "Invalid domain name %s, fails regexp check"; # XXX
-$PALANG['pInvalidDomainDNS'] = "Invalid domain %s, and/or not discoverable in DNS"; # XXX
-$PALANG['pInvalidMailRegex'] = "Invalid email address, fails regexp check"; # XXX
 $PALANG['pFetchmail_welcome'] = 'Fetch mail for:'; # XXX
 $PALANG['pFetchmail_new_entry'] = 'New entry'; # XXX
 $PALANG['pFetchmail_database_save_error'] = 'Could not save this entry in the database!'; # XXX
@@ -400,7 +392,6 @@ $PALANG['pFetchmail_field_poll_time']       = 'Poll'; # XXX
 $PALANG['pFetchmail_field_fetchall']        = 'Fetch All'; # XXX
 $PALANG['pFetchmail_field_keep']            = 'Keep'; # XXX
 $PALANG['pFetchmail_field_protocol']        = 'Protocol'; # XXX
-$PALANG['pFetchmail_field_usessl']          = 'SSL active'; # XXX
 $PALANG['pFetchmail_field_extra_options']   = 'Extra Options'; # XXX
 $PALANG['pFetchmail_field_mda']             = 'MDA'; # XXX
 $PALANG['pFetchmail_field_date']            = 'Date'; # XXX
@@ -416,7 +407,6 @@ $PALANG['pFetchmail_desc_poll_time']        = 'Poll every ... minutes'; # XXX
 $PALANG['pFetchmail_desc_fetchall']         = 'Retrieve  both old (seen) and new messages'; # XXX
 $PALANG['pFetchmail_desc_keep']             = 'Keep retrieved messages on the remote mailserver'; # XXX
 $PALANG['pFetchmail_desc_protocol']         = 'Protocol to use'; # XXX
-$PALANG['pFetchmail_desc_usessl']           = 'SSL encryption'; # XXX
 $PALANG['pFetchmail_desc_extra_options']    = 'Extra fetchmail Options'; # XXX
 $PALANG['pFetchmail_desc_mda']              = 'Mail Delivery Agent'; # XXX
 $PALANG['pFetchmail_desc_date']             = 'Date of last polling/configuration change'; # XXX

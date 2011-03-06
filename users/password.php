@@ -30,7 +30,10 @@
 require_once('../common.php');
 
 authentication_require_role('user');
-$username = authentication_get_username();
+$USERID_USERNAME = authentication_get_username();
+
+$tmp = preg_split ('/@/', $USERID_USERNAME);     
+$USERID_DOMAIN = $tmp[1];
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
@@ -39,30 +42,49 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         exit(0);
     }
 
-    $fPassword_current = $_POST['fPassword_current'];
-    $fPassword = $_POST['fPassword'];
-    $fPassword2 = $_POST['fPassword2'];
+    $fPassword_current = escape_string ($_POST['fPassword_current']);
+    $fPassword = escape_string ($_POST['fPassword']);
+    $fPassword2 = escape_string ($_POST['fPassword2']);
 
-    $error = 0;
     if(strlen($fPassword) < $CONF['min_password_length']) {
-        $error += 1;
+        $error = 1;
         flash_error(sprintf($PALANG['pPasswordTooShort'], $CONF['min_password_length']));
     }
-    if(!UserHandler::login($username, $fPassword_current)) {
-        $error += 1;
-        $pPassword_password_current_text = $PALANG['pPassword_password_current_text_error'];
+    $username = $USERID_USERNAME;
+
+    $result = db_query ("SELECT * FROM $table_mailbox WHERE username='$username'");
+    if ($result['rows'] == 1)
+    {
+        $row = db_array ($result['result']);
+        $checked_password = pacrypt($fPassword_current, $row['password']);
+
+        $result = db_query ("SELECT * FROM $table_mailbox WHERE username='$username' AND password='$checked_password'");      
+        if ($result['rows'] != 1)
+        {
+            $error = 1;
+            $pPassword_password_current_text = $PALANG['pPassword_password_current_text_error'];
+        }
     }
+    else
+    {
+        $error = 1;
+        $pPassword_email_text = $PALANG['pPassword_email_text_error']; 
+    }
+
     if (empty ($fPassword) or ($fPassword != $fPassword2))
     {
-        $error += 1;
+        $error = 1;
         $pPassword_password_text = $PALANG['pPassword_password_text_error'];
     }
 
-    if ($error == 0)
+    if ($error != 1)
     {
-        $uh = new UserHandler($username);
-        if($uh->change_pw($fPassword, $fPassword_current) ) {
+        $password = pacrypt ($fPassword);
+        $result = db_query ("UPDATE $table_mailbox SET password='$password',modified=NOW() WHERE username='$username'");
+        if ($result['rows'] == 1)
+        {
             flash_info($PALANG['pPassword_result_success']);
+            db_log ($USERID_USERNAME, $USERID_DOMAIN, 'edit_password', "$USERID_USERNAME");
             header("Location: main.php");
             exit(0);
         }
@@ -73,14 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     }
 }
 
-$smarty->assign ('USERID_USERNAME', $username);
-//$smarty->assign ('pPassword_admin_text', $pPassword_admin_text);
-$smarty->assign ('pPassword_password_current_text', $pPassword_password_current_text, false);
-$smarty->assign ('pPassword_password_text', $pPassword_password_text, false);
-$smarty->assign ('tMessage', $tMessage, false);
-
-$smarty->assign ('smarty_template', 'users_password');
-$smarty->display ('index.tpl');
+include ("../templates/header.php");
+include ("../templates/users_menu.php");
+include ("../templates/users_password.php");
+include ("../templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

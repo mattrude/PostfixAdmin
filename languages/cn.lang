@@ -22,7 +22,8 @@ $PALANG['pLogin_welcome'] = '邮件管理员请从这里登录以管理你的域
 $PALANG['pLogin_username'] = '帐号 (邮件地址)';
 $PALANG['pLogin_password'] = '密码';
 $PALANG['pLogin_button'] = '登录';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">登录失败, 请确认你是使用你的邮件地址登录!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">密码错误!</span>';
 $PALANG['pLogin_login_users'] = '普通用户点击这里进入用户控制面板.';
 
 $PALANG['pMenu_main'] = 'Main'; # XXX
@@ -99,7 +100,6 @@ $PALANG['pCreate_alias_domain_button'] = 'Add Alias Domain'; # XXX
 $PALANG['pCreate_alias_domain_error1'] = 'You are not allowed to create the chosen configuration.'; # XXX
 $PALANG['pCreate_alias_domain_error2'] = 'The chosen configuration is invalid, please choose a different one!'; # XXX
 $PALANG['pCreate_alias_domain_error3'] = 'Database insert failed.'; # XXX
-$PALANG['pCreate_alias_domain_error4'] = 'All domains are already aliased.'; # XXX
 $PALANG['pCreate_alias_domain_success'] = 'The domain alias has been added to the alias domain table!'; # XXX
 
 $PALANG['pCreate_alias_welcome'] = '在你的域中新建一个别名.';
@@ -189,9 +189,6 @@ $PALANG['pViewlog_username'] = '管理员';
 $PALANG['pViewlog_domain'] = '域';
 $PALANG['pViewlog_action'] = '操作';
 $PALANG['pViewlog_data'] = '内容';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -341,7 +338,7 @@ $PALANG['pUsersVacation_welcome'] = '自动回复.';
 $PALANG['pUsersVacation_welcome_text'] = '你已经设置了自动回复!';
 $PALANG['pUsersVacation_subject'] = '主题';
 $PALANG['pUsersVacation_subject_text'] = '我现在无法回信';
-$PALANG['pUsersVacation_body'] = '内容'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = '内容';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
     我在 <date> 到 <date> 这段时间内暂时无法回信.
 如果你有急事请与 <contact person> 联系.
@@ -350,8 +347,6 @@ $PALANG['pUsersVacation_button_away'] = '开启自动回复';
 $PALANG['pUsersVacation_button_back'] = '关闭自动回复';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">更新自动回复失败!</span>';
 $PALANG['pUsersVacation_result_success'] = '你的自动回复已经关闭!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = '新建邮箱';     
 $PALANG['pCreate_dbLog_createalias'] = '新建别名';
@@ -378,9 +373,6 @@ $PALANG['pStatus_undeliverable'] = 'maybe UNDELIVERABLE '; # XXX
 $PALANG['pStatus_custom'] = 'Delivers to '; # XXX
 $PALANG['pStatus_popimap'] = 'POP/IMAP '; # XXX
 $PALANG['pPasswordTooShort'] = "Password is too short - requires %s characters"; # XXX
-$PALANG['pInvalidDomainRegex'] = "Invalid domain name %s, fails regexp check"; # XXX
-$PALANG['pInvalidDomainDNS'] = "Invalid domain %s, and/or not discoverable in DNS"; # XXX
-$PALANG['pInvalidMailRegex'] = "Invalid email address, fails regexp check"; # XXX
 $PALANG['pFetchmail_welcome'] = 'Fetch mail for:'; # XXX
 $PALANG['pFetchmail_new_entry'] = 'New entry'; # XXX
 $PALANG['pFetchmail_database_save_error'] = 'Could not save this entry in the database!'; # XXX
@@ -401,7 +393,6 @@ $PALANG['pFetchmail_field_poll_time']       = 'Poll'; # XXX
 $PALANG['pFetchmail_field_fetchall']        = 'Fetch All'; # XXX
 $PALANG['pFetchmail_field_keep']            = 'Keep'; # XXX
 $PALANG['pFetchmail_field_protocol']        = 'Protocol'; # XXX
-$PALANG['pFetchmail_field_usessl']          = 'SSL active'; # XXX
 $PALANG['pFetchmail_field_extra_options']   = 'Extra Options'; # XXX
 $PALANG['pFetchmail_field_mda']             = 'MDA'; # XXX
 $PALANG['pFetchmail_field_date']            = 'Date'; # XXX
@@ -417,7 +408,6 @@ $PALANG['pFetchmail_desc_poll_time']        = 'Poll every ... minutes'; # XXX
 $PALANG['pFetchmail_desc_fetchall']         = 'Retrieve  both old (seen) and new messages'; # XXX
 $PALANG['pFetchmail_desc_keep']             = 'Keep retrieved messages on the remote mailserver'; # XXX
 $PALANG['pFetchmail_desc_protocol']         = 'Protocol to use'; # XXX
-$PALANG['pFetchmail_desc_usessl']           = 'SSL encryption'; # XXX
 $PALANG['pFetchmail_desc_extra_options']    = 'Extra fetchmail Options'; # XXX
 $PALANG['pFetchmail_desc_mda']              = 'Mail Delivery Agent'; # XXX
 $PALANG['pFetchmail_desc_date']             = 'Date of last polling/configuration change'; # XXX

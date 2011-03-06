@@ -15,22 +15,21 @@
  * File: edit-alias.php
  * Users can use this to set forwards etc for their mailbox.
  *
- * Template File: users_edit-alias.tpl
+ * Template File: users_edit-alias.php
  *
  * Template Variables:
  *
  * tMessage
- * tGotoArray
- * tStoreAndForward
+ * tGoto
  *
  * Form POST \ GET Variables:
  *
  * fAddress
+ * fDomain
  * fGoto
  */
 
 require_once('../common.php');
-$smarty->assign ('smarty_template', 'users_edit-alias');
 
 authentication_require_role('user');
 $USERID_USERNAME = authentication_get_username();
@@ -41,21 +40,25 @@ $USERID_DOMAIN = $tmp[1];
 $vacation_domain = $CONF['vacation_domain'];
 $vacation_goto = preg_replace('/@/', '#', $USERID_USERNAME) . '@' . $vacation_domain;
 
-$ah = new AliasHandler($USERID_USERNAME);
-$smarty->assign ('USERID_USERNAME', $USERID_USERNAME);
-
-
-if ( ! $ah->get() ) die("Can't get alias details. Invalid alias?"); # this can only happen if a admin deleted the user since the user logged in
-$tGotoArray = $ah->result();
-$tStoreAndForward = $ah->hasStoreAndForward();
-$vacation_domain = $CONF['vacation_domain'];
-
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-    ($tStoreAndForward) ? $smarty->assign ('forward_and_store', ' checked="checked"') : $smarty->assign ('forward_only', ' checked="checked"');
+    $vacation_domain = $CONF['vacation_domain'];
 
-    $smarty->assign ('tGotoArray', $tGotoArray);
-    $smarty->display ('index.tpl');
+    $result = db_query ("SELECT * FROM $table_alias WHERE address='$USERID_USERNAME'");
+    if ($result['rows'] == 1)
+    {
+        $row = db_array ($result['result']);
+        $tGoto = $row['goto'];
+    }
+    else
+    {
+        $tMessage = $PALANG['pEdit_alias_address_error'];
+    }
+
+    include ("../templates/header.php");
+    include ("../templates/users_menu.php");
+    include ("../templates/users_edit-alias.php");
+    include ("../templates/footer.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
@@ -68,71 +71,68 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
     $pEdit_alias_goto = $PALANG['pEdit_alias_goto'];
 
-    if (isset($_POST['fGoto'])) $fGoto = trim($_POST['fGoto']);
-    if (isset($_POST['fForward_and_store'])) $fForward_and_store = $_POST['fForward_and_store'];
+    if (isset ($_POST['fVacation'])) $fVacation = $_POST['fVacation'];   
+    if (isset ($_POST['fGoto'])) $fGoto = escape_string (trim($_POST['fGoto']));
+    if (isset ($_POST['fForward_and_store'])) $fForward_and_store = escape_string ($_POST['fForward_and_store']);
 
     $goto = strtolower ($fGoto);
     $goto = preg_replace ('/\\\r\\\n/', ',', $goto);
     $goto = preg_replace ('/\r\n/', ',', $goto);
-    $goto = preg_replace ('/,[\s]+/i', ',', $goto);
-    $goto = preg_replace ('/[\s]+,/i', ',', $goto);
+    $goto = preg_replace ('/[\s]+/i', '', $goto);
     $goto = preg_replace ('/\,*$/', '', $goto);
-
+    ( $fForward_and_store == "YES" ) ? $goto = $USERID_USERNAME . "," . $goto : '';
     $goto = explode(",",$goto);
-
-    $error = 0;
     $goto = array_merge(array_unique($goto));
-    $good_goto = array();
+    $goto = implode(",",$goto);
 
-    if($fForward_and_store != 'YES' && sizeof($goto) == 1 && $goto[0] == '') {
-        $tMessage = $PALANG['pEdit_alias_goto_text_error1'];
-        $error += 1;
-    }
-    if($error === 0) {
-        foreach($goto as $address) {
-          if ($address != "") { # $goto[] may contain a "" element
-            # TODO - from https://sourceforge.net/tracker/?func=detail&aid=3027375&group_id=191583&atid=937964 
-            # The not-so-good news is that some internals of edit-alias aren't too nice
-            # - for example, $goto[] can contain an element with empty string. I added a
-            # check for that in the 2.3 branch, but we should use a better solution
-            # (avoid empty elements in $goto) in trunk ;-)
-            if(!check_email($address)) {
-                $error += 1;
-                if (!empty($tMessage)) $tMessage .= "<br />";
-                $tMessage .= $PALANG['pEdit_alias_goto_text_error2'] . " $address</font>";
-            }
-            else {
-                $good_goto[] = $address;
-            }
-          }
+    $array = preg_split ('/,/', $goto);
+
+    for ($i = 0; $i < sizeof ($array); $i++) {
+        if (in_array ("$array[$i]", $CONF['default_aliases'])) continue;
+        if (empty ($array[$i]) && $fForward_and_store == "NO")
+        {
+            $error = 1;
+            $tGoto = $goto;
+            $tMessage = $PALANG['pEdit_alias_goto_text_error1'];
+        }
+        if (empty ($array[$i])) continue;
+        if (!check_email ($array[$i]))
+        {
+            $error = 1;
+            $tGoto = $goto;
+            $tMessage = $PALANG['pEdit_alias_goto_text_error2'] . "$array[$i]</font>";
         }
     }
 
-    if ($error == 0) {
-        $flags = 'remote_only';
-        if($fForward_and_store == "YES" ) {
-            $flags = 'forward_and_store';
+    if ($error != 1)
+    {
+        if (empty ($goto))
+        {
+            $goto = $USERID_USERNAME;
         }
-        $updated = $ah->update($good_goto, $flags);
-        if($updated) {
+
+        if ($fVacation == "YES")
+        {
+            $goto .= "," . $vacation_goto;
+        }
+
+        $result = db_query ("UPDATE $table_alias SET goto='$goto',modified=NOW() WHERE address='$USERID_USERNAME'");
+        if ($result['rows'] != 1)
+        {
+            $tMessage = $PALANG['pEdit_alias_result_error'];
+        }
+        else
+        {
+            db_log ($USERID_USERNAME, $USERID_DOMAIN, 'edit_alias', "$USERID_USERNAME -> $goto");
+
             header ("Location: main.php");
             exit;
         }
-        if (!empty($tMessage)) $tMessage .= "<br />";
-        $tMessage .= $PALANG['pEdit_alias_result_error'];
     }
-    else {
-        $tGotoArray = $goto;
-    }
-    $smarty->assign ('tMessage', $tMessage, false);
-    $smarty->assign ('tGotoArray', $tGotoArray);
-    if ($fForward_and_store == "YES") {
-        $smarty->assign ('forward_and_store', ' checked="checked"');
-    } else {
-        $smarty->assign ('forward_only', ' checked="checked"');
-    }
-    $smarty->display ('index.tpl');
-}
 
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
+    include ("../templates/header.php");
+    include ("../templates/users_menu.php");
+    include ("../templates/users_edit-alias.php");
+    include ("../templates/footer.php");
+}
 ?>

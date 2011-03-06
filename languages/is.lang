@@ -22,7 +22,8 @@ $PALANG['pLogin_welcome'] = 'Póst kerfisstjóri tengist hér til að viðhalda 
 $PALANG['pLogin_username'] = 'Auðkenni(email)';
 $PALANG['pLogin_password'] = 'Lykilorð';
 $PALANG['pLogin_button'] = 'Tengjast';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Auðkenni þitt er rangt, ath hvort þú hafir slegið það rangt inn og prófaðu aftur, ath notaðu fullt email til að tengjas!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Lykilorðið var rangt!</span>';
 $PALANG['pLogin_login_users'] = 'Notendur smellið hér til að opna almennt notendaviðmót.';
 
 $PALANG['pMenu_main'] = 'Main'; # XXX
@@ -99,7 +100,6 @@ $PALANG['pCreate_alias_domain_button'] = 'Add Alias Domain'; # XXX
 $PALANG['pCreate_alias_domain_error1'] = 'You are not allowed to create the chosen configuration.'; # XXX
 $PALANG['pCreate_alias_domain_error2'] = 'The chosen configuration is invalid, please choose a different one!'; # XXX
 $PALANG['pCreate_alias_domain_error3'] = 'Database insert failed.'; # XXX
-$PALANG['pCreate_alias_domain_error4'] = 'All domains are already aliased.'; # XXX
 $PALANG['pCreate_alias_domain_success'] = 'The domain alias has been added to the alias domain table!'; # XXX
 
 $PALANG['pCreate_alias_welcome'] = 'Útbúa nýjan alias fyrir þitt lén.'; $PALANG['pCreate_alias_address'] = 'Alias';
@@ -188,9 +188,6 @@ $PALANG['pViewlog_username'] = 'kerfisstjóri';
 $PALANG['pViewlog_domain'] = 'lén';
 $PALANG['pViewlog_action'] = 'aðgerð';
 $PALANG['pViewlog_data'] = 'gögn';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -340,7 +337,7 @@ $PALANG['pUsersVacation_welcome'] = 'sjálfvirk skilaboð.';
 $PALANG['pUsersVacation_welcome_text'] = 'Þú hefur nú þegar skilgreint sjálfvirk skilaboð!';
 $PALANG['pUsersVacation_subject'] = 'Meginmál - Subject';
 $PALANG['pUsersVacation_subject_text'] = 'Er ekki við - Out of Office';
-$PALANG['pUsersVacation_body'] = 'Meginmál'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Meginmál';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 Ég er ekki við frá <date> og til <date>.  I will be away from <date> until <date>.
 Ef mikið liggur við, geturðu haft samaband við <contact person>. For urgent matters you can contact <contact person>.
@@ -349,8 +346,6 @@ $PALANG['pUsersVacation_button_away'] = 'Verð í burtu';
 $PALANG['pUsersVacation_button_back'] = 'Kem aftur';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Get ekki uppfært sjálfvirk skilaboð þín!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Sjálfvirk skilaboð þín (svar) hefur verið fjarlægt!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';      # XXX
 $PALANG['pCreate_dbLog_createalias'] = 'create alias'; # XXX
@@ -377,9 +372,6 @@ $PALANG['pStatus_undeliverable'] = 'maybe UNDELIVERABLE '; # XXX
 $PALANG['pStatus_custom'] = 'Delivers to '; # XXX
 $PALANG['pStatus_popimap'] = 'POP/IMAP '; # XXX
 $PALANG['pPasswordTooShort'] = "Password is too short - requires %s characters"; # XXX
-$PALANG['pInvalidDomainRegex'] = "Invalid domain name %s, fails regexp check"; # XXX
-$PALANG['pInvalidDomainDNS'] = "Invalid domain %s, and/or not discoverable in DNS"; # XXX
-$PALANG['pInvalidMailRegex'] = "Invalid email address, fails regexp check"; # XXX
 $PALANG['pFetchmail_welcome'] = 'Fetch mail for:'; # XXX
 $PALANG['pFetchmail_new_entry'] = 'New entry'; # XXX
 $PALANG['pFetchmail_database_save_error'] = 'Could not save this entry in the database!'; # XXX
@@ -400,7 +392,6 @@ $PALANG['pFetchmail_field_poll_time']       = 'Poll'; # XXX
 $PALANG['pFetchmail_field_fetchall']        = 'Fetch All'; # XXX
 $PALANG['pFetchmail_field_keep']            = 'Keep'; # XXX
 $PALANG['pFetchmail_field_protocol']        = 'Protocol'; # XXX
-$PALANG['pFetchmail_field_usessl']          = 'SSL active'; # XXX
 $PALANG['pFetchmail_field_extra_options']   = 'Extra Options'; # XXX
 $PALANG['pFetchmail_field_mda']             = 'MDA'; # XXX
 $PALANG['pFetchmail_field_date']            = 'Date'; # XXX
@@ -416,7 +407,6 @@ $PALANG['pFetchmail_desc_poll_time']        = 'Poll every ... minutes'; # XXX
 $PALANG['pFetchmail_desc_fetchall']         = 'Retrieve  both old (seen) and new messages'; # XXX
 $PALANG['pFetchmail_desc_keep']             = 'Keep retrieved messages on the remote mailserver'; # XXX
 $PALANG['pFetchmail_desc_protocol']         = 'Protocol to use'; # XXX
-$PALANG['pFetchmail_desc_usessl']           = 'SSL encryption'; # XXX
 $PALANG['pFetchmail_desc_extra_options']    = 'Extra fetchmail Options'; # XXX
 $PALANG['pFetchmail_desc_mda']              = 'Mail Delivery Agent'; # XXX
 $PALANG['pFetchmail_desc_date']             = 'Date of last polling/configuration change'; # XXX

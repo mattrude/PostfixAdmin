@@ -14,11 +14,12 @@
  * 
  * File: login.php
  * Authenticates a user, and populates their $_SESSION as appropriate.
- * Template File: login.tpl
+ * Template File: login.php
  *
  * Template Variables:
  *
  *  tMessage
+ *  tUsername
  *
  * Form POST \ GET Variables:
  *
@@ -29,19 +30,23 @@
 
 require_once('common.php');
 
-$smarty->assign('tMessage', '');
 # force user to delete setup.php (allows creation of superadmins!)
-if($CONF['configured'] !== true) {
-    print "Installation not yet configured; please edit config.inc.php";
-    exit;
+if (file_exists (realpath ("./setup.php"))) {
+   if (is_string($CONF['configured']) && $CONF['configured'] == 'I_know_the_risk_of_not_deleting_setup.php')
+   {
+   }
+   else
+   {
+      print "Please delete setup.php before using Postfix Admin!";
+      exit;
+   }
 }
-
-$smarty->assign ('language_selector', language_selector(), false);
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-    $smarty->assign ('smarty_template', 'login');
-    $smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/login.php");
+    include ("./templates/footer.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
@@ -50,12 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     $fPassword = '';
     if (isset ($_POST['fUsername'])) $fUsername = escape_string ($_POST['fUsername']);
     if (isset ($_POST['fPassword'])) $fPassword = escape_string ($_POST['fPassword']);
-    $lang = safepost('lang');
+	$lang = safepost('lang');
 
-    if ( $lang != check_language(0) ) { # only set cookie if language selection was changed
-        setcookie('lang', $lang, time() + 60*60*24*30); # language cookie, lifetime 30 days
-        # (language preference cookie is processed even if username and/or password are invalid)
-    }
+   if ( $lang != check_language(0) ) { # only set cookie if language selection was changed
+		setcookie('lang', $lang, time() + 60*60*24*30); # language cookie, lifetime 30 days
+		# (language preference cookie is processed even if username and/or password are invalid)
+	}
 
     $result = db_query ("SELECT password FROM $table_admin WHERE username='$fUsername' AND active='1'");
     if ($result['rows'] == 1)
@@ -66,13 +71,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         if ($result['rows'] != 1)
         {
             $error = 1;
-            $tMessage = '<span class="error_msg">' . $PALANG['pLogin_failed'] . '</span>';
+            $tMessage = $PALANG['pLogin_password_incorrect'];
+            $tUsername = $fUsername;
         }
     }
     else
     {
         $error = 1;
-        $tMessage = '<span class="error_msg">' . $PALANG['pLogin_failed'] . '</span>';
+        $tMessage = $PALANG['pLogin_username_incorrect'];
     }
 
     if ($error != 1)
@@ -88,18 +94,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         if ($result['rows'] == 1)
         {
             $_SESSION['sessid']['roles'][] = 'global-admin';
-            #            header("Location: admin/list-admin.php");
-            #            exit(0);
+#            header("Location: admin/list-admin.php");
+#            exit(0);
         }
         header("Location: main.php");
         exit(0);
     }
 
-    $smarty->assign ('tMessage', $tMessage, false);
-
-    $smarty->assign ('smarty_template', 'login');
-    $smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/login.php");
+    include ("./templates/footer.php");
 }
-
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

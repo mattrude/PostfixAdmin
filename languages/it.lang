@@ -19,12 +19,13 @@ $PALANG['check_update'] = 'Verifica gli aggiornamenti';
 $PALANG['invalid_parameter'] = 'Parametro non valido!';
 $PALANG['pFooter_logged_as'] = 'Collegato come %s';
 
-$PALANG['pLogin_welcome'] = 'Gli amministratori di posta devono effettuare il login qui per amministrare il proprio dominio.';
+$PALANG['pLogin_welcome'] = 'GLi amministratori di posta devono effettuare il login qui per amministrare il proprio dominio.';
 $PALANG['pLogin_username'] = 'Nome utente (email)';
 $PALANG['pLogin_password'] = 'Password';
 $PALANG['pLogin_button'] = 'Entra';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
-$PALANG['pLogin_login_users'] = 'Gli utenti devono cliccare qui per entrare nella propria sezione.';
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Il tuo nome utente non &egrave; corretto. Assicurati di avere inserito il tuo indirizzo email corretto!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">La tua password non &egrave; corretta!</span>';
+$PALANG['pLogin_login_users'] = 'GLi utenti devono cliccare qui per entrare nella propria sezione.';
 
 $PALANG['pMenu_main'] = 'Principale';
 $PALANG['pMenu_overview'] = 'Resoconto';
@@ -75,7 +76,7 @@ $PALANG['pOverview_mailbox_quota'] = 'Quota (MB)';
 $PALANG['pOverview_mailbox_modified'] = 'Ultima modifica';
 $PALANG['pOverview_mailbox_active'] = 'Attivo';
 $PALANG['pOverview_vacation_edit'] = 'AUTORISPONDITORE ATTIVO';
-$PALANG['pOverview_vacation_option'] = 'Attiva autorisponditore';
+$PALANG['pOverview_vacation_option'] = 'Attiva autoresponditore';
 
 $PALANG['pOverview_get_domain'] = 'Dominio';
 $PALANG['pOverview_get_aliases'] = 'Alias';
@@ -100,13 +101,12 @@ $PALANG['pCreate_alias_domain_button'] = 'Add Alias Domain'; # XXX
 $PALANG['pCreate_alias_domain_error1'] = 'You are not allowed to create the chosen configuration.'; # XXX
 $PALANG['pCreate_alias_domain_error2'] = 'The chosen configuration is invalid, please choose a different one!'; # XXX
 $PALANG['pCreate_alias_domain_error3'] = 'Database insert failed.'; # XXX
-$PALANG['pCreate_alias_domain_error4'] = 'All domains are already aliased.'; # XXX
 $PALANG['pCreate_alias_domain_success'] = 'The domain alias has been added to the alias domain table!'; # XXX
 
 $PALANG['pCreate_alias_welcome'] = 'Crea un nuovo alias per il tuo dominio.';
 $PALANG['pCreate_alias_address'] = 'Alias';
 $PALANG['pCreate_alias_address_text_error1'] = '<br /><span class="error_msg">L\' Alias non &egrave; valido!</span>';
-$PALANG['pCreate_alias_address_text_error2'] = '<br /><span class="error_msg">Questo indirizzo di posta esiste gi&agrave;, per favore sceglierne uno diverso!</span>';
+$PALANG['pCreate_alias_address_text_error2'] = '<br /><span class="error_msg">Questo indirizzo di post esiste gi&agrave;, per favore sceglierne uno diverso!</span>';
 $PALANG['pCreate_alias_address_text_error3'] = '<br /><span class="error_msg">Hai raggiunto il tuo limite per creare alias!</span>';
 $PALANG['pCreate_alias_goto'] = 'A';
 $PALANG['pCreate_alias_active'] = 'Attivo';
@@ -115,7 +115,7 @@ $PALANG['pCreate_alias_goto_text'] = 'Dove la mail deve essere spedita.';
 $PALANG['pCreate_alias_goto_text_error'] = 'Dove l\'email deve andare.<br /><span class="error_msg">Il campo A non &egrave; valido!</span>';
 $PALANG['pCreate_alias_result_error'] = '<span class="error_msg">Non sono riuscito ad aggiungere l\'alias alla tabella degli alias!</span>';
 $PALANG['pCreate_alias_result_success'] = 'L\'alias &egrave; stato aggiunto alla tabella degli alias!';
-$PALANG['pCreate_alias_catchall_text'] = 'Per creare un account universale, usare "*" come alias.<br />Per inoltri da dominio a dominio, usare "*@domain.tld" come campo "a".';
+$PALANG['pCreate_alias_catchall_text'] = 'Per creare un account universale, usare "*" come alias.<br />Per inoltri da dominio a dominio, usare "*@domain.tld" come campo \"a\".';
 
 $PALANG['pEdit_alias_welcome'] = 'Modifica un alias per il tuo dominio.<br />Un indirizzo per linea.';
 $PALANG['pEdit_alias_address'] = 'Alias';
@@ -181,8 +181,8 @@ $PALANG['pPassword_result_success'] = 'La tua password &egrave; stata modificata
 $PALANG['pEdit_vacation_set'] = 'Cambia / inserisci messaggio';
 $PALANG['pEdit_vacation_remove'] = 'Rimuovi messaggio';
 $PALANG['pVacation_result_error'] = '<span class="error_msg">Impossibile registrare le modifiche!</span>';
-$PALANG['pVacation_result_removed'] = 'Autorisponditore disabilitato!';
-$PALANG['pVacation_result_added'] = 'Autorisponditore abilitato!';
+$PALANG['pVacation_result_removed'] = 'Autoresponditore disabilitato!';
+$PALANG['pVacation_result_added'] = 'Autoresponditore abilitato!';
 
 $PALANG['pViewlog_welcome'] = 'Elenca gli ultimi dieci eventi per ';
 $PALANG['pViewlog_timestamp'] = 'Orario';
@@ -190,9 +190,6 @@ $PALANG['pViewlog_username'] = 'Amministratore';
 $PALANG['pViewlog_domain'] = 'Dominio';
 $PALANG['pViewlog_action'] = 'Azione';
 $PALANG['pViewlog_data'] = 'Dati';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'crea casella';
 $PALANG['pViewlog_action_delete_mailbox'] = 'distruggi casella';
 $PALANG['pViewlog_action_edit_mailbox'] = 'modifica casella';
@@ -212,7 +209,7 @@ $PALANG['pViewlog_result_error'] = '<span class="error_msg">Impossibile trovare 
 $PALANG['pSendmail_welcome'] = 'Spedisci una email.';
 $PALANG['pSendmail_admin'] = 'Da';
 $PALANG['pSendmail_to'] = 'A';
-$PALANG['pSendmail_to_text_error'] = '<span class="error_msg">Il campo "A" &egrave; vuoto o non &egrave; un indirizzo valido!</span>';
+$PALANG['pSendmail_to_text_error'] = '<span class="error_msg">Il campo \"A\" &egrave; vuoto o non &egrave; un indirizzo valido!</span>';
 $PALANG['pSendmail_subject'] = 'Oggetto';
 $PALANG['pSendmail_subject_text'] = 'Benvenuto';
 $PALANG['pSendmail_body'] = 'Corpo';
@@ -333,16 +330,16 @@ $PALANG['pUsersMenu_vacation'] = 'Risposta automatica';
 $PALANG['pUsersMenu_edit_alias'] = 'Cambia il tuo inoltro';
 $PALANG['pUsersMenu_password'] = 'Cambia password';
 
-$PALANG['pUsersMain_vacation'] = 'Setta un messaggio di "Fuori ufficio" o un autorisponditore per la tua posta';
+$PALANG['pUsersMain_vacation'] = 'Setta un messaggio di "Fuori ufficio" o un autoresponditore per la tua posta';
 $PALANG['pUsersMain_vacationSet'] = $PALANG['pUsersMenu_vacation'] . ' &egrave; attivo, fai clic su \'' . $PALANG['pUsersMenu_vacation'] . '\' per ' . $PALANG['edit'] . '/rimuovere';
 $PALANG['pUsersMain_edit_alias'] = 'Cambia le impostazioni di inoltro della tua email.';
 $PALANG['pUsersMain_password'] = 'Cambia la tua password corrente.';
 
-$PALANG['pUsersVacation_welcome'] = 'Autorisponditore.';
-$PALANG['pUsersVacation_welcome_text'] = 'Hai gi&agrave; un autorisponditore configurato';
+$PALANG['pUsersVacation_welcome'] = 'Autoresponditore.';
+$PALANG['pUsersVacation_welcome_text'] = 'Hai gi$agrave; un autoresponditore configurato';
 $PALANG['pUsersVacation_subject'] = 'Soggetto';
 $PALANG['pUsersVacation_subject_text'] = 'Assente dall\'ufficio';
-$PALANG['pUsersVacation_body'] = 'Corpo'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Corpo';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 Sar&ograve; assente dal <data> al <data>.
 Per problemi urgenti potete contattare <persona da contattare>.
@@ -351,8 +348,6 @@ $PALANG['pUsersVacation_button_away'] = 'Imposta autorisponditore';
 $PALANG['pUsersVacation_button_back'] = 'Rimuovi autorisponditore';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Impossibile registrare i valori per l\'autorisponditore!</span>';
 $PALANG['pUsersVacation_result_success'] = 'La tua risposta automatica &egrave; stata tolta!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'crea casella';     
 $PALANG['pCreate_dbLog_createalias'] = 'crea alias';
@@ -379,9 +374,6 @@ $PALANG['pStatus_undeliverable'] = 'presumibilmente NON CONSEGNABILE ';
 $PALANG['pStatus_custom'] = 'In consegna a ';
 $PALANG['pStatus_popimap'] = 'POP/IMAP ';
 $PALANG['pPasswordTooShort'] = "Password troppo breve - minimo %s caratteri";
-$PALANG['pInvalidDomainRegex'] = "Invalid domain name %s, fails regexp check"; # XXX
-$PALANG['pInvalidDomainDNS'] = "Invalid domain %s, and/or not discoverable in DNS"; # XXX
-$PALANG['pInvalidMailRegex'] = "Invalid email address, fails regexp check"; # XXX
 $PALANG['pFetchmail_welcome'] = 'Ricevi posta per:';
 $PALANG['pFetchmail_new_entry'] = 'Nuova voce';
 $PALANG['pFetchmail_database_save_error'] = 'Impossibile registrare nel database!';
@@ -402,7 +394,6 @@ $PALANG['pFetchmail_field_poll_time']       = 'Scansione';
 $PALANG['pFetchmail_field_fetchall']        = 'Ricevi tutto';
 $PALANG['pFetchmail_field_keep']            = 'Conserva';
 $PALANG['pFetchmail_field_protocol']        = 'Protocollo';
-$PALANG['pFetchmail_field_usessl']          = 'SSL active'; # XXX
 $PALANG['pFetchmail_field_extra_options']   = 'Extra';
 $PALANG['pFetchmail_field_mda']             = 'MDA';
 $PALANG['pFetchmail_field_date']            = 'Data';
@@ -418,7 +409,6 @@ $PALANG['pFetchmail_desc_poll_time']        = 'Recupera ogni ... minuti';
 $PALANG['pFetchmail_desc_fetchall']         = 'Recupera anche i messaggi gi&agrave; letti';
 $PALANG['pFetchmail_desc_keep']             = 'Conserva una copia del messaggi sul server remoto';
 $PALANG['pFetchmail_desc_protocol']         = 'Protocollo da usare';
-$PALANG['pFetchmail_desc_usessl']           = 'SSL encryption'; # XXX
 $PALANG['pFetchmail_desc_extra_options']    = 'Opzioni extra';
 $PALANG['pFetchmail_desc_mda']              = 'Mail Delivery Agent';
 $PALANG['pFetchmail_desc_date']             = 'Data dell\'ultima modifica o attivit&agrave;';

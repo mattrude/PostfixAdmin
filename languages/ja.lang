@@ -24,7 +24,8 @@ $PALANG['pLogin_welcome'] = 'こちらからドメインの管理ができます
 $PALANG['pLogin_username'] = 'ログイン (メールアドレス)';
 $PALANG['pLogin_password'] = 'パスワード';
 $PALANG['pLogin_button'] = 'ログイン';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">ログインが違います。正しいメールアドレスを入力してください。</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">パスワードが違います。</span>';
 $PALANG['pLogin_login_users'] = '一般ユーザのログインはここをクリックしてください。';
 
 $PALANG['pMenu_main'] = 'メイン';
@@ -101,7 +102,6 @@ $PALANG['pCreate_alias_domain_button'] = 'Add Alias Domain'; # XXX
 $PALANG['pCreate_alias_domain_error1'] = 'You are not allowed to create the chosen configuration.'; # XXX
 $PALANG['pCreate_alias_domain_error2'] = 'The chosen configuration is invalid, please choose a different one!'; # XXX
 $PALANG['pCreate_alias_domain_error3'] = 'Database insert failed.'; # XXX
-$PALANG['pCreate_alias_domain_error4'] = 'All domains are already aliased.'; # XXX
 $PALANG['pCreate_alias_domain_success'] = 'The domain alias has been added to the alias domain table!'; # XXX
 
 $PALANG['pCreate_alias_welcome'] = '新しい転送先の作成';
@@ -193,9 +193,6 @@ $PALANG['pViewlog_username'] = '管理者';
 $PALANG['pViewlog_domain'] = 'ドメイン';
 $PALANG['pViewlog_action'] = 'アクション';
 $PALANG['pViewlog_data'] = 'データ';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 
 $PALANG['pViewlog_action_create_mailbox'] = 'アドレス作成';
 $PALANG['pViewlog_action_delete_mailbox'] = 'アドレス削除';
@@ -347,7 +344,7 @@ $PALANG['pUsersVacation_welcome'] = '自動応答';
 $PALANG['pUsersVacation_welcome_text'] = '既に自動応答を構成してあります。';
 $PALANG['pUsersVacation_subject'] = '件名';
 $PALANG['pUsersVacation_subject_text'] = '不在';
-$PALANG['pUsersVacation_body'] = '本文'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = '本文';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 私は <date> から <date> まで不在です。
 緊急事項は <contact person> まで連絡してください。
@@ -356,8 +353,6 @@ $PALANG['pUsersVacation_button_away'] = '設定';
 $PALANG['pUsersVacation_button_back'] = '解除';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">自動応答の設定を更新できませんでした！</span>';
 $PALANG['pUsersVacation_result_success'] = '自動応答を解除しました。';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox'; # XXX
 $PALANG['pCreate_dbLog_createalias'] = 'create alias'; # XXX
@@ -388,9 +383,6 @@ $PALANG['pStatus_custom'] = '配送先 ';
 $PALANG['pStatus_popimap'] = 'POP/IMAP ';
 
 $PALANG['pPasswordTooShort'] = "パスワードが短すぎます。最低 %s 文字必要です。"; # usage: flash_error(sprintf($PALANG['pPasswordTooShort'], $CONF['min_password_length']));
-$PALANG['pInvalidDomainRegex'] = "Invalid domain name %s, fails regexp check"; # XXX
-$PALANG['pInvalidDomainDNS'] = "Invalid domain %s, and/or not discoverable in DNS"; # XXX
-$PALANG['pInvalidMailRegex'] = "Invalid email address, fails regexp check"; # XXX
 
 $PALANG['pFetchmail_welcome'] = 'メール取得:';
 $PALANG['pFetchmail_new_entry'] = '新しいエントリ';
@@ -412,7 +404,6 @@ $PALANG['pFetchmail_field_poll_time']       = '間隔';
 $PALANG['pFetchmail_field_fetchall']        = 'すべて取得';
 $PALANG['pFetchmail_field_keep']            = '残す';
 $PALANG['pFetchmail_field_protocol']        = 'プロトコル';
-$PALANG['pFetchmail_field_usessl']          = 'SSL active'; # XXX
 $PALANG['pFetchmail_field_extra_options']   = '追加オプション';
 $PALANG['pFetchmail_field_mda']             = 'MDA';
 $PALANG['pFetchmail_field_date']            = '日付';
@@ -428,7 +419,6 @@ $PALANG['pFetchmail_desc_poll_time']        = '分単位の確認間隔';
 $PALANG['pFetchmail_desc_fetchall']         = '既読と新着メッセージを取得するか';
 $PALANG['pFetchmail_desc_keep']             = 'リモートサーバに取得済メッセージを残すか';
 $PALANG['pFetchmail_desc_protocol']         = '利用するプロトコル';
-$PALANG['pFetchmail_desc_usessl']           = 'SSL encryption'; # XXX
 $PALANG['pFetchmail_desc_extra_options']    = '追加の fetchmail オプション';
 $PALANG['pFetchmail_desc_mda']              = 'メール配送エージェント (Mail Delivery Agent)';
 $PALANG['pFetchmail_desc_date']             = '最終取得確認／設定変更日時';

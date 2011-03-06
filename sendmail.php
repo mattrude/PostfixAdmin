@@ -14,7 +14,7 @@
  * 
  * File: sendmail.php
  * Used to send an email to a user.
- * Template File: sendmail.tpl
+ * Template File: sendmail.php
  *
  * Template Variables:
  *
@@ -45,25 +45,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    $fHeaders = "To: " . $fTo . "\n";
    $fHeaders .= "From: " . $fFrom . "\n";
 
-   mb_internal_encoding("UTF-8");
-   $fHeaders .= "Subject: " . mb_encode_mimeheader( safepost('fSubject'), 'UTF-8', 'Q') . "\n";
+   $fHeaders .= "Subject: " . encode_header(safepost('fSubject')) . "\n";
    $fHeaders .= "MIME-Version: 1.0\n";
    $fHeaders .= "Content-Type: text/plain; charset=utf-8\n";
    $fHeaders .= "Content-Transfer-Encoding: 8bit\n";
-   $fHeaders .= "\n";
 
-   $tBody = $_POST['fBody'];
-   if (get_magic_quotes_gpc ())
-   {
-      $tBody = stripslashes($tBody);
-   }
-   $fHeaders .= $tBody;
+   $fHeaders .= escape_string ($_POST['fBody']);
 
    if (empty ($fTo) or !check_email ($fTo))
    {
       $error = 1;
       $tTo = escape_string ($_POST['fTo']);
       $tSubject = escape_string ($_POST['fSubject']);
+      $tBody = escape_string ($_POST['fBody']);
       $tMessage = $PALANG['pSendmail_to_text_error'];
    }
 
@@ -79,12 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       }
    }
 }
-$smarty->assign ('SESSID_USERNAME', $SESSID_USERNAME);
-$smarty->assign ('tMessage', $tMessage, false);
 
-$smarty->assign ('smarty_template', 'sendmail');
-$smarty->display ('index.tpl');
-
+include ("./templates/header.php");
+include ("./templates/menu.php");
+include ("./templates/sendmail.php");
+include ("./templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

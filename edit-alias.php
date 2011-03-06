@@ -15,7 +15,7 @@
  * File: edit-alias.php 
  * Used to update an alias.
  *
- * Template File: edit-alias.tpl
+ * Template File: edit-alias.php
  *
  * Template Variables:
  *
@@ -34,68 +34,43 @@ require_once('common.php');
 authentication_require_role('admin');
 $SESSID_USERNAME = authentication_get_username();
 
-if($CONF['alias_control_admin'] == 'NO' && !authentication_has_role('global-admin')) {
-   die("Check config.inc.php - domain administrators do not have the ability to edit user's aliases (alias_control_admin)");
-}
+if ($_SERVER['REQUEST_METHOD'] == "GET")
+{
+   if (isset ($_GET['address'])) $fAddress = escape_string ($_GET['address']);
+   if (isset ($_GET['domain'])) $fDomain = escape_string ($_GET['domain']);
 
-/* retrieve existing alias record for the user first... may be via GET or POST */
-
-$fAddress = safepost('address', safeget('address')); # escaped below
-$fDomain = escape_string(preg_replace("/.*@/", "", $fAddress));
-$fAddress = escape_string($fAddress); # escaped now
-if ($fAddress == "") {
-   die("Required parameters not present");
-}
-
-/* Check the user is able to edit the domain's aliases */
-
-   if(!check_owner($SESSID_USERNAME, $fDomain) && !authentication_has_role('global-admin'))
+   if (check_owner ($SESSID_USERNAME, $fDomain) || authentication_has_role('global-admin'))
    {
-	   die("You lack permission to do this. yes.");
-   }
-
-   $table_alias = table_by_key('alias');
-   $alias_list = array();
-   $orig_alias_list = array();
       $result = db_query ("SELECT * FROM $table_alias WHERE address='$fAddress' AND domain='$fDomain'");
       if ($result['rows'] == 1)
       {
          $row = db_array ($result['result']);
          $tGoto = $row['goto'];
-		 $orig_alias_list = explode(',', $tGoto);
-       $tGoto = str_replace(',', "\n", $tGoto);
-		 $alias_list = $orig_alias_list;
-		 //. if we are not a global admin, and alias_control_admin is NO, hide the alias that's the mailbox name.
-		 if($CONF['alias_control_admin'] == 'NO' && !authentication_has_role('global-admin')) {
-
-         /* Has a mailbox as well? Remove the address from $tGoto in order to edit just the real aliases */
-         $result = db_query ("SELECT * FROM $table_mailbox WHERE username='$fAddress' AND domain='$fDomain'");
-         if ($result['rows'] == 1)
-         {
-			 $alias_list = array(); // empty it, repopulated again below
-			 foreach($orig_alias_list as $alias) {
-				 if(strtolower($alias) == strtolower($fAddress)) {
-					 // mailbox address is dropped if they don't have special_alias_control enabled, and/or not a global-admin
-				 }
-				 else {
-					 $alias_list[] = $alias;
-				 }
-			 }
-		 }
+      }
    }
-}
-else {
-	die("Invalid alias");
+   else
+   {
+      $tMessage = $PALANG['pEdit_alias_address_error'];
+   }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
    $pEdit_alias_goto = $PALANG['pEdit_alias_goto'];
    
+   if (isset ($_GET['address'])) $fAddress = escape_string ($_GET['address']);
+   $fAddress = strtolower ($fAddress);
+   if (isset ($_GET['domain'])) $fDomain = escape_string ($_GET['domain']);
    if (isset ($_POST['fGoto'])) $fGoto = escape_string ($_POST['fGoto']);
    $fGoto = strtolower ($fGoto);
 
-   if (!check_alias_owner ($SESSID_USERNAME, $fAddress))
+   if (! (check_owner ($SESSID_USERNAME, $fDomain) || authentication_has_role('global-admin')) )
+   {
+      $error = 1;
+      $tGoto = $_POST['fGoto'];
+      $tMessage = $PALANG['pEdit_alias_domain_error'] . "$fDomain</span>";
+   }
+   elseif (!check_alias_owner ($SESSID_USERNAME, $fAddress))
    {
      $error = 1;
      $tGoto = $fGoto;
@@ -104,56 +79,39 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
    $goto = preg_replace ('/\\\r\\\n/', ',', $fGoto);
    $goto = preg_replace ('/\r\n/', ',', $goto);
-   $goto = preg_replace ('/,[\s]+/i', ',', $goto); 
-   $goto = preg_replace ('/[\s]+,/i', ',', $goto); 
+   $goto = preg_replace ('/[\s]+/i', '', $goto);
    $goto = preg_replace ('/,*$|^,*/', '', $goto);
    $goto = preg_replace ('/,,*/', ',', $goto);
 
-   if (empty ($goto) && !authentication_has_role('global-admin'))
+   if (empty ($goto))
    {
       $error = 1;
       $tGoto = $_POST['fGoto'];
       $tMessage = $PALANG['pEdit_alias_goto_text_error1'];
    }
 
-   $new_aliases = array();
    if ($error != 1)
    {
-      $new_aliases = explode(',', $goto);
+      $array = preg_split ('/,/', $goto);
    }
-   $new_aliases = array_unique($new_aliases);
+   else
+   {
+      $array = array();
+   }
 
-   foreach($new_aliases as $address) {
-      if (in_array($address, $CONF['default_aliases'])) continue;
-      if (empty($address)) continue; # TODO: should never happen - remove after 2.2 release
-      if (!check_email($address))
-      {
-         $error = 1;
-         $tGoto = $goto;
-         if (!empty($tMessage)) $tMessage .= "<br />";
-         $tMessage .= $PALANG['pEdit_alias_goto_text_error2'] . "$address</span>";
-      }
+	for ($i = 0; $i < sizeof ($array); $i++) {
+		if (in_array ("$array[$i]", $CONF['default_aliases'])) continue;
+		if (empty ($array[$i])) continue; # TODO: should never happen - remove after 2.2 release
+		if (!check_email ($array[$i]))
+		{
+   		$error = 1;
+   		$tGoto = $goto;
+   		$tMessage = $PALANG['pEdit_alias_goto_text_error2'] . "$array[$i]</span>";
+	   }
    }
    
-   $result = db_query ("SELECT * FROM $table_mailbox WHERE username='$fAddress' AND domain='$fDomain'");
-   if ($result['rows'] == 1)
-   {
-	  if($CONF['alias_control_admin'] == 'NO' && !authentication_has_role('global-admin')) {
-		  // if original record had a mailbox alias, so ensure the updated one does too.
-		  if(in_array($fAddress, $orig_alias_list)) {
-			  $new_aliases[] = $fAddress;
-		  }
-	  }
-
-   }
-   // duplicates suck, mmkay..
-   $new_aliases = array_unique($new_aliases);
-
-   $goto = implode(',', $new_aliases);
-
    if ($error != 1)
    {
-	  $goto = escape_string($goto);
       $result = db_query ("UPDATE $table_alias SET goto='$goto',modified=NOW() WHERE address='$fAddress' AND domain='$fDomain'");
       if ($result['rows'] != 1)
       {
@@ -161,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       }
       else
       {
-         db_log ($fDomain, 'edit_alias', "$fAddress -> $goto");
+         db_log ($SESSID_USERNAME, $fDomain, 'edit_alias', "$fAddress -> $goto");
 
          header ("Location: list-virtual.php?domain=$fDomain");
          exit;
@@ -169,14 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    }
 }
 
-$array = preg_split ('/,/', $tGoto);
-
-$smarty->assign ('fAddress', $fAddress);
-$smarty->assign ('tGoto', $tGoto);
-$smarty->assign ('array', $array, false);
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'edit-alias');
-$smarty->display ('index.tpl');
+$fAddress = htmlentities($fAddress, ENT_QUOTES);
+$fDomain = htmlentities($fDomain, ENT_QUOTES);
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/edit-alias.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

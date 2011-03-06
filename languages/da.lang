@@ -24,7 +24,8 @@ $PALANG['pLogin_welcome'] = 'Postadministrator: Log ind for at administrere dine
 $PALANG['pLogin_username'] = 'Brugernavn (email)';
 $PALANG['pLogin_password'] = 'Adgangskode';
 $PALANG['pLogin_button'] = 'Login';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Dit brugernavn er forkert. Kontroller at du bruger din emailadresse som brugernavn!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Din adgangskode er forkert!</span>';
 $PALANG['pLogin_login_users'] = 'Bruger: Log ind på brugersektionen her.';
 
 $PALANG['pMenu_main'] = 'Start';
@@ -102,7 +103,6 @@ $PALANG['pCreate_alias_domain_button'] = 'Add Alias Domain'; # XXX
 $PALANG['pCreate_alias_domain_error1'] = 'You are not allowed to create the chosen configuration.'; # XXX
 $PALANG['pCreate_alias_domain_error2'] = 'The chosen configuration is invalid, please choose a different one!'; # XXX
 $PALANG['pCreate_alias_domain_error3'] = 'Database insert failed.'; # XXX
-$PALANG['pCreate_alias_domain_error4'] = 'All domains are already aliased.'; # XXX
 $PALANG['pCreate_alias_domain_success'] = 'The domain alias has been added to the alias domain table!'; # XXX
 
 $PALANG['pCreate_alias_welcome'] = 'Tilføj nyt alias til dit domæne.';
@@ -194,9 +194,6 @@ $PALANG['pViewlog_username'] = 'Administrator';
 $PALANG['pViewlog_domain'] = 'Domæne';
 $PALANG['pViewlog_action'] = 'Handling';
 $PALANG['pViewlog_data'] = 'Data';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 
 $PALANG['pViewlog_action_create_mailbox'] = 'tilføj postboks';
 $PALANG['pViewlog_action_delete_mailbox'] = 'slet postboks';
@@ -348,7 +345,7 @@ $PALANG['pUsersVacation_welcome'] = 'Autosvar.';
 $PALANG['pUsersVacation_welcome_text'] = 'Du har allerede et autosvar indstillet!';
 $PALANG['pUsersVacation_subject'] = 'Emne';
 $PALANG['pUsersVacation_subject_text'] = 'Ikke tilstede';
-$PALANG['pUsersVacation_body'] = 'Meddelelse'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Meddelelse';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 Jeg er ikke tilstede i perioden <dato> til <dato>.
 I nødstilfælde kan <kontaktperson> kontaktes.
@@ -357,8 +354,6 @@ $PALANG['pUsersVacation_button_away'] = 'Tager afsted';
 $PALANG['pUsersVacation_button_back'] = 'Kommer tilbage';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Kan ikke opdatere indstillinger for dit autosvar!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Dit autosvar er fjernet!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'tilføj postboks';
 $PALANG['pCreate_dbLog_createalias'] = 'tilføj alias';
@@ -389,9 +384,6 @@ $PALANG['pStatus_custom'] = 'Leveres til ';
 $PALANG['pStatus_popimap'] = 'POP/IMAP ';
 
 $PALANG['pPasswordTooShort'] = "Adgangskoden er for kort - mindst %s tegn kræves";
-$PALANG['pInvalidDomainRegex'] = "Invalid domain name %s, fails regexp check"; # XXX
-$PALANG['pInvalidDomainDNS'] = "Invalid domain %s, and/or not discoverable in DNS"; # XXX
-$PALANG['pInvalidMailRegex'] = "Invalid email address, fails regexp check"; # XXX
 
 $PALANG['pFetchmail_welcome'] = 'Hent post for:';
 $PALANG['pFetchmail_new_entry'] = 'Ny regel';
@@ -413,7 +405,6 @@ $PALANG['pFetchmail_field_poll_time']       = 'Prøve';
 $PALANG['pFetchmail_field_fetchall']        = 'Hent alle';
 $PALANG['pFetchmail_field_keep']            = 'Behold';
 $PALANG['pFetchmail_field_protocol']        = 'Protokol';
-$PALANG['pFetchmail_field_usessl']          = 'SSL active'; # XXX
 $PALANG['pFetchmail_field_extra_options']   = 'Ekstra tilvalg';
 $PALANG['pFetchmail_field_mda']             = 'MDA (Mail Delivery Agent)';
 $PALANG['pFetchmail_field_date']            = 'Dato';
@@ -429,7 +420,6 @@ $PALANG['pFetchmail_desc_poll_time']        = 'Prøv hver ... minut';
 $PALANG['pFetchmail_desc_fetchall']         = 'Hent både gamle (sete) og nye beskeder';
 $PALANG['pFetchmail_desc_keep']             = 'Gem hentede beskeder på den eksterne postserver';
 $PALANG['pFetchmail_desc_protocol']         = 'Brug protokol';
-$PALANG['pFetchmail_desc_usessl']           = 'SSL encryption'; # XXX
 $PALANG['pFetchmail_desc_extra_options']    = 'Ekstra fetchmail flag';
 $PALANG['pFetchmail_desc_mda']              = 'Mail Delivery Agent';
 $PALANG['pFetchmail_desc_date']             = 'Dato for seneste prøve/konfigurationsændring';

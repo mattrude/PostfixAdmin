@@ -11,7 +11,7 @@
  *     http://www.postfixadmin.com or http://postfixadmin.sf.net
  *
  * File: create-alias.php
- * Template File: create-alias.tpl
+ * Template File: create-alias.php
  * Responsible for allowing for the creation of mail aliases.
  *
  * @version $Id$
@@ -41,7 +41,7 @@ if(authentication_has_role('global-admin')) {
     $list_domains = list_domains ();
 }
 else {
-    $list_domains = list_domains_for_admin ($username);
+   $list_domains = list_domains_for_admin ($username);
 }
 
 $pCreate_alias_goto_text = $PALANG['pCreate_alias_goto_text'];
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
     if (isset ($_POST['fAddress']) && isset ($_POST['fDomain'])) {
         $fAddress = escape_string($_POST['fAddress']) . "@" . escape_string ($_POST['fDomain']);
-        $fAddress = strtolower ($fAddress);
+       $fAddress = strtolower ($fAddress);
     }
 
     if (isset ($_POST['fGoto'])) {
@@ -75,10 +75,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         $fDomain = escape_string ($_POST['fDomain']);
     }
 
-# TODO: Doesn't work with multiple aliases - fix or discard...
-#    if(!preg_match ('/@/',$fGoto)) {
-#        $fGoto = $fGoto . "@" . escape_string ($_POST['fDomain']);
-#    }
+    if(!preg_match ('/@/',$fGoto)) {
+        $fGoto = $fGoto . "@" . escape_string ($_POST['fDomain']);
+    }
 
     if(!(authentication_has_role('global-admin') || 
         check_owner ($SESSID_USERNAME, $fDomain) ))
@@ -106,42 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         $pCreate_alias_address_text = $PALANG['pCreate_alias_address_text_error1'];
     }
 
-    // Begin check alias email    
-    $goto = preg_replace ('/\\\r\\\n/', ',', $fGoto); 
-    $goto = preg_replace ('/\r\n/', ',', $goto); 
-    $goto = preg_replace ('/,[\s]+/i', ',', $goto); 
-    $goto = preg_replace ('/[\s]+,/i', ',', $goto); 
-    $goto = preg_replace ('/,*$|^,*/', '', $goto); 
-    $goto = preg_replace ('/,,*/', ',', $goto); 
- 
-    if (empty ($goto) && !authentication_has_role('global-admin')) { 
-       $error = 1; 
-       $tGoto = $_POST['fGoto']; 
-       $tMessage = $PALANG['pEdit_alias_goto_text_error1']; 
-    } 
- 
-    $new_aliases = array(); 
-    if ($error != 1) { 
-       $new_aliases = explode(',', $goto); 
-    } 
-    $new_aliases = array_unique($new_aliases); 
- 
-    foreach($new_aliases as $address) { 
-       if (in_array($address, $CONF['default_aliases'])) continue; 
-       if (empty($address)) continue; # TODO: should never happen - remove after 2.2 release
-       if (!check_email($address)) { 
-           $error = 1; 
-           $tGoto = $goto; 
-           if (!empty($tMessage)) $tMessage .= "<br />";
-           $tMessage .= $PALANG['pEdit_alias_goto_text_error2'] . "$address</span>"; 
-       }
-    }
-    
-    $goto = implode(',', $new_aliases);
-    $fGoto = escape_string($goto);
-    // End check alias mail
-    
-    if (empty($fGoto)) {
+    if (empty($fGoto) || !check_email ($fGoto)) {
         $error = 1;
         $tAddress = escape_string ($_POST['fAddress']);
         $tGoto = $fGoto;
@@ -154,13 +118,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     }
 
     $result = db_query ("SELECT * FROM $table_alias WHERE address='$fAddress'");
-    if ($result['rows'] == 1)
-    {
+    if ($result['rows'] == 1) {
         $error = 1;
         $tAddress = escape_string ($_POST['fAddress']);
         $tGoto = $fGoto;
         $tDomain = $fDomain;
-	$pCreate_alias_address_text = $PALANG['pCreate_alias_address_text_error2'];
+        $pCreate_alias_address_text = $PALANG['pCreate_alias_address_text_error2'];
     }
 
     if ($fActive == "on") {
@@ -181,26 +144,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
             $tMessage = $PALANG['pCreate_alias_result_error'] . "<br />($fAddress -> $fGoto)<br />\n";
         }
         else {
-            db_log ($fDomain, 'create_alias', "$fAddress -> $fGoto");
+            db_log ($SESSID_USERNAME, $fDomain, 'create_alias', "$fAddress -> $fGoto");
 
             $tDomain = $fDomain;
             $tMessage = $PALANG['pCreate_alias_result_success'] . "<br />($fAddress -> $fGoto)<br />\n";
         }
-    } else { # on error
-        $tAddress = htmlentities($_POST['fAddress']);
-        $tGoto = htmlentities($_POST['fGoto']);
-        $tDomain = htmlentities($_POST['fDomain']);
     }
 }
 
-$smarty->assign ('tAddress', $tAddress);
-$smarty->assign ('select_options', select_options ($list_domains, array ($tDomain)), false);
-$smarty->assign ('pCreate_alias_address_text', $pCreate_alias_address_text, false);
-$smarty->assign ('tGoto', $tGoto, false);
-$smarty->assign ('pCreate_alias_goto_text', $pCreate_alias_goto_text);
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'create-alias');
-$smarty->display ('index.tpl');
-
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/create-alias.php");
+include ("templates/footer.php");
 ?>
