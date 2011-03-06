@@ -189,9 +189,6 @@ $PALANG['pViewlog_username'] = 'Yönetici';
 $PALANG['pViewlog_domain'] = 'Domain';
 $PALANG['pViewlog_action'] = 'Aksiyon';
 $PALANG['pViewlog_data'] = 'Veri';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -350,8 +347,6 @@ $PALANG['pUsersVacation_button_away'] = 'Dýþarý gidiyorum.';
 $PALANG['pUsersVacation_button_back'] = 'Geri Geliyorum';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">otomatik cevaplama ayarlarýnýzý deðiþtirilemiyor!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Otomatik cevaplamanýz kaldýrýldý!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';      # XXX
 $PALANG['pCreate_dbLog_createalias'] = 'create alias'; # XXX

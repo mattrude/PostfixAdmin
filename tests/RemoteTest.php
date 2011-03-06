@@ -80,5 +80,3 @@ class RemoteTest extends UnitTestCase {
         }
     }
 }
-
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
