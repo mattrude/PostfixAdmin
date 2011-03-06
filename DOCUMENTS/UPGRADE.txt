@@ -9,7 +9,7 @@ REQUIRED!!
 ----------
 - You are using Postfix 2.0 or higher.
 - You are using Apache 1.3.27 / Lighttpd 1.3.15 or higher.
-- You are using PHP 5.1.2 or higher.
+- You are using PHP 4.1 or higher.
 - You are using MySQL 3.23 or higher OR PostgreSQL v7.4+
 
 
@@ -43,7 +43,7 @@ or
 Make sure that you are in your WWW directory and then unarchive the
 Postfix Admin archive (whatever the filename is):
 
-  $ tar -zxvf postfixadmin-X.X.tgz
+  $ tar -zxvf postfixadmin-2.2.tgz
 
 
 3. Change permissions
@@ -57,13 +57,6 @@ to have change the permissions for Postfix Admin.
 
 (the last command assumes your Apache is running with group "www")
 
-Since version 2.4 we use smarty templates. That means the templates_c directory
-needs to be writeable for your webserver.
-
-  $ chown -R www-data templates_c/
-
-(if your Apache runs as user "www-data")
-
 
 4. Configure
 ------------
@@ -73,36 +66,25 @@ relevant to your setup.
 Comparing config.inc.php with your previous using "diff" might save you some
 time.
 
-You can use a config.local.php file to contain your local settings. These will override any 
-defined in config.inc.php - and save some time when upgrading to a new version of PostfixAdmin ;-)
 
-5. Run setup.php
+5. Perform appropriate database upgrades
 ----------------------------------------
-
-Access setup.php through a web browser.
-
-It will attempt to upgrade your database, and also allow you to create a superadmin user.
-(In case the database upgrade fails, you can run setup.php?debug=1 to see the last executed query.)
-
-From version 2.3, you need to specify a setup_password in config.inc.php - 
-setup.php should guide you through this process. If you do not have a setup_password, type one
-into the form, and setup.php will echo out the hashed value (which needs to go into config.inc.php).
-The setup_password removes the requirement for you to delete setup.php, and also closes a security hole.
 
 Since version 2.2 of Postfixadmin, setup.php can perform the needed database 
 updates automatically .
+
+Open setup.php in your browser to update your database scheme.
 
 If you update from 2.1 or older, also create a superadmin account using setup.php.
 
 Note that admin/ has been merged into the main directory. Login with the
 superadmin account to setup domains and domain admins.
 
-6. Upgrade your postfix config
-------------------------------
 
-Since version 2.3, PostfixAdmin supports alias domains ($CONF['alias_domain']).
-If you want to use them, you have to add some queries to your postfix config -
-see POSTFIX_CONF for details.
+6. Delete setup.php
+-------------------
+Delete setup.php - it allown non-authorized users to create a superadmin
+account!
 
 
 7. Done

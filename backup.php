@@ -30,11 +30,7 @@ authentication_require_role('global-admin');
 // TODO: make backup supported for postgres
 if ('pgsql'==$CONF['database_type'])
 {
-	$smarty->assign ('tMessage', '<p>Sorry: Backup is currently not supported for your DBMS ('.$CONF['database_type'].').</p>');
-	$smarty->assign ('smarty_template', 'message');
-	$smarty->display ('index.tpl');
-//    print '<p>Sorry: Backup is currently not supported for your DBMS.</p>';
-die;
+    print '<p>Sorry: Backup is currently not supported for your DBMS.</p>';
 }
 /*
 	SELECT attnum,attname,typname,atttypmod-4,attnotnull,atthasdef,adsrc
@@ -58,19 +54,19 @@ echo $res;
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
    umask (077);
-   $path = (ini_get('upload_tmp_dir') != '') ? ini_get('upload_tmp_dir') : '/tmp';
+   $path = (ini_get('upload_tmp_dir') != '') ? ini_get('upload_tmp_dir') : '/tmp/';
    $filename = "postfixadmin-" . date ("Ymd") . "-" . getmypid() . ".sql";
-   $backup = $path . DIRECTORY_SEPARATOR . $filename;
+   $backup = $path . $filename;
 
    $header = "#\n# Postfix Admin $version\n# Date: " . date ("D M j G:i:s T Y") . "\n#\n";
 
    if (!$fh = fopen ($backup, 'w'))
    {
       $tMessage = "<div class=\"error_msg\">Cannot open file ($backup)</div>";
-		$smarty->assign ('tMessage', $tMessage);
-		$smarty->assign ('smarty_template', 'message');
-		$smarty->display ('index.tpl');
-//      include ("templates/message.php");
+      include ("templates/header.php");
+      include ("templates/menu.php");
+      include ("templates/message.php");
+      include ("templates/footer.php");
    } 
    else
    {
@@ -86,8 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
          'fetchmail',
          'log',
          'mailbox',
-		 'quota',
-		 'quota2',
          'vacation',
          'vacation_notification'
       );

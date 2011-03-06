@@ -4,7 +4,7 @@ body {
 	font-family: "BitStream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: normal;
-	text-align: left;
+	text-align: center;
 }
 
 a {
@@ -25,7 +25,6 @@ table {
 	/* border-spacing: 0; */
 	/* padding: 0; */
 	border-collapse: collapse; /* for IE */
-	text-align: left;
 }
 
 .button {
@@ -36,7 +35,7 @@ table {
 	font-size: 11px;
 }
 
-.button:hover, .button:focus {
+.button:hover {
 	background: #BCFF36;
 	color: #888888;
 }
@@ -99,80 +98,69 @@ ul.flash-error {
 	font-size: 13px;
 }
 
-#menu, #tabbar {
-	text-align:center;
-	float:left;
-	width:100%; 
+#menu {
+	width: 750px;
 	margin: 0 auto;
 	padding-top: 10px;
 	white-space: nowrap;
 }
 
-#menu ul, #tabbar  ul	{
+#menu ul {
 	padding: 0;
 	margin: 0;
 	margin-left:auto;
 	margin-right:auto;
 	list-style: none;
-	text-align: center;
-	position:relative;
-	left:50%;
-	float:left;
 }
 
-#menu li, #tabbar li {
+#menu li {
 	float: left;
 	background: #efefef;
 	margin-right: 3px;
 	border-top: 4px solid #aaaaaa;
-	position:relative;
-	right:50%;
-	/* border-bottom: 4px solid #aaaaaa; */
 }
 
-#menu li:hover, #menu li.sfhover, #tabbar li:hover, #tabbar li.sfhover {
+#menu li:hover, #menu li.sfhover {
 	background: #BFFF00;
 }
 
-#menu li ul, #tabbar li ul {
+#menu li ul {
 	position: absolute;
 	width: auto;
-	left: -999em; 
-	right:auto;
-	background: #FFFFFF; 
-	color: #999999;
+	left: -999em;
+    background: #FFFFFF;
 	border:2px solid white;
 	border-top:none;
 }
-#menu li:hover ul, #menu li.sfhover ul, #tabbar li:hover ul, #tabbar li.sfhover ul {
+#menu li:hover ul, #menu li.sfhover ul {
    left: auto;
 }
 
 
-#menu li ul li, #tabbar li ul li {
-	float: none;
+#menu li ul li {
+    float: none;
 	margin-right: 0px;
-	border-top:2px solid white;
+	border-top:2px solid white;;
 	text-align:left;
-	/* border-bottom: none; */
-	right:auto;
 }
 
 
-#menu a, #tabbar a {
+
+
+#menu a {
 	display: block;
 	width: auto;
 	padding: 20px 5px 5px 5px;
 	color: #888888;
 }
 
-#menu a:hover, #tabbar a:hover {
+#menu a:hover {
 	color: #888888;
 }
 
 
 
-#menu li ul li a, #tabbar li ul li a {
+#menu li ul li a {
 	padding: 5px 5px 5px 5px;
 }
 
@@ -252,6 +240,12 @@ ul.flash-error {
 	line-height: 30px;
 }
 
+#nav_bar {
+	text-align: right;
+	width: 750px;
+	margin: 0 auto;
+}
+
 #alias_domain_table, #alias_table, #mailbox_table, #overview_table, #log_table, #admin_table {
 	width: 750px;
 	margin: 0px auto;
@@ -273,7 +267,7 @@ ul.flash-error {
 }
 
 #alias_domain_table tr:hover, #alias_table tr:hover, #mailbox_table tr:hover, #overview_table tr:hover, #log_table tr:hover, #admin_table tr:hover {
-	background: #D9FF43; /*#D6FF85;*/ /*#ffdddd;*/
+        background: #D9FF43; /*#D6FF85;*/ /*#ffdddd;*/
 }
 
 
@@ -285,10 +279,6 @@ ul.flash-error {
 	padding-left: 20px;
 	line-height: 25px;
 	margin: 0;
-}
-
-#alias_domain_table td, #alias_table td, #mailbox_table td, #overview_table td, #log_table td, #admin_table td {
-text-align	: left;
 }
 
 #footer {
@@ -322,14 +312,4 @@ div.setup {
 
 div.setup li {
 	padding-bottom:1em;
-}
-
-.searchresult {
-	background:lightgreen;
-}
-
-div.nav_bar {
-	text-align: left;
-	width: 750px;
-	margin: 0 auto;
 }

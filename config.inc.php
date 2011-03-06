@@ -16,19 +16,21 @@
  * Contains configuration options.
  */
 
+if (ereg ("config.inc.php", $_SERVER['PHP_SELF']))
+{
+   header ("Location: login.php");
+   exit;
+}
+
 /*****************************************************************
  *  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
- * You have to set $CONF['configured'] = true; before the
+ * The following line needs commenting out or removing before the
  * application will run!
  * Doing this implies you have changed this file as required.
- * i.e. configuring database etc; specifying setup.php password etc.
  */
 $CONF['configured'] = false;
 
-// In order to setup Postfixadmin, you MUST specify a hashed password here.
-// To create the hash, visit setup.php in a browser and type a password into the field,
-// on submission it will be echoed out to you as a hashed value.
-$CONF['setup_password'] = 'changeme';
+
 // Postfix Admin Path
 // Set the location of your Postfix Admin installation here.
 // YOU MUST ENTER THE COMPLETE URL e.g. http://domain.tld/postfixadmin
@@ -50,11 +52,7 @@ $CONF['database_host'] = 'localhost';
 $CONF['database_user'] = 'postfix';
 $CONF['database_password'] = 'postfixadmin';
 $CONF['database_name'] = 'postfix';
-// If you need to specify a different port for a MYSQL database connection, use e.g.
-//   $CONF['database_host'] = '172.30.33.66:3308';
-// If you need to specify a different port for POSTGRESQL database connection
-//   uncomment and change the following
-// $CONF['database_port'] = '5432';
+$CONF['database_prefix'] = '';
 
 // Here, if you need, you can customize table names.
 $CONF['database_prefix'] = '';
@@ -71,7 +69,6 @@ $CONF['database_tables'] = array (
     'vacation' => 'vacation',
     'vacation_notification' => 'vacation_notification',
     'quota' => 'quota',
-	'quota2' => 'quota2',
 );
 
 // Site Admin
@@ -92,19 +89,7 @@ $CONF['smtp_port'] = '25';
 // system = whatever you have set as your PHP system default
 // cleartext = clear text passwords (ouch!)
 // mysql_encrypt = useful for PAM integration
-// authlib = support for courier-authlib style passwords
-// dovecot:CRYPT-METHOD = use dovecotpw -s 'CRYPT-METHOD'. Example: dovecot:CRAM-MD5
 $CONF['encrypt'] = 'md5crypt';
-
-// In what flavor should courier-authlib style passwords be enrypted?
-// md5 = {md5} + base64 encoded md5 hash
-// md5raw = {md5raw} + plain encoded md5 hash
-// SHA = {SHA} + base64-encoded sha1 hash
-// crypt = {crypt} + Standard UNIX DES-enrypted with 2-character salt
-$CONF['authlib_default_flavor'] = 'md5raw';
-
-// If you use the dovecot encryption method: where is the dovecotpw binary located?
-$CONF['dovecotpw'] = "/usr/sbin/dovecotpw";
 
 // Minimum length required for passwords. Postfixadmin will not
 // allow users to set passwords which are shorter than this value.
@@ -146,36 +131,6 @@ $CONF['domain_path'] = 'NO';
 //   NO:  /usr/local/virtual/domain.tld/username
 // Note: If $CONF['domain_path'] is set to NO, this setting will be forced to YES.
 $CONF['domain_in_mailbox'] = 'YES';
-// If you want to define your own function to generate a maildir path set this to the name of the function.
-// Notes: 
-//   - this configuration directive will override both domain_path and domain_in_mailbox
-//   - the maildir_name_hook() function example is present below, commented out
-//   - if the function does not exist the program will default to the above domain_path and domain_in_mailbox settings
-$CONF['maildir_name_hook'] = 'NO';
-
-/*
-    maildir_name_hook example function
- 
-    Called by create-mailbox.php if $CONF['maildir_name_hook'] == '<name_of_the_function>'
-    - allows for customized maildir paths determined by a custom function
-    - the example below will prepend a single-character directory to the
-      beginning of the maildir, splitting domains more or less evenly over
-      36 directories for improved filesystem performance with large numbers
-      of domains.
-
-    Returns: maildir path
-    ie. I/example.com/user/
-*/
-/*
-function maildir_name_hook($domain, $user) {
-    $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    $dir_index = hexdec(substr(md5($domain), 28)) % strlen($chars);
-    $dir = substr($chars, $dir_index, 1);
-    return sprintf("%s/%s/%s/", $dir, $domain, $user);
-}
-*/
-
 
 // Default Domain Values
 // Specify your default values below. Quota in MB.
@@ -206,7 +161,7 @@ $CONF['transport_default'] = 'virtual';
 
 // Virtual Vacation
 // If you want to use virtual vacation for you mailbox users set this to 'YES'.
-// NOTE: Make sure that you install the vacation module. (See VIRTUAL-VACATION/)
+// NOTE: Make sure that you install the vacation module. http://high5.net/postfixadmin/
 $CONF['vacation'] = 'NO';
 // This is the autoreply domain that you will need to set in your Postfix
 // transport maps to handle virtual vacations. It does not need to be a
@@ -226,16 +181,14 @@ $CONF['vacation_control_admin'] = 'YES';
 // The reason for this is that when you want catch-all and normal mailboxes
 // to work you need to have the mailbox replicated in the alias table.
 // If you want to take control of these aliases as well set this to 'YES'.
-
-// Alias control for superadmins
 $CONF['alias_control'] = 'NO';
 
-// Alias Control for domain admins
+// Alias Control for admins
+// Set to 'NO' if your domain admins shouldn't be able to edit user aliases.
 $CONF['alias_control_admin'] = 'NO';
 
 // Special Alias Control
-// Set to 'NO' if your domain admins shouldn't be able to edit the default aliases
-// as defined in $CONF['default_aliases']
+// Set to 'NO' if your domain admins shouldn't be able to edit default aliases.
 $CONF['special_alias_control'] = 'NO';
 
 // Alias Goto Field Limit
@@ -332,17 +285,13 @@ $CONF['show_popimap_color']='darkgrey';
 // - add the corresponding color to show_custom_colors
 $CONF['show_custom_domains']=array("subdomain.domain.ext","domain2.ext");
 $CONF['show_custom_colors']=array("lightgreen","lightblue");
-// If you use a recipient_delimiter in your postfix config, you can also honor it when aliases are checked.
-// Example: $CONF['recipient_delimiter'] = "+";
-// Set to "" to disable this check.
-$CONF['recipient_delimiter'] = "";
+
 
 // Optional:
 // Script to run after creation of mailboxes.
 // Note that this may fail if PHP is run in "safe mode", or if
 // operating system features (such as SELinux) or limitations
 // prevent the web-server from executing external scripts.
-// Parameters: (1) username (2) domain (3) maildir (4) quota
 // $CONF['mailbox_postcreation_script']='sudo -u courier /usr/local/bin/postfixadmin-mailbox-postcreation.sh';
 
 // Optional:
@@ -350,7 +299,6 @@ $CONF['recipient_delimiter'] = "";
 // Note that this may fail if PHP is run in "safe mode", or if
 // operating system features (such as SELinux) or limitations
 // prevent the web-server from executing external scripts.
-// Parameters: (1) username (2) domain (3) maildir (4) quota
 // $CONF['mailbox_postedit_script']='sudo -u courier /usr/local/bin/postfixadmin-mailbox-postedit.sh';
 
 // Optional:
@@ -358,7 +306,6 @@ $CONF['recipient_delimiter'] = "";
 // Note that this may fail if PHP is run in "safe mode", or if
 // operating system features (such as SELinux) or limitations
 // prevent the web-server from executing external scripts.
-// Parameters: (1) username (2) domain
 // $CONF['mailbox_postdeletion_script']='sudo -u courier /usr/local/bin/postfixadmin-mailbox-postdeletion.sh';
 
 // Optional:
@@ -366,7 +313,6 @@ $CONF['recipient_delimiter'] = "";
 // Note that this may fail if PHP is run in "safe mode", or if
 // operating system features (such as SELinux) or limitations
 // prevent the web-server from executing external scripts.
-// Parameters: (1) domain
 //$CONF['domain_postcreation_script']='sudo -u courier /usr/local/bin/postfixadmin-domain-postcreation.sh';
 
 // Optional:
@@ -374,7 +320,6 @@ $CONF['recipient_delimiter'] = "";
 // Note that this may fail if PHP is run in "safe mode", or if
 // operating system features (such as SELinux) or limitations
 // prevent the web-server from executing external scripts.
-// Parameters: (1) domain
 // $CONF['domain_postdeletion_script']='sudo -u courier /usr/local/bin/postfixadmin-domain-postdeletion.sh';
 
 // Optional:
@@ -397,11 +342,7 @@ $CONF['create_mailbox_subdirs_prefix']='INBOX.';
 // See: DOCUMENTATION/DOVECOT.txt
 //      http://wiki.dovecot.org/Quota/Dict
 //
-$CONF['used_quotas'] = 'NO';
-
-// if you use dovecot >= 1.2, set this to yes.
-// Note about dovecot config: table "quota" is for 1.0 & 1.1, table "quota2" is for dovecot 1.2 and newer
-$CONF['new_quota_table'] = 'NO';
+// $CONF['used_quotas'] = 'YES';
 
 //
 // Normally, the TCP port number does not have to be specified.
@@ -421,17 +362,11 @@ $CONF['new_quota_table'] = 'NO';
 $CONF['theme_logo'] = 'images/logo-default.png';
 $CONF['theme_css'] = 'css/default.css';
 
-// XMLRPC Interface.
-// This should be only of use if you wish to use e.g the
-// Postfixadmin-Squirrelmail package
-//  change to boolean true to enable xmlrpc
-$CONF['xmlrpc_enabled'] = false;
-
 // If you want to keep most settings at default values and/or want to ensure 
 // that future updates work without problems, you can use a separate config 
 // file (config.local.php) instead of editing this file and override some
 // settings there.
-if (file_exists(dirname(__FILE__) . '/config.local.php')) {
+if (file_exists(dirname(__FILE__) . '/config.local.php')) { # for /
     include(dirname(__FILE__) . '/config.local.php');
 }
 

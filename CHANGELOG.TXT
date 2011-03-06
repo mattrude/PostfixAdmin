@@ -10,151 +10,17 @@
 # Last update:
 # $Id$
 
-Version ***svn*** - 2009/12/26 - SVN r***
------------------------------------
 
-  - NOTE: changes from the 2.3 branch also apply to this version
-  - use smarty for templates
-  - add ability to choose activation date for vacation message in user module
-  - merge search functionality into list-virtual.php
-
-Version 2.3.2 - 2010/08/24 - SVN r860 (postfixadmin-2.3 branch)
----------------------------------------------------------------
-
-  - SUMMARY: PostfixAdmin 2.3.2 is a bugfix-only release for Postfix Admin 2.3.1
-  - SECURITY: attackers could find out if a admin exists (login pre-filled the
-    username after "only" a wrong password was entered)
-  - SECURITY: fix sql injection in list-domain (only exploitable by superadmins)
-  - alias targets in users/edit-alias are now validated
-  - invalid alias targets in users/edit-alias are shown to the user again
-    instead of dropping them
-  - fix dovecot:* password encryption (was broken in 2.3.1)
-  - fix displaying used quota for dovecot <= 1.1 (was broken in 2.3.1)
-  - when deleting a domain that is an alias domain (on the "from" side), the
-    alias domain is deleted
-
-Version 2.3.1 - 2010/07/09 - SVN r847 (postfixadmin-2.3 branch)
----------------------------------------------------------------
-
-  - SUMMARY: PostfixAdmin 2.3.1 is a bugfix-only release for Postfix Admin 2.3.
-    The only visible change is displaying the alias target for mailboxes which
-    was a longstanding issue/"missing feature".
-    The ADDITIONS directory contains some new scripts.
-  - SECURITY: users could bypass checking the old password when changing the
-	password by entering a too short new password. Fortunately only
-	"exploitable" by authentificated users.
-  - merge in changes to /debain (thanks normes) from trunk
-  - display alias targets for mailboxes (if $CONF['special_alias_control'] = YES)
-  - add hook for custom maildir path generation
-  - add import_users_from_csv.py script (by Simone Piccardi)
-  - add mailbox_post* scripts for cyrus
-  - handle dovecot passwords without any tempfile (prevents safe_mode issues)
-  - fix MySQL 6.0 compatibility
-  - fix quota display (for dovecot >= 1.2)
-  - fix short open tags ("<?")
-  - translation updates and fixes
-  - documentation updates and fixes
-  - document commandline parameters for $CONF[*_script] options in config.inc.php
-  - list-virtual: added error message if the check_owner query returns more
-    than one result (can happen with pre-2.3 databases and prevents access for
-    superadmins)
-  - add in_array() check to avoid that superadmins can enter invalid domains
-  - fix delete link for alias domains (when on target domain)
-  - delete values from quota and quota2 table when deleting a mailbox
-  - fix hardcoded table names in list-domain.php
-  - fixed edit-alias.php not to drop alias to the mailbox if
-    special_alias_control = NO
-  - fix alias handling for mailboxes (special_alias_control vs.
-    alias_control_admin confusion)
-  - fix typo in upgrade.php that broke index creation and deletion when using
-    non-default table names
-  - fix creating 'ALL' domain (dummy for superadmins) when using non-default
-    table names
-  - fix: db_query did not return number of SELECTed rows if query starts with
-    with whitespace
-  - check for $CONF['encrypt'] = 'dovecot:md5-crypt' (postfixadmin login not
-    working because dovecotpw uses a new salt each time), recommend
-    internal md5crypt instead
-  - replaced terribly outdated, broken squirrelmail plugin with a fresh version.
-    Note: The new plugin version requires the Zend framework.
-
-Version 2.3 - 2009/10/24 - SVN r739
------------------------------------
-
-  - automatically create quota tables for dovecot (both 1.0/1.1 and >= 1.2)
-  - list-virtual can now handle both table formats
-  - fixed upgrade.php for MySQL 6.0 compability
-  - changed vacation.pl syslog facility from "user" to "mail"
-  - added config option for postregsql database port
-  - added config option to enable/disable XMLRPC interface (default: off)
-  - Fix check/query for alias with enabled vacation in vacation.pl 
-  - Fix db_get_boolean() to return t/f for postgresql, not true/false
-  - Fix missing quoting for boolean values in SQL queries at various places
-  - Allow SHA courier-authlib passwords
-  - various small bug fixes
-  - fixed SVN revision for 2.3rc7 in changelog (was r691, should be r694)
-
-Version 2.3rc7 - 2009/07/27 - SVN r694
---------------------------------------
-
-  - Fix bug with confd-link.sh debian thing (breakage on Lenny with wwwconfig-common 0.1.2)
-  - Fix crypt() issue (see https://sourceforge.net/tracker/?func=detail&aid=2814820&group_id=191583&atid=937964 )
-
-Version 2.3rc6 - 2009/07/20 - SVN r689
---------------------------------------
-
-  - Updates to vacation.pl
-  - PHP 5.3 compatibility
-  - Easier dependencies for .debs - should work on Lenny/Ubuntu etc without issue now.
-
-Version 2.3rc5 - 2009/05/20 - SVN r658
---------------------------------------
-
-  - Improvements to the setup process
-  - Far better Debian packaging (we hope!) which should make installation much, much easier.
-  - Various bug fixes 
-  - Performance enhancements (or we fixed the regressions ...) in domain listing etc.
-
-Version 2.3rc4 - 2009/04/18 - SVN r632
---------------------------------------
-
-  - *Security fix* - on upgrade setup.php is restored; allowing a malicious
-    user to create their own superadmin account. We've removed the requirement to delete
-    setup.php, and instead a new config parameter (setup_password) is used to protect access
-    to this page. Password is encrypted, and setup.php can be used to generate the initial value.
-  - Fix undefined variables problem(s)
-  - Fix PostgreSQL date timestamp issues...
- 
-Version 2.3rc3 - 2009/04/06 - SVN r611
---------------------------------------
-
-  - Minor improvements to the Debian packaging, expect more soon
-  - Assorted bug fixes
-  - Partial support for per-user fetchmail.pl support
-
-Version 2.3rc2 - 2009/02/03 - SVN r593
---------------------------------------
-
-  - Refactor /users (see /model) and provide XmlRpc interface for remote mail clients
-     (e.g. squirrelmail-postfixadmin)
-  - Add dovecotpw support - see: 
-     https://sourceforge.net/tracker/index.php?func=detail&aid=2607332&group_id=191583&atid=937966
-  - Add unit tests for model/ directory (see /tests)
-  - Add additional scripts to ADDITIONS
-  - Documentation updates
-  - Various language updates
-  - added ADDITIONS/delete-mailq-by-domain.pl (by Jose Nilton)
-  - added ADDITIONS/quota_usage.pl (by Jose Nilton) - produces report of quota usage
-  - added support for courier authlib authentication flavors ($CONF['authlib_default_flavor'])
-
+Only in SVN trunk
+--------------------
 
 Version 2.3 Beta - 2009/01/15 - SVN r527
 -----------------------------------------
 
   - added support for domain aliases (from lenix) (can be disabled with $CONF['alias_domain'])
     Important: If you update from a previous version, you'll have to adapt your postfix 
-    configuration (see DOCUMENTS/POSTFIX_CONF.txt) - or just disable alias domain support,
-    your postfix configuration will continue to work
+	configuration (see DOCUMENTS/POSTFIX_CONF.txt) - or just disable alias domain support,
+	your postfix configuration will continue to work
   - updated postfix example configuration for domain aliases and to use the new mysql map format
   - vacation.pl:
     - add option for re-notification after definable timeout (patch from Luxten)
@@ -166,22 +32,14 @@ Version 2.3 Beta - 2009/01/15 - SVN r527
     - allow to enter the configuration in /etc/mail/postfixadmin/vacation.conf
       instead of editing vacation.pl directly
     - bump version number of vacation.pl
-  - added domain-postcreation script support
-  - added dovecot quota support (documentation + viewing in postfixadmin)
-  - enhanced mailbox table to make it easier for people to customise where mailboxes live
-    (new column "local_part")
-  - enhanced fetchmail.pl script (file locking, syslog logging, configuration file etc)
   - added clear error message for non-resolvable domains when creating mailboxes or aliases
   - check for non-resolvable domains on domain creation
   - new option $CONF['create_mailbox_subdirs_prefix'] for compatibility with more IMAP servers
-  - added support for mysql encrypt() password encrpytion 
   - fix "illegal mix of collations" problem in MySQL by explicitely setting the charset everywhere
   - fix: cleanup vacation_notification table when disabling vacation
   - fix: config and fetchmail tables now honor $CONF['database_tables']
-  - fix: several table names were hardcoded in database creation/update
   - fix: "unlimited" and "disabled" for quota and limits were crossed at several places
   - fix: honor $CONF['default_transport'] even if $CONF['transport'] = "no" (patch by fabiobon)
-  - fix: transport field is no longer emptied on domain edit if editing transport is disabled
   - show links to create mailboxes or alias even on disabled domains
   - added support for fetchmail's "ssl" option
   - superadmin can now setup fetchmail for all users, not only for himself
@@ -193,6 +51,10 @@ Version 2.3 Beta - 2009/01/15 - SVN r527
   - dropped obsolete VIRTUAL_VACATION/mail-filter script
   - translation updates
   - several small bugfixes
+  - Added domain-postcreation script support
+  - Added dovecot quota support (documentation + viewing in postfixadmin)
+  - Enhanced mailbox table to make it easier for people to customise where mailboxes live
+  - Enhanced fetchmail.pl script (file locking, syslog logging, configuration file etc)
 
 
 Version 2.2.1.1 - 2008/07/23 - SVN r412

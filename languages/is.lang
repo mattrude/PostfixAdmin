@@ -22,7 +22,8 @@ $PALANG['pLogin_welcome'] = 'Póst kerfisstjóri tengist hér til að viðhalda 
 $PALANG['pLogin_username'] = 'Auðkenni(email)';
 $PALANG['pLogin_password'] = 'Lykilorð';
 $PALANG['pLogin_button'] = 'Tengjast';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Auðkenni þitt er rangt, ath hvort þú hafir slegið það rangt inn og prófaðu aftur, ath notaðu fullt email til að tengjas!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Lykilorðið var rangt!</span>';
 $PALANG['pLogin_login_users'] = 'Notendur smellið hér til að opna almennt notendaviðmót.';
 
 $PALANG['pMenu_main'] = 'Main'; # XXX
@@ -188,9 +189,6 @@ $PALANG['pViewlog_username'] = 'kerfisstjóri';
 $PALANG['pViewlog_domain'] = 'lén';
 $PALANG['pViewlog_action'] = 'aðgerð';
 $PALANG['pViewlog_data'] = 'gögn';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -340,7 +338,7 @@ $PALANG['pUsersVacation_welcome'] = 'sjálfvirk skilaboð.';
 $PALANG['pUsersVacation_welcome_text'] = 'Þú hefur nú þegar skilgreint sjálfvirk skilaboð!';
 $PALANG['pUsersVacation_subject'] = 'Meginmál - Subject';
 $PALANG['pUsersVacation_subject_text'] = 'Er ekki við - Out of Office';
-$PALANG['pUsersVacation_body'] = 'Meginmál'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Meginmál';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 Ég er ekki við frá <date> og til <date>.  I will be away from <date> until <date>.
 Ef mikið liggur við, geturðu haft samaband við <contact person>. For urgent matters you can contact <contact person>.
@@ -349,8 +347,6 @@ $PALANG['pUsersVacation_button_away'] = 'Verð í burtu';
 $PALANG['pUsersVacation_button_back'] = 'Kem aftur';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Get ekki uppfært sjálfvirk skilaboð þín!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Sjálfvirk skilaboð þín (svar) hefur verið fjarlægt!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';      # XXX
 $PALANG['pCreate_dbLog_createalias'] = 'create alias'; # XXX

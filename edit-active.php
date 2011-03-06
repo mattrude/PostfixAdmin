@@ -15,7 +15,7 @@
  * File: edit-active.php 
  * Responsible for toggling the active status of a mailbox. 
  *
- * Template File: message.tp
+ * Template File: message.php
  *
  * Template Variables:
  *
@@ -31,12 +31,6 @@ require_once('common.php');
 
 authentication_require_role('admin');
 $SESSID_USERNAME = authentication_get_username();
-
-$fAliasDomain = '';
-$fUsername    = '';
-$fAlias       = '';
-$fDomain      = '';
-$fReturn      = '';
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
@@ -65,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
          }
          else
          {
-            db_log ($fDomain, 'edit_mailbox_state', $fUsername);
+            db_log ($SESSID_USERNAME, $fDomain, 'edit_mailbox_state', $fUsername);
          }
       }
       if ($fAlias != '')
@@ -78,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
          }
          else
          {
-            db_log ($fDomain, 'edit_alias_state', $fAlias);
+            db_log ($SESSID_USERNAME, $fDomain, 'edit_alias_state', $fAlias);
          }
       }
       if ($fAliasDomain != '')
@@ -91,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
          }
          else
          {
-            db_log ($fDomain, 'edit_alias_domain_state', $fDomain);
+            db_log ($SESSID_USERNAME, $fDomain, 'edit_alias_domain_state', $fDomain);
          }
       }
    }
@@ -112,9 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
    }
 }
 
-$smarty->assign ('tMessage', $tMessage);
-$smarty->assign ('smarty_template', 'message');
-$smarty->display ('index.tpl');
-
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/message.php");
+include ("templates/footer.php");
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

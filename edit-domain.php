@@ -14,7 +14,7 @@
  * 
  * File: edit-domain.php 
  * Updates the properties of a domain.
- * Template File: admin_edit-domain.tpl
+ * Template File: admin_edit-domain.php
  *
  * Template Variables:
  *
@@ -80,6 +80,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
     if ($fBackupmx == "on")
     {
+        $fAliases = -1;
+        $fMailboxes = -1;
+        $fMaxquota = -1;
         $fBackupmx = 1;
         $sqlBackupmx = db_get_boolean(True);
     }
@@ -113,16 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     }
 }
 
-$smarty->assign ('domain', $domain);
-$smarty->assign ('tDescription', $tDescription);
-$smarty->assign ('tAliases', $tAliases);
-$smarty->assign ('tMailboxes', $tMailboxes);
-$smarty->assign ('tMaxquota', $tMaxquota);
-$smarty->assign ('select_options', select_options($CONF['transport_options'], array($tTransport)), false);
-if ($tBackupmx)	$smarty->assign ('tBackupmx', ' checked="checked"');
-if ($tActive)	$smarty->assign ('tActive', ' checked="checked"');
-$smarty->assign ('tMessage', $tMessage,false);
-$smarty->assign ('smarty_template', 'admin_edit-domain');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/admin_edit-domain.php");
+include ("templates/footer.php");
 
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
+/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
+?>

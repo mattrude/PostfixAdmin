@@ -15,7 +15,7 @@
  * File: broadcast-message.php
  * Used to send a message to _ALL_ users with mailboxes on this server.
  *
- * Template File: broadcast-message.tpl
+ * Template File: broadcast-message.php
  *
  * Template Variables: -none-
  *
@@ -45,16 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    }
    else
    {
-      $table_mailbox = table_by_key('mailbox');
-	  $table_alias = table_by_key('alias');
-      
-	  $q = "select username from $table_mailbox union select goto from $table_alias " .
-		   "where goto not in (select username from $table_mailbox)";
+      $q = 'select username from mailbox union '.
+         'select goto from alias '.
+         'where goto not in (select username from mailbox)';
 
       $result = db_query ($q);
       if ($result['rows'] > 0)
       {
-         mb_internal_encoding("UTF-8");
          $b_name = mb_encode_mimeheader( $_POST['name'], 'UTF-8', 'Q');
          $b_subject = mb_encode_mimeheader( $_POST['subject'], 'UTF-8', 'Q');
          $b_message = base64_encode($_POST['message']);
@@ -81,20 +78,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
             }
          }
       }
-		$smarty->assign ('tMessage', $PALANG['pBroadcast_success']);
-		$smarty->assign ('smarty_template', 'message');
-		$smarty->display ('index.tpl');
-//		echo '<p>'.$PALANG['pBroadcast_success'].'</p>';
+      include ("templates/header.php");
+      include ("templates/menu.php");
+      echo '<p>'.$PALANG['pBroadcast_success'].'</p>';
+      include ("templates/footer.php");
    }
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "GET" || $error == 1)
 {
-	$smarty->assign ('error', $error);
-	$smarty->assign ('smarty_template', 'broadcast-message');
-	$smarty->display ('index.tpl');
-
-//   include ("templates/broadcast-message.tpl");
+   include ("templates/header.php");
+   include ("templates/menu.php");
+   include ("templates/broadcast-message.php");
+   include ("templates/footer.php");
 }
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */

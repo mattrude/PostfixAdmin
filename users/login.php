@@ -14,7 +14,7 @@
  * 
  * File: login.php
  * Used to authenticate want-to-be users.
- * Template File: login.tpl
+ * Template File: login.php
  *
  * Template Variables:
  *
@@ -30,17 +30,18 @@
 
 require_once("../common.php");
 
-$smarty->assign ('language_selector', language_selector(), false);
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-	$smarty->assign ('smarty_template', 'users_login');
-	$smarty->display ('index.tpl');
+   include ("../templates/header.php");
+   include ("../templates/users_login.php");
+   include ("../templates/footer.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
-
+   $fUsername = escape_string ($_POST['fUsername']);
+   $fPassword = escape_string ($_POST['fPassword']);
    $lang = safepost('lang');
 
    if ( $lang != check_language(0) ) { # only set cookie if language selection was changed
@@ -48,10 +49,33 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       # (language preference cookie is processed even if username and/or password are invalid)
    }
 
-   $fUsername = escape_string ($_POST['fUsername']);
-   $fPassword = escape_string ($_POST['fPassword']);
+   $active = db_get_boolean(True);
+   $query = "SELECT password FROM $table_mailbox WHERE username='$fUsername' AND active=$active";
 
-   if(UserHandler::login($_POST['fUsername'], $_POST['fPassword'])) {
+   $result = db_query ($query);
+   if ($result['rows'] == 1)
+   {
+      $row = db_array ($result['result']);
+      $password = pacrypt ($fPassword, $row['password']);
+
+      $query = "SELECT * FROM $table_mailbox WHERE username='$fUsername' AND password='$password' AND active=$active";
+
+      $result = db_query ($query);
+      if ($result['rows'] != 1)
+      {
+         $error = 1;
+         $tMessage = $PALANG['pLogin_password_incorrect'];
+         $tUsername = $fUsername;
+      }
+   }
+   else
+   {
+      $error = 1;
+      $tMessage = $PALANG['pLogin_username_incorrect'];
+   }
+
+   if ($error != 1)
+   {
       session_regenerate_id();
       $_SESSION['sessid'] = array();
       $_SESSION['sessid']['roles'] = array();
@@ -60,15 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       header("Location: main.php");
       exit;
    }
-   else {   
-         $error = 1;
-         $tMessage = '<span class="error_msg">' . $PALANG['pLogin_failed'] . '</span>';
-         $tUsername = $fUsername;
-   }
-	$smarty->assign ('tUsername', $tUsername);
-	$smarty->assign ('tMessage', $tMessage, false);
-	$smarty->assign ('smarty_template', 'users_login');
-	$smarty->display ('index.tpl');
+
+   include ("../templates/header.php");
+   include ("../templates/users_login.php");
+   include ("../templates/footer.php");
 }
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

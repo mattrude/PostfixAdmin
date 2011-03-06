@@ -22,7 +22,8 @@ $PALANG['pLogin_welcome'] = 'Posta Yöneticileri buradan domainlerinizi yönetme
 $PALANG['pLogin_username'] = 'Kullanýcý adý (eposta)';
 $PALANG['pLogin_password'] = 'Þifre';
 $PALANG['pLogin_button'] = 'Giriþ';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Kullanýcý adnýnýz doðru deðil. E-posta adresinizi kontrol ediniz.</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Þifreniz doðru deðil!</span>';
 $PALANG['pLogin_login_users'] = 'Kullanýcý iþlemlerine girmek için burayý kullanýnýz.';
 
 $PALANG['pMenu_main'] = 'Main'; # XXX
@@ -189,9 +190,6 @@ $PALANG['pViewlog_username'] = 'Yönetici';
 $PALANG['pViewlog_domain'] = 'Domain';
 $PALANG['pViewlog_action'] = 'Aksiyon';
 $PALANG['pViewlog_data'] = 'Veri';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -341,7 +339,7 @@ $PALANG['pUsersVacation_welcome'] = 'Otomatik Cevaplama.';
 $PALANG['pUsersVacation_welcome_text'] = 'Zaten bir otomatik cevaplamanýz bulunmakta!';
 $PALANG['pUsersVacation_subject'] = 'konu';
 $PALANG['pUsersVacation_subject_text'] = 'Ofis dýþýnda';
-$PALANG['pUsersVacation_body'] = 'Metin'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Metin';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 <date> tarihinden den <date> ine burada bulunmayacaðým.
 Acil durumlarda lütfen  <contact person> a baþvurunuz.
@@ -350,8 +348,6 @@ $PALANG['pUsersVacation_button_away'] = 'Dýþarý gidiyorum.';
 $PALANG['pUsersVacation_button_back'] = 'Geri Geliyorum';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">otomatik cevaplama ayarlarýnýzý deðiþtirilemiyor!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Otomatik cevaplamanýz kaldýrýldý!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';      # XXX
 $PALANG['pCreate_dbLog_createalias'] = 'create alias'; # XXX

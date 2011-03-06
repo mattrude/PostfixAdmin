@@ -33,7 +33,7 @@ function update_string_list() {
 
 		grep -v 'No newline at end of file' "$file.diff" | while read line ; do
 			greptext="$(echo $line | sed 's/^[+ 	-]//')"
-			grepresult=$(grep "'$greptext'" en.lang) || grepresult="***DEFAULT - $greptext dropped from en.lang? *** $line"
+			grepresult=$(grep "'$greptext'" en.lang) || grepresult="***DEFAULT*** $line"
 			grepresult2=$(grep "'$greptext'" $file)  || grepresult2="$grepresult"
 			case "$line" in
 				---*)
@@ -72,10 +72,10 @@ function update_string_list() {
 
 
 function forcepatch() {
-	for i in `seq 1 5` ; do 
+	for i in `seq 1 10` ; do 
 		for file in $filelist ; do
 			test "$file" = "en.lang" && { echo "*** skipping en.lang ***"; continue ; } >&2
-			"$0" "$file" | sed -n '1,3 p ; 5 s/^./-/p ; 5s/^./+/p ;  6p'  | recountdiff | patch "$file"
+			"$0" "$file" | head -n7  | recountdiff | patch "$file"
 		done
 	done
 } # end forcepatch
@@ -103,27 +103,6 @@ function rename_string() {
 		test $patch = 1 && patch $file < $file.patch
 	done
 } # end rename_string()
-
-
-function remove_string() {
-	for file in $filelist ; do
-		line="$(grep "PALANG\['$remove_string'\]" "$file")" || {
-			echo "*** $file does not contain \$PALANG['$remove_string'] ***" >&2
-			continue
-		}
-
-		# create patch
-		echo "
---- $file.old
-+++ $file
-@@ -1,1 +1,0 @@
--$line
-		" > "$file.patch"
-
-		test $patch = 0 && cat $file.patch
-		test $patch = 1 && patch $file < $file.patch
-	done
-} # end remove_string()
 
 
 function addcomment() {
@@ -229,11 +208,6 @@ echo '
     Rename $PALANG['"'"'old_string'"'"'] to $PALANG['"'"'new_string'"'"']
 
 
-'"$0"' --remove string [--patch] [--nocleanup] [foo.lang [bar.lang [...] ] ]
-
-    Remove $PALANG['"'"'string'"'"'] from language files
-
-
 '"$0"' --addcomment string comment [--patch] [--nocleanup] [foo.lang [bar.lang [...] ] ]
 
     Add a comment to $PALANG['"'"'string'"'"']
@@ -277,7 +251,6 @@ patch=0  # do not patch by default
 forcepatch=0  # no forcepatch by default
 nocleanup=0 # don't delete tempfiles
 rename=0 # rename a string
-remove=0 # remove a string
 stats=0  # create translation statistics
 addcomment=0 # add translation comment
 text=''
@@ -308,11 +281,6 @@ while [ -n "$1" ] ; do
 			echo "$rename_old" | grep '^[a-z_-]*\.lang$' && rename_new='' # error out on *.lang - probably a filename
 			echo "$rename_new" | grep '^[a-z_-]*\.lang$' && rename_new='' # error out on *.lang - probably a filename
 			test -z "$rename_new" && { echo '--rename needs two parameters' >&2 ; exit 1 ; }
-			;;
-		--remove)
-			remove=1
-			shift ; remove_string="$1"
-			test -z "$remove-string" && { echo '--remove needs a parameter' >&2 ; exit 1 ; }
 			;;
 		--addcomment)
 			addcomment=1
@@ -346,7 +314,6 @@ test "$filelist" = "" && filelist="`ls -1 *.lang`"
 
 test "$addcomment" = 1 && { addcomment ; cleanup ; exit 0 ; }
 test "$rename" = 1 && { rename_string ; cleanup ; exit 0 ; }
-test "$remove" = 1 && { remove_string ; cleanup ; exit 0 ; }
 test "$forcepatch" = 1 && { forcepatch ; cleanup ; exit 0 ; }
 
 test "$stats" = 1 && { statistics ; exit 0 ; }

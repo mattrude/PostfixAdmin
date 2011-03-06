@@ -22,7 +22,8 @@ $PALANG['pLogin_welcome'] = 'Kudeatzailearen logina domeinuak kudeatzeko.';
 $PALANG['pLogin_username'] = 'Erabiltzailea (e-mail)';
 $PALANG['pLogin_password'] = 'Pasahitza';
 $PALANG['pLogin_button'] = 'Erabiltzailea';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Logina ez da zuzena. Ziurtatu zaitez logina zeure e-mailarekin egin duzula.</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Pasahitz okerra!</span>';
 $PALANG['pLogin_login_users'] = 'Erabiltzaileen gunera joateko logina.';
 $PALANG['pMenu_main'] = 'Main'; # XXX
 $PALANG['pMenu_overview'] = 'Laburpena';
@@ -187,9 +188,6 @@ $PALANG['pViewlog_username'] = 'Kudeatzailea';
 $PALANG['pViewlog_domain'] = 'Domeinua';
 $PALANG['pViewlog_action'] = 'Ekintza';
 $PALANG['pViewlog_data'] = 'Datuak';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -340,7 +338,7 @@ $PALANG['pUsersVacation_welcome'] = 'Erantzun automatikoa.';
 $PALANG['pUsersVacation_welcome_text'] = 'Erantzun automatiko bat konfiguratuta duzu!';
 $PALANG['pUsersVacation_subject'] = 'Gaia';
 $PALANG['pUsersVacation_subject_text'] = 'Lanetik kanpo';
-$PALANG['pUsersVacation_body'] = 'Gorputza'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Gorputza';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 <date>-tik <date> arte kanpoan egongo naiz.
 Larrialdiko gaientzat, hemen <contact person> kontakta dezakezu nirekin.
@@ -349,8 +347,6 @@ $PALANG['pUsersVacation_button_away'] = 'Aldeginda';
 $PALANG['pUsersVacation_button_back'] = 'Itzulita';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Ezinezkoa zure erantzun atomatikoaren konfigurazioa eguneratzea!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Zure erantzun automatikoa borratu da!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';      # XXX
 $PALANG['pCreate_dbLog_createalias'] = 'create alias'; # XXX

@@ -14,7 +14,7 @@
  * 
  * File: create-domain.php
  * Allows administrators to create new domains.
- * Template File: admin_create-domain.tpl
+ * Template File: admin_create-domain.php
  *
  * Template Variables:
  *
@@ -48,12 +48,12 @@ $form_fields = array(
     'fMailboxes'      => array('type' => 'int', 'default' => $CONF['mailboxes']), 
     'fMaxquota'       => array('type' => 'int', 'default' => $CONF['maxquota']), 
     'fTransport'      => array('type' => 'str', 'default' => $CONF['transport_default'], 'options' => $CONF['transport_options']), 
-    'fDefaultaliases' => array('type' => 'str', 'default' => 'on', 'options' => array('on', 'off')), 
+    'fDefaultaliases' => array('type' => 'str', 'default' => 'off', 'options' => array('on', 'off')), 
     'fBackupmx'       => array('type' => 'str', 'default' => 'off', 'options' => array('on', 'off')) 
 );
 
 foreach($form_fields  as $key => $default) {
-    if(isset($_POST[$key]) && (strlen($_POST[$key]) > 0)) {
+    if(isset($_POST[$key]) && (!empty($_POST[$key]))) {
         $$key = escape_string($_POST[$key]);
     }
     else {
@@ -78,13 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
     $tAliases = $fAliases;
     $tMaxquota = $fMaxquota;
     $tMailboxes = $fMailboxes;
-    $tDefaultaliases = $fDefaultaliases;
+    $tDefaultAliases = $fDefaultaliases;
     $tBackupmx = $fBackupmx;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
-    $tBackupmx = "";
     if ($fDomain == null or domain_exist($fDomain) or !check_domain($fDomain))
     {
         $error = 1;
@@ -108,6 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
         if ($fBackupmx == "on")
         {
+            $fAliases = -1;
+            $fMailboxes = -1;
+            $fMaxquota = -1;
             $fBackupmx = 1;
             $sqlBackupmx = db_get_boolean(true);
         }
@@ -116,8 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
             $fBackupmx = 0;
             $sqlBackupmx = db_get_boolean(false);
         }
-
-        $sql_query = "INSERT INTO $table_domain (domain,description,aliases,mailboxes,maxquota,transport,backupmx,created,modified) VALUES ('$fDomain','$fDescription',$fAliases,$fMailboxes,$fMaxquota,'$fTransport','$sqlBackupmx',NOW(),NOW())";
+        $sql_query = "INSERT INTO $table_domain (domain,description,aliases,mailboxes,maxquota,transport,backupmx,created,modified) VALUES ('$fDomain','$fDescription',$fAliases,$fMailboxes,$fMaxquota,'$fTransport',$sqlBackupmx,NOW(),NOW())";
         $result = db_query($sql_query);
         if ($result['rows'] != 1)
         {
@@ -138,22 +139,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         if (!domain_postcreation($fDomain))
         {
              $tMessage = $PALANG['pAdminCreate_domain_error'];
-        }
+       }
     }
 }
 
-$smarty->assign ('tDomain', $tDomain);
-$smarty->assign ('pAdminCreate_domain_domain_text', $pAdminCreate_domain_domain_text, false);
-$smarty->assign ('tDescription', $tDescription, false);
-$smarty->assign ('tAliases', $tAliases);
-$smarty->assign ('tMailboxes', $tMailboxes);
-$smarty->assign ('tMaxquota', $tMaxquota,false);
-$smarty->assign ('select_options', select_options ($CONF ['transport_options'], array ($tTransport)),false);
-$smarty->assign ('tDefaultaliases', ($tDefaultaliases == 'on') ? ' checked="checked"' : '');
-$smarty->assign ('tBackupmx', ($tBackupmx == 'on') ? ' checked="checked"' : '');
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'admin_create-domain');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/admin_create-domain.php");
+include ("templates/footer.php");
 
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
+/* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

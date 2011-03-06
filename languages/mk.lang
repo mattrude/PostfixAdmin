@@ -22,7 +22,8 @@ $PALANG['pLogin_welcome'] = 'Логин за администрирање на �
 $PALANG['pLogin_username'] = 'Корисничко име (email)';
 $PALANG['pLogin_password'] = 'Лозинка';
 $PALANG['pLogin_button'] = 'Пријава';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Погрешно корисничко име. Логирајте се со вашата e-mail адреса!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Погрешна лозинка!</span>';
 $PALANG['pLogin_login_users'] = 'Логин за обични корисници.';
 
 $PALANG['pMenu_main'] = 'Main'; # XXX
@@ -189,9 +190,6 @@ $PALANG['pViewlog_username'] = 'Админ';
 $PALANG['pViewlog_domain'] = 'Домен';
 $PALANG['pViewlog_action'] = 'Операција';
 $PALANG['pViewlog_data'] = 'Датум';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -342,7 +340,7 @@ $PALANG['pUsersVacation_welcome'] = 'Автоматски одговор.';
 $PALANG['pUsersVacation_welcome_text'] = 'Веќе имате конфигуриран автоматски одговор!';
 $PALANG['pUsersVacation_subject'] = 'Тема';
 $PALANG['pUsersVacation_subject_text'] = 'Отсутен';
-$PALANG['pUsersVacation_body'] = 'Содржина'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Содржина';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 Ќе бидам отсутен од <date> до <date>.
 За итни случаи контактирајте со <contact person>.
@@ -351,8 +349,6 @@ $PALANG['pUsersVacation_button_away'] = 'Заминување';
 $PALANG['pUsersVacation_button_back'] = 'Враќање :)';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Не можам да ги променам сетирањата за автоматскиот одговор!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Вашиот автоматски одговор е отстранет!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'create mailbox';      # XXX
 $PALANG['pCreate_dbLog_createalias'] = 'create alias'; # XXX

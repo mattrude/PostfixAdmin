@@ -21,7 +21,8 @@ $PALANG['pLogin_welcome'] = 'Pašto srities administratorius.';
 $PALANG['pLogin_username'] = 'Vartotojas (el.paštas)';
 $PALANG['pLogin_password'] = 'Slaptažodis';
 $PALANG['pLogin_button'] = 'Prisijungti';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Prisijungti nepavyko. Vartotojo lauke įveskite srities pašto administratoriaus el.pašto adresą!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Slaptažodis neteisingas!</span>';
 $PALANG['pLogin_login_users'] = 'Pašto vartotojo nustatymai.';
 
 $PALANG['pMenu_main'] = 'Main'; # XXX
@@ -188,9 +189,6 @@ $PALANG['pViewlog_username'] = 'Vartotojas';
 $PALANG['pViewlog_domain'] = 'Sritis';
 $PALANG['pViewlog_action'] = 'Veiksmas';
 $PALANG['pViewlog_data'] = 'Duomenys';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -340,7 +338,7 @@ $PALANG['pUsersVacation_welcome'] = 'Automatinis atsakymas.';
 $PALANG['pUsersVacation_welcome_text'] = 'Auto atsakiklis jau nustatytas!';
 $PALANG['pUsersVacation_subject'] = 'Tema';
 $PALANG['pUsersVacation_subject_text'] = 'Esu išvykęs';
-$PALANG['pUsersVacation_body'] = 'Žinutė'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Žinutė';
 ### XXX (see below)
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 I will be away from <date> until <date>.
@@ -350,8 +348,6 @@ $PALANG['pUsersVacation_button_away'] = 'Išvykstu';
 $PALANG['pUsersVacation_button_back'] = 'Grįžtu';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Nepavyko nustatyti el.pašto auto atsakovo!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Auto atsakovas išjungtas!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'pašto dėžutė sukurta';
 $PALANG['pCreate_dbLog_createalias'] = 'sinonimas sukurtas';

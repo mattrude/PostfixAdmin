@@ -24,7 +24,8 @@ $PALANG['pLogin_welcome'] = 'Mail administratörer loggar in här för att sköt
 $PALANG['pLogin_username'] = 'Login (epost)';
 $PALANG['pLogin_password'] = 'Lösenord';
 $PALANG['pLogin_button'] = 'Login';
-$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
+$PALANG['pLogin_username_incorrect'] = '<span class="error_msg">Ditt login är ej korrekt. Logga in med din epostadress!</span>';
+$PALANG['pLogin_password_incorrect'] = '<span class="error_msg">Du angav fel lösenord!</span>';
 $PALANG['pLogin_login_users'] = 'Användare klickar här för att logga in på användardelen.';
 
 $PALANG['pMenu_main'] = 'Huvudmeny';
@@ -191,9 +192,6 @@ $PALANG['pViewlog_username'] = 'Admin';
 $PALANG['pViewlog_domain'] = 'Domän';
 $PALANG['pViewlog_action'] = 'Åtgärd';
 $PALANG['pViewlog_data'] = 'Data';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'skapa brevlåda';
 $PALANG['pViewlog_action_delete_mailbox'] = 'radera brevlåda';
 $PALANG['pViewlog_action_edit_mailbox'] = 'ändra brevlåda';
@@ -343,7 +341,7 @@ $PALANG['pUsersVacation_welcome'] = 'Autosvar.';
 $PALANG['pUsersVacation_welcome_text'] = 'Du har redan ett autosvar meddelande definierat!';
 $PALANG['pUsersVacation_subject'] = 'Ärende';
 $PALANG['pUsersVacation_subject_text'] = 'Out of Office';
-$PALANG['pUsersVacation_body'] = 'Text'; # XXX text changed to 'Message'
+$PALANG['pUsersVacation_body'] = 'Text';
 $PALANG['pUsersVacation_body_text'] = <<<EOM
 Jag är borta från <datum> till <datum>.
 För brådskande ärenden kan ni kontakta <kontakt person>.
@@ -352,8 +350,6 @@ $PALANG['pUsersVacation_button_away'] = 'Försvinner';
 $PALANG['pUsersVacation_button_back'] = 'Kommer tillbaka';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Kan inte uppdatera dina autosvar inställningar!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Ditt autosvar har taqits bort!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'skapa brevlåda';     
 $PALANG['pCreate_dbLog_createalias'] = 'skapa alias';
