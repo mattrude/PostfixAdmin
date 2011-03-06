@@ -195,9 +195,6 @@ $PALANG['pViewlog_username'] = 'Administrador';
 $PALANG['pViewlog_domain'] = 'Domínio';
 $PALANG['pViewlog_action'] = 'Ação';
 $PALANG['pViewlog_data'] = 'Descrição';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 
 $PALANG['pViewlog_action_create_mailbox'] = 'criar conta de email';
 $PALANG['pViewlog_action_delete_mailbox'] = 'remover conta de email';
@@ -358,8 +355,6 @@ $PALANG['pUsersVacation_button_away'] = 'Ausente';
 $PALANG['pUsersVacation_button_back'] = 'De Volta';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Não foi possível atualizar suas configurações de resposta automática!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Resposta automática removida!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'criar conta de email';
 $PALANG['pCreate_dbLog_createalias'] = 'criar alias';

@@ -23,14 +23,12 @@
  * Form POST \ GET Variables: -none-
  */
 
-define('POSTFIXADMIN', 1); # by defining it here, common.php will not start a session.
-
-require_once(dirname(__FILE__).'/common.php'); # make sure correct common.php is used.
+require_once('common.php');
 
 $CONF['show_header_text'] = 'NO';
 $CONF['theme_logo'] = 'images/logo-default.png';
 $CONF['theme_css'] = 'css/default.css';
-require($incpath.'/templates/header.php');
+require('templates/header.php');
 ?>
 
 <div class='setup'>
@@ -120,12 +118,12 @@ $config_loaded = 0;
 if ($file_config == 1)
 {
     print "<li>Depends on: presence config.inc.php - OK</li>\n";
-    require_once($incpath.'/config.inc.php');
+    require_once('config.inc.php');
     $config_loaded = 1;
 
-    require($incpath.'/config.inc.php');
+    require('config.inc.php');
     if(isset($CONF['configured'])) {
-        if($CONF['configured'] === TRUE) {
+        if($CONF['configured'] == TRUE) {
             print "<li>Checking \$CONF['configured'] - OK\n";
         } else {
             print "<li><b>Warning: \$CONF['configured'] is 'false'.<br>\n";
@@ -140,19 +138,6 @@ else
     print "For example:<br />\n";
     print "<code><pre>cp config.inc.php.sample config.inc.php</pre></code>\n";
     $error =+ 1;
-}
-
-//
-// Check if templates directory is writable
-//
-
-if (!is_writeable($incpath.'/templates_c'))
-{
-    print "<li><b>Error: Smarty template compile directory templates_c is not writable.</b><br />\n";
-	print "<b>Please make it writable.</b><br />\n";
-    $error =+ 1;
-} else {
-	print "<li>Smarty template compile directory is writable - OK<br />\n";
 }
 
 //
@@ -311,7 +296,7 @@ if ($error != 0)
 else
 {
     print "<p>Everything seems fine... attempting to create/update database structure</p>\n";
-    require_once($incpath.'/upgrade.php');
+    require_once('upgrade.php');
 
     $pAdminCreate_admin_username_text = $PALANG['pAdminCreate_admin_username_text'];
     $pAdminCreate_admin_password_text = "";
@@ -349,7 +334,7 @@ else
             $table_domain = table_by_key('domain');
             $r = db_query("SELECT * FROM $table_domain WHERE domain = 'ALL'");
             if($r['rows'] == 0) {
-                db_insert('domain', array('domain' => 'ALL')); // all other fields should default through the schema.
+                db_insert($table_domain, array('domain' => 'ALL')); // all other fields should default through the schema.
             }
 
             list ($error, $tMessage, $pAdminCreate_admin_username_text, $pAdminCreate_admin_password_text) = create_admin($fUsername, $fPassword, $fPassword2, array('ALL'), TRUE);
