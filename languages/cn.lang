@@ -189,9 +189,6 @@ $PALANG['pViewlog_username'] = '管理员';
 $PALANG['pViewlog_domain'] = '域';
 $PALANG['pViewlog_action'] = '操作';
 $PALANG['pViewlog_data'] = '内容';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -350,8 +347,6 @@ $PALANG['pUsersVacation_button_away'] = '开启自动回复';
 $PALANG['pUsersVacation_button_back'] = '关闭自动回复';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">更新自动回复失败!</span>';
 $PALANG['pUsersVacation_result_success'] = '你的自动回复已经关闭!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = '新建邮箱';     
 $PALANG['pCreate_dbLog_createalias'] = '新建别名';

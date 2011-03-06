@@ -15,7 +15,7 @@
  * File: vacation.php
  * Used by users to set/change their vacation settings.
  *
- * Template File: users_vacation.tpl
+ * Template File: users_vacation.php
  *
  * Template Variables:
  *
@@ -48,15 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
     $tSubject = '';
     $tBody = '';
-	$tActiveFrom = '';
-	$tActiveUntil = '';
-		
-	$details = $vh->get_details();
-	if($details != false) {
+
+    $details = $vh->get_details();
+    if($details != false) {
         $tSubject = $details['subject'];
         $tBody = $details['body'];
-		$fActiveFrom = $details['activeFrom'];
-		$fActiveUntil = $details['activeUntil'];
     }
     if($vh->check_vacation()) {
         $tMessage = $PALANG['pUsersVacation_welcome_text'];
@@ -73,12 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         exit(0);
     }
 
-    if (isset ($_POST['fSubject'])) $fSubject = $_POST['fSubject'];
-    if (isset ($_POST['fBody']))    $fBody    = $_POST['fBody'];
+    if (isset ($_POST['fSubject'])) $fSubject = escape_string ($_POST['fSubject']);
+    if (isset ($_POST['fBody'])) $fBody = escape_string ($_POST['fBody']);
     if (isset ($_POST['fAway'])) $fAway = escape_string ($_POST['fAway']);
     if (isset ($_POST['fBack'])) $fBack = escape_string ($_POST['fBack']);
-	if (isset ($_POST['fActiveFrom'])) $tActiveFrom = date ("Y-m-d 00:00:00", strtotime ($_POST['fActiveFrom']));
-	if (isset ($_POST['fActiveUntil'])) $tActiveUntil = date ("Y-m-d 23:59:59", strtotime ($_POST['fActiveUntil']));
 
     //set a default, reset fields for coming back selection
     if ($tSubject == '') { $tSubject = html_entity_decode($PALANG['pUsersVacation_subject_text'], ENT_QUOTES, 'UTF-8'); }
@@ -89,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     // the user is going away - set the goto alias and vacation table as necessary.
     if (!empty ($fAway))
     {
-        if(!$vh->set_away($fSubject, $fBody, $tActiveFrom, $tActiveUntil)) {
+        if(!$vh->set_away($fSubject, $fBody)) {
             $error = 1;
             $tMessage = $PALANG['pUsersVacation_result_error'];
         }
@@ -107,12 +101,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     }
 }
 
-$smarty->assign ('tSubject', htmlentities ($tSubject, ENT_QUOTES, 'UTF-8'), false);
-$smarty->assign ('tBody', htmlentities ($tBody, ENT_QUOTES, 'UTF-8'), false);
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('tActiveFrom',  date ("d.m.Y", strtotime ($fActiveFrom)));
-$smarty->assign ('tActiveUntil',  date ("d.m.Y", strtotime ($fActiveUntil)));
-$smarty->assign ('smarty_template', 'users_vacation');
-$smarty->display ('index.tpl');
+include ("../templates/header.php");
+include ("../templates/users_menu.php");
+include ("../templates/users_vacation.php");
+include ("../templates/footer.php");
+
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

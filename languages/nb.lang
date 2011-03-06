@@ -4,7 +4,7 @@
 // Language file Norwegian (bokmål)
 // by Odd Henriksen
 //
-// Last updated: 2010-11-28 / Odd Henriksen
+// Last updated: 2009-01-24 / Odd Henriksen
 //
 
 $PALANG['YES'] = 'JA';
@@ -24,7 +24,7 @@ $PALANG['pLogin_welcome'] = 'E-postadministratorer kan logge inn her for å admi
 $PALANG['pLogin_username'] = 'Brukernavn (e-postadresse)';
 $PALANG['pLogin_password'] = 'Passord';
 $PALANG['pLogin_button'] = 'Logg inn';
-$PALANG['pLogin_failed'] = 'E-postadressen eller passordet er ikke korrekt.';
+$PALANG['pLogin_failed'] = 'Your email address or password are not correct.'; # XXX
 $PALANG['pLogin_login_users'] = 'Vanlige brukere kan klikke her for å gå til brukerseksjonen.';
 
 $PALANG['pMenu_main'] = 'Hoved';
@@ -190,9 +190,6 @@ $PALANG['pViewlog_username'] = 'Administrator';
 $PALANG['pViewlog_domain'] = 'Domene';
 $PALANG['pViewlog_action'] = 'Handling';
 $PALANG['pViewlog_data'] = 'Data';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'opprett e-postkonto';
 $PALANG['pViewlog_action_delete_mailbox'] = 'slett e-postkonto';
 $PALANG['pViewlog_action_edit_mailbox'] = 'rediger e-postkonto';
@@ -342,17 +339,15 @@ $PALANG['pUsersVacation_welcome'] = 'Automatisk svar.';
 $PALANG['pUsersVacation_welcome_text'] = 'Du har allerede et autosvar aktivert!';
 $PALANG['pUsersVacation_subject'] = 'Emne';
 $PALANG['pUsersVacation_subject_text'] = 'Fraværsmelding';
-$PALANG['pUsersVacation_body'] = 'Meldingstekst';
+$PALANG['pUsersVacation_body'] = 'Meldingstekst'; # XXX text changed to 'Message'
 $PALANG['pUsersVacation_body_text'] = <<<EOM
-Jeg er utilgjengelig fra (dato) til (dato).
-Dersom det gjelder noe viktig kan du kontakte (kontaktperson).
+Jeg er utilgjengelig fra <date> til <date>.
+Dersom det gjelder noe viktig kan du kontakte <contact person>.
 EOM;
 $PALANG['pUsersVacation_button_away'] = 'Merk meg som fraværende';
 $PALANG['pUsersVacation_button_back'] = 'Merk meg som tilstede';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Kunne ikke oppdatere dine autosvar-innstillinger!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Ditt automatiske svar er blitt fjernet!';
-$PALANG['pUsersVacation_activefrom'] = 'Aktiv fra';
-$PALANG['pUsersVacation_activeuntil'] = 'Aktiv til';
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'opprett e-postkonto';
 $PALANG['pCreate_dbLog_createalias'] = 'opprett alias';

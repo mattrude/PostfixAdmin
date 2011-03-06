@@ -16,7 +16,13 @@
  * Contains re-usable code.
  */
 
-$version = '2.4 develop';
+if (ereg ("functions.inc.php", $_SERVER['PHP_SELF']))
+{  
+    header ("Location: login.php");
+    exit;
+}
+
+$version = '2.3 rc3';
 
 /**
  * check_session
@@ -27,11 +33,6 @@ $version = '2.4 develop';
 function authentication_get_username()
 {
     global $CONF;
-
-    if (defined('POSTFIXADMIN_CLI')) {
-        return 'CLI';
-    }
-
     if (!isset($_SESSION['sessid'])) {
         header ("Location: " . $CONF['postfix_admin_url'] . "/login.php");
         exit(0);
@@ -86,12 +87,7 @@ function authentication_require_role($role) {
     if(authentication_has_role($role)) {
         return True;
     }
-    if($role === 'user') {
-        header("Location: " . $CONF['postfix_admin_url'] . '/users/login.php');
-    }
-    else {
-        header("Location: " . $CONF['postfix_admin_url'] . "/login.php");
-    }
+    header("Location: " . $CONF['postfix_admin_url'] . "/login.php");
     exit(0);
 }
 /**
@@ -234,7 +230,7 @@ function check_domain ($domain)
     global $CONF;
     global $PALANG;
 
-    if (!preg_match ('/^([-0-9A-Z]+\.)+' . '([0-9A-Z]){2,6}$/i', ($domain)))
+    if (!preg_match ('/([-0-9A-Z]+\.)+' . '([0-9A-Z]){2,6}$/i', trim ($domain)))
     {
         flash_error(sprintf($PALANG['pInvalidDomainRegex'], htmlentities($domain)));
         return false;
@@ -435,7 +431,13 @@ function get_domain_properties ($domain)
     global $table_alias, $table_mailbox, $table_domain;
     $list = array ();
 
-   $result = db_query ("SELECT COUNT(*) FROM $table_alias WHERE domain='$domain'");
+   $result = db_query ("SELECT COUNT(*) FROM $table_alias
+                        LEFT JOIN $table_mailbox ON $table_alias.address=$table_mailbox.username
+                        WHERE ($table_alias.domain='$domain' AND $table_mailbox.maildir IS NULL)
+                              OR
+                              ($table_alias.domain='$domain'
+                               AND $table_alias.goto LIKE '%,%'
+                               AND $table_mailbox.maildir IS NOT NULL)");
 
    $row = db_row ($result['result']);
    $list['alias_count'] = $row[0];
@@ -447,7 +449,7 @@ function get_domain_properties ($domain)
    $result = db_query ("SELECT SUM(quota) FROM $table_mailbox WHERE domain='$domain'");
    $row = db_row ($result['result']);
    $list['quota_sum'] = $row[0];
-   $list['alias_count'] = $list['alias_count'] - $list['mailbox_count'];
+   $list['alias_count'] = $list['alias_count'];
 
     $list['alias_pgindex']=array ();
     $list['mbox_pgindex']=array ();
@@ -455,8 +457,7 @@ function get_domain_properties ($domain)
     //while loop to figure index names. use page_size and loop of queries
     $i=0;
     $current=0;
-    $page_size = (int) $CONF['page_size'];
-    if ($page_size < 1) die ("\$CONF['page_size'] = '$page_size' is invalid (it may only contain digits and must be >= 1)");
+    $page_size = $CONF['page_size'];
     $tmpstr="";
     $idxlabel="";
     $list['alias_pgindex_count'] = 0;
@@ -470,6 +471,10 @@ function get_domain_properties ($domain)
                    FROM $table_alias
                    LEFT JOIN $table_mailbox ON $table_alias.address=$table_mailbox.username
                    WHERE ($table_alias.domain='$domain' AND $table_mailbox.maildir IS NULL)
+                        OR
+                         ($table_alias.domain='$domain'
+                          AND $table_alias.goto LIKE '%,%'
+                          AND $table_mailbox.maildir IS NOT NULL)
                    ORDER BY $table_alias.address LIMIT $limitSql";
          $result = db_query ("$query");
          $row = db_array ($result['result']);
@@ -482,6 +487,10 @@ function get_domain_properties ($domain)
                    FROM $table_alias
                    LEFT JOIN $table_mailbox ON $table_alias.address=$table_mailbox.username
                    WHERE ($table_alias.domain='$domain' AND $table_mailbox.maildir IS NULL)
+                        OR
+                         ($table_alias.domain='$domain'
+                          AND $table_alias.goto LIKE '%,%'
+                          AND $table_mailbox.maildir IS NOT NULL)
                    ORDER BY $table_alias.address LIMIT $limitSql";
          $result = db_query ("$query");
          $row = db_array ($result['result']);
@@ -745,10 +754,6 @@ function check_owner ($username, $domain)
     $result = db_query ("SELECT 1 FROM $table_domain_admins WHERE username='$username' AND (domain='$domain' OR domain='ALL') AND active='1'");
     if ($result['rows'] != 1)
     {
-        if ($result['rows'] > 1) { # "ALL" + specific domain permissions. 2.3 doesn't create such entries, but they are available as leftover from older versions
-            flash_error("Permission check returned more than one result. Please go to 'edit admin' for your username and press the save "
-             . "button once to fix the database. If this doesn't help, open a bugreport.");
-        } 
         return false;
     }
     else
@@ -796,8 +801,8 @@ function list_domains_for_admin ($username)
     $query = "SELECT $table_domain.domain, $table_domain_admins.username FROM $table_domain 
         LEFT JOIN $table_domain_admins ON $table_domain.domain=$table_domain_admins.domain 
         WHERE $table_domain_admins.username='$username' 
-        AND $table_domain.active='$active_sql'
-        AND $table_domain.backupmx='$backupmx_sql'
+        AND $table_domain.active=$active_sql 
+        AND $table_domain.backupmx=$backupmx_sql 
         ORDER BY $table_domain_admins.domain";
 
     $result = db_query ($query);
@@ -1151,9 +1156,9 @@ function pacrypt ($pw, $pw_db="")
     }
 
     elseif ($CONF['encrypt'] == 'system') {
-        if (preg_match("/\\$1\\$/", $pw_db)) {
+        if (ereg ("\$1\$", $pw_db)) {
             $split_salt = preg_split ('/\$/', $pw_db);
-            $salt = "\$1\$${split_salt[2]}\$";
+            $salt = $split_salt[2];
         }
         else {
             if (strlen($pw_db) == 0) {
@@ -1187,9 +1192,9 @@ function pacrypt ($pw, $pw_db="")
     elseif ($CONF['encrypt'] == 'authlib') {
         $flavor = $CONF['authlib_default_flavor'];
         $salt = substr(create_salt(), 0, 2); # courier-authlib supports only two-character salts
-        if(preg_match('/^{.*}/', $pw_db)) {
+        if(ereg('^{.*}', $pw_db)) {
             // we have a flavor in the db -> use it instead of default flavor
-            $result = preg_split('/[{}]/', $pw_db, 3); # split at { and/or }
+            $result = split('{|}', $pw_db, 3);
             $flavor = $result[1];  
             $salt = substr($result[2], 0, 2);
         }
@@ -1200,10 +1205,8 @@ function pacrypt ($pw, $pw_db="")
             $password = '{' . $flavor . '}' . base64_encode(md5($pw, TRUE));
         } elseif(stripos($flavor, 'crypt') === 0) {
             $password = '{' . $flavor . '}' . crypt($pw, $salt);
-		} elseif(stripos($flavor, 'SHA') === 0) {
-			$password = '{' . $flavor . '}' . base64_encode(sha1($pw, TRUE));
         } else {
-            die("authlib_default_flavor '" . $flavor . "' unknown. Valid flavors are 'md5raw', 'md5', 'SHA' and 'crypt'");
+            die("authlib_default_flavor '" . $flavor . "' unknown. Valid flavors are 'md5raw', 'md5' and 'crypt'");
         }
     }
     
@@ -1211,35 +1214,26 @@ function pacrypt ($pw, $pw_db="")
         $split_method = preg_split ('/:/', $CONF['encrypt']);
         $method       = strtoupper($split_method[1]);
         if (! preg_match("/^[A-Z0-9-]+$/", $method)) { die("invalid dovecot encryption method"); }  # TODO: check against a fixed list?
-        if (strtolower($method) == 'md5-crypt') die("\$CONF['encrypt'] = 'dovecot:md5-crypt' will not work because dovecotpw generates a random salt each time. Please use \$CONF['encrypt'] = 'md5crypt' instead."); 
 
         $dovecotpw = "dovecotpw";
         if (!empty($CONF['dovecotpw'])) $dovecotpw = $CONF['dovecotpw'];
 
-        # Use proc_open call to avoid safe_mode problems and to prevent showing plain password in process table
-        $spec = array(
-			0 => array("pipe", "r"), // stdin
-			1 => array("pipe", "w") // stdout
-		);
-
-		$pipe = proc_open("$dovecotpw '-s' $method", $spec, $pipes);
+        // prevent showing plain password in process table
+        $prefix = "postfixadmin-";
+        $tmpfile = tempnam('/tmp', $prefix);
+        $pipe = popen("'$dovecotpw' -s '$method' > '$tmpfile'", 'w'); # TODO: replace tempfile usage with proc_open call
 
         if (!$pipe) {
-            die("can't proc_open $dovecotpw");
+            unlink($tmpfile);
         } else {
             // use dovecot's stdin, it uses getpass() twice
-			// Write pass in pipe stdin
-			fwrite($pipes[0], $pw . "\n", 1+strlen($pw)); usleep(1000);
-			fwrite($pipes[0], $pw . "\n", 1+strlen($pw));
-			fclose($pipes[0]);
-
-			// Read hash from pipe stdout
-			$password = fread($pipes[1], "200");
-			   fclose($pipes[1]);
-			proc_close($pipe);
-
+            fwrite($pipe, $pw . "\n", 1+strlen($pw)); usleep(1000);
+            fwrite($pipe, $pw . "\n", 1+strlen($pw));
+            pclose($pipe);
+            $password = file_get_contents($tmpfile);
             if ( !preg_match('/^\{' . $method . '\}/', $password)) { die("can't encrypt password with dovecotpw"); }
             $password = trim(str_replace('{' . $method . '}', '', $password));
+            unlink($tmpfile);
         }
     }
 
@@ -1358,42 +1352,20 @@ function to64 ($v, $n)
 
 
 
-/**
- * smtp_mail
- * Action: Send email
- * Call: smtp_mail (string to, string from, string subject, string body]) - or -
- * Call: smtp_mail (string to, string from, string data) - DEPRECATED
- * @param String - To:
- * @param String - From:
- * @param String - Subject: (if called with 4 parameters) or full mail body (if called with 3 parameters)
- * @param String (optional, but recommended) - mail body
- * @return bool - true on success, otherwise false
- * TODO: Replace this with something decent like PEAR::Mail or Zend_Mail.
- */
-function smtp_mail ($to, $from, $data, $body = "") {
+//
+// smtp_mail
+// Action: Sends email to new account.
+// Call: smtp_mail (string To, string From, string Data)
+// TODO: Replace this with something decent like PEAR::Mail or Zend_Mail.
+function smtp_mail ($to, $from, $data)
+{
     global $CONF;
     $smtpd_server = $CONF['smtp_server'];
     $smtpd_port = $CONF['smtp_port'];
-    //$smtp_server = $_SERVER["SERVER_NAME"];
-    $smtp_server = php_uname("n");
+    $smtp_server = $_SERVER["SERVER_NAME"];
     $errno = "0";
     $errstr = "0";
     $timeout = "30";
-
-    if ($body != "") {
-        $maildata = 
-            "To: " . $to . "\n"
-            . "From: " . $from . "\n"
-            . "Subject: " . encode_header ($data) . "\n"
-            . "MIME-Version: 1.0\n"
-            . "Content-Type: text/plain; charset=utf-8\n"
-            . "Content-Transfer-Encoding: 8bit\n"
-            . "\n"
-            . $body
-        ;
-    } else {
-        $maildata = $data;
-    }
 
     $fh = @fsockopen ($smtpd_server, $smtpd_port, $errno, $errstr, $timeout);
 
@@ -1412,7 +1384,7 @@ function smtp_mail ($to, $from, $data, $body = "") {
         $res = smtp_get_response($fh);
         fputs ($fh, "DATA\r\n");
         $res = smtp_get_response($fh);
-        fputs ($fh, "$maildata\r\n.\r\n");
+        fputs ($fh, "$data\r\n.\r\n");
         $res = smtp_get_response($fh);
         fputs ($fh, "QUIT\r\n");
         $res = smtp_get_response($fh);
@@ -1485,7 +1457,7 @@ function db_connect ($ignore_errors = 0)
         }
         else
         {
-            $error_text .= "<p />DEBUG INFORMATION:<br />MySQL 3.x / 4.0 functions not available! (php5-mysql installed?)<br />database_type = 'mysql' in config.inc.php, are you using a different database? $DEBUG_TEXT";
+            $error_text .= "<p />DEBUG INFORMATION:<br />MySQL 3.x / 4.0 functions not available!<br />database_type = 'mysql' in config.inc.php, are you using a different database? $DEBUG_TEXT";
         }
     }
     elseif ($CONF['database_type'] == "mysqli")
@@ -1501,23 +1473,20 @@ function db_connect ($ignore_errors = 0)
         }
         else
         {
-            $error_text .= "<p />DEBUG INFORMATION:<br />MySQL 4.1 functions not available! (php5-mysqli installed?)<br />database_type = 'mysqli' in config.inc.php, are you using a different database? $DEBUG_TEXT";
+            $error_text .= "<p />DEBUG INFORMATION:<br />MySQL 4.1 functions not available!<br />database_type = 'mysqli' in config.inc.php, are you using a different database? $DEBUG_TEXT";
         }
     }
     elseif ($CONF['database_type'] == "pgsql")
     {
         if (function_exists ("pg_pconnect"))
         {
-			if(!isset($CONF['database_port'])) {
-				$CONF['database_port'] = '5432';
-			}
-            $connect_string = "host=" . $CONF['database_host'] . " port=" . $CONF['database_port'] . " dbname=" . $CONF['database_name'] . " user=" . $CONF['database_user'] . " password=" . $CONF['database_password'];
+            $connect_string = "host=" . $CONF['database_host'] . " dbname=" . $CONF['database_name'] . " user=" . $CONF['database_user'] . " password=" . $CONF['database_password'];
             $link = @pg_pconnect ($connect_string) or $error_text .= ("<p />DEBUG INFORMATION:<br />Connect: failed to connect to database. $DEBUG_TEXT");
             if ($link) pg_set_client_encoding($link, 'UNICODE');
         }
         else
         {
-            $error_text .= "<p />DEBUG INFORMATION:<br />PostgreSQL functions not available! (php5-pgsql installed?)<br />database_type = 'pgsql' in config.inc.php, are you using a different database? $DEBUG_TEXT";
+            $error_text .= "<p />DEBUG INFORMATION:<br />PostgreSQL functions not available!<br />database_type = 'pgsql' in config.inc.php, are you using a different database? $DEBUG_TEXT";
         }
     }
     else
@@ -1564,9 +1533,9 @@ function db_get_boolean($bool) {
     if($CONF['database_type']=='pgsql') {
         // return either true or false (unquoted strings)
         if($bool) {
-            return 't';
+            return 'true';
         }  
-        return 'f';
+        return 'false';
     }
     elseif($CONF['database_type'] == 'mysql' || $CONF['database_type'] == 'mysqli') {
         if($bool) {
@@ -1606,7 +1575,7 @@ function db_query ($query, $ignore_errors = 0)
     if ($error_text != "" && $ignore_errors == 0) die($error_text);
 
     if ($error_text == "") {
-        if (preg_match("/^SELECT/i", trim($query)))
+        if (eregi ("^SELECT", $query))
         {
             // if $query was a SELECT statement check the number of rows with [database_type]_num_rows ().
             if ($CONF['database_type'] == "mysql") $number_rows = mysql_num_rows ($result);
@@ -1688,7 +1657,6 @@ function db_assoc ($result)
 //
 function db_delete ($table,$where,$delete)
 {
-    $table = table_by_key($table);
     $query = "DELETE FROM $table WHERE " . escape_string($where) . "='" . escape_string($delete) . "'";
     $result = db_query ($query);
     if ($result['rows'] >= 1)
@@ -1705,13 +1673,13 @@ function db_delete ($table,$where,$delete)
 /**
  * db_insert
  * Action: Inserts a row from a specified table
- * Call: db_insert (string table, array values [, array timestamp])
- * @param String - table name
- * @param array  - key/value map of data to insert into the table.
- * @param array (optional) - array of fields to set to now() - default: array('created', 'modified')
+ * Call: db_insert (string table, array values)
+ * @param String $table - table name
+ * @param array - key/value map of data to insert into the table.
+ * @param array (optional) - array of fields to set to now()
  * @return int - number of inserted rows
  */
-function db_insert ($table, $values, $timestamp = array('created', 'modified') )
+function db_insert ($table, $values, $timestamp = array())
 {
     $table = table_by_key ($table);
 
@@ -1733,30 +1701,15 @@ function db_insert ($table, $values, $timestamp = array('created', 'modified') )
 /**
  * db_update
  * Action: Updates a specified table
- * Call: db_update (string table, string where_col, string where_value, array values [, array timestamp])
- * @param String - table name
- * @param String - column of WHERE condition
- * @param String - value of WHERE condition
+ * Call: db_update (string table, array values, string where)
+ * @param String $table - table name
+ * @param String - WHERE condition
  * @param array - key/value map of data to insert into the table.
- * @param array (optional) - array of fields to set to now() - default: array('modified')
+ * @param array (optional) - array of fields to set to now()
  * @return int - number of updated rows
  */
-function db_update ($table, $where_col, $where_value, $values, $timestamp = array('modified') ) {
-    $where = $where_col . " = '" . escape_string($where_value) . "'";
-    return db_update_q ($table, $where, $values, $timestamp );
-}
-
-/**
- * db_update_q
- * Action: Updates a specified table
- * Call: db_update_q (string table, string where, array values [, array timestamp])
- * @param String - table name
- * @param String - WHERE condition (as SQL)
- * @param array - key/value map of data to insert into the table.
- * @param array (optional) - array of fields to set to now() - default: array('modified')
- * @return int - number of updated rows
- */
-function db_update_q ($table, $where, $values, $timestamp = array('modified') ) {
+function db_update ($table, $where, $values, $timestamp = array())
+{
     $table = table_by_key ($table);
 
     foreach(array_keys($values) as $key) {
@@ -1773,53 +1726,19 @@ function db_update_q ($table, $where, $values, $timestamp = array('modified') ) 
     return $result['rows'];
 }
 
-/**
- * db_begin / db_commit / db_rollback
- * Action: BEGIN / COMMIT / ROLLBACK transaction (PostgreSQL only!)
- * Call: db_begin()
- */
-function db_begin () {
-    global $CONF;
-#    if ('pgsql'== Config::read('database_type')) {
-    if ('pgsql'== $CONF['database_type']) {
-        db_query('BEGIN');
-    }
-}
-
-function db_commit () {
-    global $CONF;
-#    if ('pgsql'== Config::read('database_type')) {
-    if ('pgsql'== $CONF['database_type']) {
-        db_query('COMMIT');
-    }
-}
-
-function db_rollback () {
-    global $CONF;
-#    if ('pgsql'== Config::read('database_type')) {
-    if ('pgsql'== $CONF['database_type']) {
-        db_query('ROLLBACK');
-    }
-}
-
-
-
 
 
 /**
  * db_log
  * Action: Logs actions from admin
- * Call: db_log (string domain, string action, string data)
+ * Call: db_log (string username, string domain, string action, string data)
  * Possible actions are:
- * 'create_domain'
  * 'create_alias'
  * 'create_alias_domain'
  * 'create_mailbox'
- * 'delete_domain'
  * 'delete_alias'
  * 'delete_alias_domain'
  * 'delete_mailbox'
- * 'edit_domain'
  * 'edit_alias'
  * 'edit_alias_state'
  * 'edit_alias_domain_state'
@@ -1827,21 +1746,13 @@ function db_rollback () {
  * 'edit_mailbox_state'
  * 'edit_password'
  */
-function db_log ($domain,$action,$data)
+function db_log ($username,$domain,$action,$data)
 {
     global $CONF;
     global $table_log;
-    $REMOTE_ADDR = getRemoteAddr();
+    $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
 
-    $username = authentication_get_username();
-
-    $action_list = array(  
-        'create_alias', 'edit_alias', 'edit_alias_state', 'delete_alias',
-        'create_mailbox', 'edit_mailbox', 'edit_mailbox_state', 'delete_mailbox',
-        'create_domain', 'edit_domain', 'delete_domain',
-        'create_alias_domain', 'edit_alias_domain_state', 'delete_alias_domain',
-        'edit_password',
-    );
+    $action_list = array('create_alias', 'create_alias_domain', 'delete_alias', 'delete_alias_domain', 'edit_alias', 'create_mailbox', 'delete_mailbox', 'edit_mailbox', 'edit_alias_state', 'edit_alias_domain_state', 'edit_mailbox_state', 'edit_password');
 
     if(!in_array($action, $action_list)) {
         die("Invalid log action : $action");   // could do with something better?
@@ -1849,31 +1760,19 @@ function db_log ($domain,$action,$data)
 
     if ($CONF['logging'] == 'YES')
     {
-        $logdata = array(
-            'username'  => "$username ($REMOTE_ADDR)",
-            'domain'    => $domain,
-            'action'    => $action,
-            'data'      => $data,
-        );
-        $result = db_insert('log', $logdata, array('timestamp') );
-        if ($result != 1) {
+        $result = db_query ("INSERT INTO $table_log (timestamp,username,domain,action,data) VALUES (NOW(),'$username ($REMOTE_ADDR)','$domain','$action','$data')");
+        if ($result['rows'] != 1)
+        {
             return false;
-        } else {
+        }
+        else
+        {
             return true;
         }
     }
 }
 
-/**
- * db_in_clause
- * Action: builds and returns the "field in(x, y)" clause for database queries
- * Call: db_in_clause (string field, array values)
- */
-function db_in_clause($field, $values) {
-	return " $field IN ('"
-	. implode("','",escape_string(array_values($values)))
-	. "') ";
-}
+
 
 //
 // table_by_key
@@ -1883,13 +1782,9 @@ function db_in_clause($field, $values) {
 function table_by_key ($table_key)
 {
     global $CONF;
-    if (empty($CONF['database_tables'][$table_key])) {
-        $table = $table_key;
-    } else {
-        $table = $CONF['database_tables'][$table_key];
-    }
-
-    return $CONF['database_prefix'].$table;
+    $table = $CONF['database_prefix'].$CONF['database_tables'][$table_key];
+    if (empty($table)) $table = $table_key;
+    return $table;
 }
 
 
@@ -2202,7 +2097,6 @@ function create_mailbox_subfolders($login,$cleartext_password)
         $f='{'.$s_host.'}'.$s_prefix.$f;
         $res=imap_createmailbox($i,$f);
         if (!$res) {
-            error_log('Could not create IMAP folder $f: '.imap_last_error());
             @imap_close($i);
             return FALSE;
         }
@@ -2246,13 +2140,7 @@ function gen_show_status ($show_alias)
         while ( ($g=array_pop($gotos)) && $stat_ok )
         {
             $stat_catchall = substr($g,strpos($g,"@"));
-            $stat_delimiter = "";
-			if (!empty($CONF['recipient_delimiter'])) {
-				$delimiter = preg_quote($CONF['recipient_delimiter'], "/");
-				$stat_delimiter = preg_replace('/' .$delimiter. '[^' .$delimiter. ']*@/', "@", $g);
-				$stat_delimiter = "OR address = '$stat_delimiter'";
-			}
-			$stat_result = db_query ("SELECT address FROM $table_alias WHERE address = '$g' OR address = '$stat_catchall' $stat_delimiter");
+            $stat_result = db_query ("SELECT address FROM $table_alias WHERE address = '$g' OR address = '$stat_catchall'");
             if ($stat_result['rows'] == 0)
             {
                 $stat_ok = 0;
@@ -2295,15 +2183,8 @@ function gen_show_status ($show_alias)
     // POP/IMAP CHECK
     if ( $CONF['show_popimap'] == 'YES' )
     {
-		 $stat_delimiter = "";
-		 if (!empty($CONF['recipient_delimiter'])) {
-			 $delimiter = preg_quote($CONF['recipient_delimiter'], "/");
-			 $stat_delimiter = preg_replace('/' .$delimiter. '[^' .$delimiter. '@]*@/', "@", $stat_goto);
-			 $stat_delimiter = ',' . $stat_delimiter;
-		 }
-
         //if the address passed in appears in its own goto field, its POP/IMAP
-         if ( preg_match ('/,' . $show_alias . ',/', ',' . $stat_goto . $stat_delimiter . ',') )
+        if ( preg_match ('/,' . $show_alias . ',/', ',' . $stat_goto . ',') )
         {
             $stat_string .= "<span  style='background-color:" . $CONF['show_popimap_color'] .
                 "'>" . $CONF['show_status_text'] . "</span>&nbsp;";
@@ -2428,7 +2309,7 @@ function create_admin($fUsername, $fPassword, $fPassword2, $fDomains, $no_genera
 
     # TODO: should we log creation, editing and deletion of admins?
     # Note: needs special handling in viewlog, because domain is empty
-    # db_log ('', 'create_admin', "$fUsername");
+    # db_log ($SESSID_USERNAME, '', 'create_admin', "$fUsername");
 
     return array(
         $error,
@@ -2438,12 +2319,6 @@ function create_admin($fUsername, $fPassword, $fPassword2, $fDomains, $no_genera
     );
 
 
-}
-function getRemoteAddr() {
-    $REMOTE_ADDR = 'localhost';
-    if (isset($_SERVER['REMOTE_ADDR'])) 
-        $REMOTE_ADDR = $_SERVER['REMOTE_ADDR'];
-    return $REMOTE_ADDR;
 }
 
 
@@ -2468,6 +2343,8 @@ function boolconf($setting) {
     }
 }
 
+
+
 $table_admin = table_by_key ('admin');
 $table_alias = table_by_key ('alias');
 $table_alias_domain = table_by_key ('alias_domain');
@@ -2478,5 +2355,4 @@ $table_mailbox = table_by_key ('mailbox');
 $table_vacation = table_by_key ('vacation');
 $table_vacation_notification = table_by_key('vacation_notification');
 $table_quota = table_by_key ('quota');
-$table_quota2 = table_by_key ('quota2');
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
