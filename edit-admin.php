@@ -15,14 +15,14 @@
  * File: edit-admin.php
  * Edits a normal administrator's details.
  *
- * Template File: admin_edit-admin.tpl
+ * Template File: admin_edit-admin.php
  *
  * Template Variables:
  *
  * tAllDomains
  * tDomains
- * tActive_checked
- * tSadmin_checked
+ * tActive
+ * tSadmin
  *
  * Form POST \ GET Variables:
  *
@@ -131,33 +131,29 @@ if (isset($_GET['username'])) $username = escape_string ($_GET['username']);
 
 $tAllDomains = list_domains();
 $tDomains = list_domains_for_admin ($username);
-$tActive_checked = '';
+$tActive = '';
 $tPassword = $admin_details['password'];
 
 if($admin_details['active'] == 't' || $admin_details['active'] == 1) {
-    $tActive_checked = ' checked="checked"';
+    $tActive = $admin_details['active'];
 }
-$tSadmin_checked = '';
+$tSadmin = '0';
 $result = db_query ("SELECT * FROM $table_domain_admins WHERE username='$username'");
 // could/should be multiple matches to query; 
 if ($result['rows'] >= 1) {
     $result = $result['result'];
     while($row = db_array($result)) {
         if ($row['domain'] == 'ALL') {
-            $tSadmin_checked = ' checked="checked"';
+            $tSadmin = '1';
             $tDomains = array(); /* empty the list, they're an admin */
         }
     }
 }
 
-$smarty->assign ('username', $username);
-$smarty->assign ('pAdminEdit_admin_password_text', $pAdminEdit_admin_password_text, false);
-$smarty->assign ('tActive_checked', $tActive_checked);
-$smarty->assign ('tSadmin_checked', $tSadmin_checked);
-$smarty->assign ('select_options', select_options ($tAllDomains, $tDomains), false);
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'admin_edit-admin');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/admin_edit-admin.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

@@ -59,5 +59,3 @@ class RemoteAliasTest extends RemoteTest {
         $this->assertEqual($this->alias->get(), array());
     }
 }
-
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

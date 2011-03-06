@@ -15,5 +15,3 @@ $test->addTestFile('./RemoteUserTest.php');
 $test->addTestFile('./RemoteAliasTest.php');
 
 exit($test->run(new TextReporter()) ? 0 : 1);
-
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

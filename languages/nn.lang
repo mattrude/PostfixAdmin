@@ -187,9 +187,6 @@ $PALANG['pViewlog_username'] = 'Administrator';
 $PALANG['pViewlog_domain'] = 'Domene';
 $PALANG['pViewlog_action'] = 'Handling';
 $PALANG['pViewlog_data'] = 'Data';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'create mailbox'; # XXX
 $PALANG['pViewlog_action_delete_mailbox'] = 'delete mailbox'; # XXX
 $PALANG['pViewlog_action_edit_mailbox'] = 'edit mailbox'; # XXX
@@ -347,8 +344,6 @@ $PALANG['pUsersVacation_button_away'] = 'Ikke tilstede';
 $PALANG['pUsersVacation_button_back'] = 'Straks tilbake';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Klarte ikke å oppdatere dine autosvar-instillinger!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Ditt autosvar er fjernet';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'oppret e-postkonto';     
 $PALANG['pCreate_dbLog_createalias'] = 'opprett alias';

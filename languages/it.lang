@@ -75,7 +75,7 @@ $PALANG['pOverview_mailbox_quota'] = 'Quota (MB)';
 $PALANG['pOverview_mailbox_modified'] = 'Ultima modifica';
 $PALANG['pOverview_mailbox_active'] = 'Attivo';
 $PALANG['pOverview_vacation_edit'] = 'AUTORISPONDITORE ATTIVO';
-$PALANG['pOverview_vacation_option'] = 'Attiva autorisponditore';
+$PALANG['pOverview_vacation_option'] = 'Attiva autoresponditore';
 
 $PALANG['pOverview_get_domain'] = 'Dominio';
 $PALANG['pOverview_get_aliases'] = 'Alias';
@@ -181,8 +181,8 @@ $PALANG['pPassword_result_success'] = 'La tua password &egrave; stata modificata
 $PALANG['pEdit_vacation_set'] = 'Cambia / inserisci messaggio';
 $PALANG['pEdit_vacation_remove'] = 'Rimuovi messaggio';
 $PALANG['pVacation_result_error'] = '<span class="error_msg">Impossibile registrare le modifiche!</span>';
-$PALANG['pVacation_result_removed'] = 'Autorisponditore disabilitato!';
-$PALANG['pVacation_result_added'] = 'Autorisponditore abilitato!';
+$PALANG['pVacation_result_removed'] = 'Autoresponditore disabilitato!';
+$PALANG['pVacation_result_added'] = 'Autoresponditore abilitato!';
 
 $PALANG['pViewlog_welcome'] = 'Elenca gli ultimi dieci eventi per ';
 $PALANG['pViewlog_timestamp'] = 'Orario';
@@ -190,9 +190,6 @@ $PALANG['pViewlog_username'] = 'Amministratore';
 $PALANG['pViewlog_domain'] = 'Dominio';
 $PALANG['pViewlog_action'] = 'Azione';
 $PALANG['pViewlog_data'] = 'Dati';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'crea casella';
 $PALANG['pViewlog_action_delete_mailbox'] = 'distruggi casella';
 $PALANG['pViewlog_action_edit_mailbox'] = 'modifica casella';
@@ -333,13 +330,13 @@ $PALANG['pUsersMenu_vacation'] = 'Risposta automatica';
 $PALANG['pUsersMenu_edit_alias'] = 'Cambia il tuo inoltro';
 $PALANG['pUsersMenu_password'] = 'Cambia password';
 
-$PALANG['pUsersMain_vacation'] = 'Setta un messaggio di "Fuori ufficio" o un autorisponditore per la tua posta';
+$PALANG['pUsersMain_vacation'] = 'Setta un messaggio di "Fuori ufficio" o un autoresponditore per la tua posta';
 $PALANG['pUsersMain_vacationSet'] = $PALANG['pUsersMenu_vacation'] . ' &egrave; attivo, fai clic su \'' . $PALANG['pUsersMenu_vacation'] . '\' per ' . $PALANG['edit'] . '/rimuovere';
 $PALANG['pUsersMain_edit_alias'] = 'Cambia le impostazioni di inoltro della tua email.';
 $PALANG['pUsersMain_password'] = 'Cambia la tua password corrente.';
 
-$PALANG['pUsersVacation_welcome'] = 'Autorisponditore.';
-$PALANG['pUsersVacation_welcome_text'] = 'Hai gi&agrave; un autorisponditore configurato';
+$PALANG['pUsersVacation_welcome'] = 'Autoresponditore.';
+$PALANG['pUsersVacation_welcome_text'] = 'Hai gi$agrave; un autoresponditore configurato';
 $PALANG['pUsersVacation_subject'] = 'Soggetto';
 $PALANG['pUsersVacation_subject_text'] = 'Assente dall\'ufficio';
 $PALANG['pUsersVacation_body'] = 'Corpo'; # XXX text changed to 'Message'
@@ -351,8 +348,6 @@ $PALANG['pUsersVacation_button_away'] = 'Imposta autorisponditore';
 $PALANG['pUsersVacation_button_back'] = 'Rimuovi autorisponditore';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Impossibile registrare i valori per l\'autorisponditore!</span>';
 $PALANG['pUsersVacation_result_success'] = 'La tua risposta automatica &egrave; stata tolta!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'crea casella';     
 $PALANG['pCreate_dbLog_createalias'] = 'crea alias';

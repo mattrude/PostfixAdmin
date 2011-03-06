@@ -48,6 +48,7 @@ else {
 
 
 $pCreate_mailbox_password_text = $PALANG['pCreate_mailbox_password_text'];
+$pCreate_mailbox_name_text = $PALANG['pCreate_mailbox_name_text'];
 $pCreate_mailbox_quota_text = $PALANG['pCreate_mailbox_quota_text'];
 
 if ($_SERVER['REQUEST_METHOD'] == "GET")
@@ -158,11 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    {
       $password = pacrypt ($fPassword);
 
-      if($CONF['maildir_name_hook'] != 'NO' && function_exists($CONF['maildir_name_hook'])) {
-         $hook_func = $CONF['maildir_name_hook'];
-         $maildir = $hook_func ($fDomain, $fUsername);
-      }
-      else if ($CONF['domain_path'] == "YES")
+      if ($CONF['domain_path'] == "YES")
       {
          if ($CONF['domain_in_mailbox'] == "YES")
          {
@@ -207,13 +204,69 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
          $tMessage = $PALANG['pAlias_result_error'] . "<br />($fUsername -> $fUsername)</br />";
       }
 
+/*
+# TODO: The following code segment is from admin/create-mailbox.php. To be compared/merged with the code from /create-mailbox.php.
+        Lines starting with /* were inserted to keep this section in commented mode.
+
+
+      if ($result['rows'] != 1)
+      {
+         $tDomain = $fDomain;
+         $tMessage .= $PALANG['pCreate_mailbox_result_error'] . "<br />($fUsername)<br />";
+      }
+      else
+      {
+
+         $error=TRUE; // Being pessimistic
+         if (mailbox_postcreation($fUsername,$fDomain,$maildir))
+         {
+            if ('pgsql'==$CONF['database_type'])
+            {
+               $result=db_query("COMMIT");
+
+/* should really not be possible: */
+/* 
+               if (!$result) die('COMMIT-query failed.');
+            }
+            $error=FALSE;
+         } else {
+            $tMessage .= $PALANG['pCreate_mailbox_result_error'] . "<br />($fUsername)<br />";
+            if ('pgsql'==$CONF['database_type'])
+            {
+               $result=db_query("ROLLBACK");
+
+/* should really not be possible: */
+/*
+               if (!$result) die('ROLLBACK-query failed.');
+            } else {
+               /*
+                  When we cannot count on transactions, we need to move forward, despite
+                  the problems.
+ */
+/*
+               $error=FALSE;
+            }
+         }
+
+
+         if (!$error)
+         {
+            db_log ($CONF['admin_email'], $fDomain, 'create_mailbox', $fUsername);
+
+ */
+
+/*
+TODO: this is the start of /create-mailbox code segment that was originally used in /create-mailbox.php instead 
+      of the above from admin/create-mailbox.php.
+      To be compared / merged.
+ */
+
       // apparently uppercase usernames really confuse some IMAP clients.
       $fUsername = strtolower($fUsername);
       $local_part = '';
       if(preg_match('/^(.*)@/', $fUsername, $matches)) {
-         $local_part = $matches[1];
+          $local_part = $matches[1];
       }
-
       $result = db_query ("INSERT INTO $table_mailbox (username,password,name,maildir,local_part,quota,domain,created,modified,active) VALUES ('$fUsername','$password','$fName','$maildir','$local_part','$quota','$fDomain',NOW(),NOW(),'$sqlActive')");
       if ($result['rows'] != 1 || !mailbox_postcreation($fUsername,$fDomain,$maildir, $quota))
       {
@@ -224,53 +277,56 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       else
       {
          db_query('COMMIT');
-         db_log ($fDomain, 'create_mailbox', "$fUsername");
-         $tDomain = $fDomain;
+         db_log ($SESSID_USERNAME, $fDomain, 'create_mailbox', "$fUsername");
+/*
+TODO: this is the end of /create-mailbox.php code segment
+ */
+      $tDomain = $fDomain;
 
-         $tQuota = $CONF['maxquota'];
+      $tQuota = $CONF['maxquota'];
 
-         if ($fMail == "on")
+      if ($fMail == "on")
+      {
+         $fTo = $fUsername;
+         $fFrom = $SESSID_USERNAME;
+         $fHeaders = "To: " . $fTo . "\n";
+         $fHeaders .= "From: " . $fFrom . "\n";
+
+         $fHeaders .= "Subject: " . encode_header ($PALANG['pSendmail_subject_text']) . "\n";
+         $fHeaders .= "MIME-Version: 1.0\n";
+         $fHeaders .= "Content-Type: text/plain; charset=utf-8\n";
+         $fHeaders .= "Content-Transfer-Encoding: 8bit\n";
+         
+         $fHeaders .= $CONF['welcome_text'];
+
+         if (!smtp_mail ($fTo, $fFrom, $fHeaders))
          {
-            $fTo = $fUsername;
-            $fFrom = $SESSID_USERNAME;
-            $fSubject = $CONF['pSendmail_subject_text'];
-            $fBody = $CONF['welcome_text'];
-
-            if (!smtp_mail ($fTo, $fFrom, $fSubject, $fBody))
-            {
-               $tMessage .= "<br />" . $PALANG['pSendmail_result_error'] . "<br />";
-            }
-            else
-            {
-               $tMessage .= "<br />" . $PALANG['pSendmail_result_success'] . "<br />";
-            }
+            $tMessage .= "<br />" . $PALANG['pSendmail_result_error'] . "<br />";
          }
-
-         $tShowpass = "";
-         if ( $tPassGenerated == 1 || $CONF['show_password'] == "YES") $tShowpass = " / $fPassword";
-
-         if (create_mailbox_subfolders($fUsername,$fPassword))
+         else
          {
-            $tMessage .= $PALANG['pCreate_mailbox_result_success'] . "<br />($fUsername$tShowpass)";
-         } else {
-            $tMessage .= $PALANG['pCreate_mailbox_result_succes_nosubfolders'] . "<br />($fUsername$tShowpass)";
+            $tMessage .= "<br />" . $PALANG['pSendmail_result_success'] . "<br />";
          }
+      }
+
+      $tShowpass = "";
+      if ( $tPassGenerated == 1 || $CONF['show_password'] == "YES") $tShowpass = " / $fPassword";
+
+      if (create_mailbox_subfolders($fUsername,$fPassword))
+      {
+         $tMessage .= $PALANG['pCreate_mailbox_result_success'] . "<br />($fUsername$tShowpass)";
+      } else {
+         $tMessage .= $PALANG['pCreate_mailbox_result_succes_nosubfolders'] . "<br />($fUsername$tShowpass)";
+      }
 
       }
    }
 }
 
-$smarty->assign ('tUsername', $tUsername);
-$smarty->assign ('select_options', select_options ($list_domains, array ($tDomain)), false);
-$smarty->assign ('pCreate_mailbox_username_text', $pCreate_mailbox_username_text, false);
-$smarty->assign ('pCreate_mailbox_password_text', $pCreate_mailbox_password_text, false);
-$smarty->assign ('tName', $tName, false);
-$smarty->assign ('tQuota', $tQuota);
-$smarty->assign ('pCreate_mailbox_quota_text', $pCreate_mailbox_quota_text, false);
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'create-mailbox');
-$smarty->display ('index.tpl');
-
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/create-mailbox.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>
