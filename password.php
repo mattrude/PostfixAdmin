@@ -14,7 +14,7 @@
  * 
  * File: password.php
  * Allows admins to change their own password.
- * Template File: password.tpl
+ * Template File: password.php
  *
  * Template Variables:
  *
@@ -33,12 +33,12 @@ authentication_require_role('admin');
 
 $SESSID_USERNAME = authentication_get_username();
 
-$smarty->assign ('SESSID_USERNAME', $SESSID_USERNAME);
-$smarty->assign ('smarty_template', 'password');
-
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-	$smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/menu.php");
+    include ("./templates/password.php");
+    include ("./templates/footer.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
@@ -88,10 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         }
     }
 
-	$smarty->assign ('pPassword_password_current_text', $pPassword_password_current_text);
-	$smarty->assign ('pPassword_password_text', $pPassword_password_text);
-	$smarty->assign ('tMessage', $tMessage,false);
-	$smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/menu.php");
+    include ("./templates/password.php");
+    include ("./templates/footer.php");
 }
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

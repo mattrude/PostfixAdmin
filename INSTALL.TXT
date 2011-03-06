@@ -15,23 +15,15 @@ REQUIRED!!
 
 READ THIS FIRST!
 ----------------
-When this is an upgrade from a previous version of Postfix Admin, please read 
-DOCUMENTS/UPGRADE.TXT also!
+When this is an upgrade from Postfix Admin 1.5.4 please read DOCUMENTS/UPGRADE.TXT!!
 
 If you need to setup Postfix to be able to handle Virtual Domains and Virtual
-Users check out:
+Users check out :
 
-  - the PostfixAdmin documentation in the DOCUMENTS/ directory
-  - our wiki at http://sourceforge.net/apps/mediawiki/postfixadmin/
-
-There are also lots of HOWTOs around the web. Be warned that many of them 
-(even those listed below) may be outdated or incomplete. 
-Please stick to the PostfixAdmin documentation, and use those HOWTOs only if
-you need some additional information that is missing in the PostfixAdmin 
-DOCUMENTS/ folder.
+  - http://high5.net/howto/ 
   - http://codepoets.co.uk/postfixadmin-postgresql-courier-squirrelmail-debian-etch-howto-tutorial (Debian+Courier+PostgreSQL+Postfix+Postfixadmin)
   - http://bliki.rimuhosting.com/space/knowledgebase/linux/mail/postfixadmin+on+debian+sarge (Postfix+MySQL+Postfixadmin+Dovecot)
-  - http://en.gentoo-wiki.com/wiki/Virtual_mail_server_using_Postfix,_Courier_and_PostfixAdmin (Postfix+MySQL+Postfixadmin+Courier)
+  - http://gentoo-wiki.com/HOWTO_Setup_a_Virtual_Postfix/Courier_Mail_System_with_PostfixAdmin (Postfix+MySQL+Postfixadmin+Courier)
 
 
 1. Unarchive new Postfix Admin
@@ -69,7 +61,7 @@ For PostgreSQL:
 3. Configure PostfixAdmin so it can find the database
 -----------------------------------------------------
 
-Edit the config.inc.php file - or - create config.local.php and add your settings there.
+Edit the config.inc.php file.
 
 The most important settings are those for your database server.
 
@@ -82,12 +74,9 @@ to
 $CONF['configured'] = true;
 
 
-PostfixAdmin does not require write access to any files except the tempates_c 
-directory (smarty cache). You can therefore leave the files owned as root (or
-another user); as long as the web server user (e.g. www-data) can read them, it
-will be fine.
-For templates_c/, allow write access (only) for the web server user (e. g. www-data).
-The easiest way to do this is   chown -R www-data templates_c
+PostfixAdmin does not require write access to any files. You can therefore 
+leave the files owned as root (or a.n.other user); as long as the web server 
+user (e.g. www-data) can read them, it will be fine.
 
 The next 'step', is optional. Only do it, if other non-trusted users have access 
 to your user:
@@ -128,17 +117,7 @@ create the admin user using the form displayed.
 This is all that is needed. Fire up your browser and go to the site that you
 specified to host Postfix Admin.
 
-6. Integration with Postfix, Dovecot etc.
------------------------------------------
-
-Now that PostfixAdmin is working, you need to do some configuration in Postfix,
-Dovecot etc. so that they use the domains, mailboxes and aliases you setup in
-PostfixAdmin.
-
-The files in the DOCUMENTS/ directory explain which settings you need to
-do/change.
-
-7. More information
+6. More information
 -------------------
 As of March 2007, PostfixAdmin moved to SourceForge.  For the
 forum posts and source updates, see:
