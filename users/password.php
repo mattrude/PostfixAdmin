@@ -43,9 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     $fPassword = $_POST['fPassword'];
     $fPassword2 = $_POST['fPassword2'];
 
-    $error = 0;
     if(strlen($fPassword) < $CONF['min_password_length']) {
-        $error += 1;
+        $error = 1;
         flash_error(sprintf($PALANG['pPasswordTooShort'], $CONF['min_password_length']));
     }
     if(!UserHandler::login($username, $fPassword_current)) {
@@ -54,14 +53,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     }
     if (empty ($fPassword) or ($fPassword != $fPassword2))
     {
-        $error += 1;
+        $error = 1;
         $pPassword_password_text = $PALANG['pPassword_password_text_error'];
     }
 
-    if ($error == 0)
+    if ($error != 1)
     {
-        $uh = new UserHandler($username);
-        if($uh->change_pw($fPassword, $fPassword_current) ) {
+        $uh = new UserHandleR($username);
+        if($uh->change_pass($fPassword_current, $fPassword)) {
             flash_info($PALANG['pPassword_result_success']);
             header("Location: main.php");
             exit(0);
@@ -73,14 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     }
 }
 
-$smarty->assign ('USERID_USERNAME', $username);
-//$smarty->assign ('pPassword_admin_text', $pPassword_admin_text);
-$smarty->assign ('pPassword_password_current_text', $pPassword_password_current_text, false);
-$smarty->assign ('pPassword_password_text', $pPassword_password_text, false);
-$smarty->assign ('tMessage', $tMessage, false);
-
-$smarty->assign ('smarty_template', 'users_password');
-$smarty->display ('index.tpl');
+include ("../templates/header.php");
+include ("../templates/users_menu.php");
+include ("../templates/users_password.php");
+include ("../templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

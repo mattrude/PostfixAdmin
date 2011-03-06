@@ -23,7 +23,7 @@
 
 $CONF['configured'] = FALSE;
 @include_once('config.inc.php'); # hide error message because only $CONF['configured'] is checked here
-if ( $CONF['configured'] === TRUE )
+if (!file_exists (realpath ("./setup.php")) || $CONF['configured'] == 'I_know_the_risk_of_not_deleting_setup.php')
 {
     header ("Location: login.php");
     exit;

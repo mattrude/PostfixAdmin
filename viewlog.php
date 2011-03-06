@@ -15,7 +15,7 @@
  * File: viewlog.php
  * Shows entries from the log table to users.
  *
- * Template File: viewlog.tpl
+ * Template File: viewlog.php
  *
  * Template Variables:
  *
@@ -53,9 +53,6 @@ if (! (check_owner ($SESSID_USERNAME, $fDomain) || authentication_has_role('glob
    $tMessage = $PALANG['pViewlog_result_error'];
 }
 
-// we need to initialize $tLog as an array!
-$tLog = array();
-
 if ($error != 1)
 {
    $query = "SELECT timestamp,username,domain,action,data FROM $table_log WHERE domain='$fDomain' ORDER BY timestamp DESC LIMIT 10";
@@ -77,14 +74,10 @@ if ($error != 1)
    }
 }
 
-for ($i = 0; $i < count ($tLog); $i++)
-	$tLog[$i]['action'] = $PALANG ['pViewlog_action_'.$tLog [$i]['action']];
-
-$smarty->assign ('select_options', select_options ($list_domains, array ($fDomain)), false);
-$smarty->assign ('tLog', $tLog,false);
-$smarty->assign ('fDomain', $fDomain);
-$smarty->assign ('smarty_template', 'viewlog');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/viewlog.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

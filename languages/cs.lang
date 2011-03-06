@@ -196,9 +196,6 @@ $PALANG['pViewlog_username'] = 'Administrátor';
 $PALANG['pViewlog_domain'] = 'Doména';
 $PALANG['pViewlog_action'] = 'Akce';
 $PALANG['pViewlog_data'] = 'Poznámka';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 
 $PALANG['pViewlog_action_create_mailbox'] = 'vytrořena schránka';
 $PALANG['pViewlog_action_delete_mailbox'] = 'smazána schránka';
@@ -359,8 +356,6 @@ $PALANG['pUsersVacation_button_away'] = 'Odjet pryč';
 $PALANG['pUsersVacation_button_back'] = 'Vrátit se';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Nepodařilo se upravit nastavení!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Nastavení bylo upraveno!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'vytvořil schránku';
 $PALANG['pCreate_dbLog_createalias'] = 'vytvořil alias';

@@ -11,7 +11,7 @@
  *     http://www.postfixadmin.com or http://postfixadmin.sf.net
  *
  * File: create-alias-domain.php
- * Template File: create-alias-domain.tpl
+ * Template File: create-alias-domain.php
  * Responsible for allowing for the creation of alias domains.
  *
  * @version $Id$
@@ -86,14 +86,11 @@ if (isset ($_REQUEST['target_domain'])) {
    $fTargetDomain = escape_string ($_REQUEST['target_domain']);
    $fTargetDomain = strtolower ($fTargetDomain);
 }
-//*** ?????
 if (isset ($_REQUEST['active'])) {
    $fActive = (bool)$_REQUEST['active'];
 } else {
-   $fActive = false;
-}
-if (!isset ($_REQUEST['submit']))
    $fActive = true;
+}
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
@@ -124,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
             $tMessage = $PALANG['pCreate_alias_domain_error3'];
         }
         else {
-            db_log ($fAliasDomain, 'create_alias_domain', "$fAliasDomain -> $fTargetDomain");
+            db_log ($SESSID_USERNAME, $fAliasDomain, 'create_alias_domain', "$fAliasDomain -> $fTargetDomain");
 
             flash_info($PALANG['pCreate_alias_domain_success']);
             # we would have to update the list of domains available for aliasing. Doing a redirect is easier.
@@ -135,13 +132,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
     $tMessage .= "<br />($fAliasDomain -> $fTargetDomain)<br />\n";
 }
-$smarty->assign ('alias_domains', (count($alias_domains) > 0));
-$smarty->assign ('select_options_alias', select_options ($alias_domains, array ($fAliasDomain)), false);
-$smarty->assign ('select_options_target', select_options ($target_domains, array ($fTargetDomain)), false);
-if ($fActive)	$smarty->assign ('fActive', ' checked="checked"');
-if ($error == 1)	$tMessage = '<span class="error_msg">'.$tMessage.'</span>';
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'create-alias-domain');
-$smarty->display ('index.tpl');
+
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/create-alias-domain.php");
+include ("templates/footer.php");
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>
