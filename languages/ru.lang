@@ -118,7 +118,7 @@ $PALANG['pCreate_alias_goto_text'] = 'Куда должна доставлять
 $PALANG['pCreate_alias_goto_text_error'] = 'Куда должна идти почта.<br /><span class="error_msg">Неверное поле Кому!</span>';
 $PALANG['pCreate_alias_result_error'] = '<span class="error_msg">Невозможно добавить алиас в список!</span>';
 $PALANG['pCreate_alias_result_success'] = 'Алиас был успешно создан!';
-$PALANG['pCreate_alias_catchall_text'] = 'Для создания catch-all почтового ящика используйте "*" в качестве имени алиаса.'; # XXX don't propagate usage of *@target-domain.com for domain-aliasing any longer
+$PALANG['pCreate_alias_catchall_text'] = 'Для создания catch-all почтового ящика используйте "*" в качестве имени алиаса.<br />для внутридоменного перенаправления используйте "*@domain.tld" для поле Кому';
 
 $PALANG['pEdit_alias_welcome'] = 'Редактирование алиаса в вашем домене.<br />Одна запись на строку.';
 $PALANG['pEdit_alias_address'] = 'Алиас';
@@ -195,9 +195,6 @@ $PALANG['pViewlog_username'] = 'Админ';
 $PALANG['pViewlog_domain'] = 'Домен';
 $PALANG['pViewlog_action'] = 'Действие';
 $PALANG['pViewlog_data'] = 'Данные';
-$PALANG['pViewlog_action_create_domain'] = 'создание домена';
-$PALANG['pViewlog_action_delete_domain'] = 'удаление домена';
-$PALANG['pViewlog_action_edit_domain'] = 'редактирование домена';
 
 $PALANG['pViewlog_action_create_mailbox'] = 'создание ящика';
 $PALANG['pViewlog_action_delete_mailbox'] = 'удаление ящика';
@@ -358,8 +355,6 @@ $PALANG['pUsersVacation_button_away'] = 'Ухожу';
 $PALANG['pUsersVacation_button_back'] = 'Возвращаюсь';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Невозможно изменить настройки автоответчика!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Ваш автоответчик был убран!';
-$PALANG['pUsersVacation_activefrom'] = 'Активен с';
-$PALANG['pUsersVacation_activeuntil'] = 'Активен по';
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'создание ящика';     
 $PALANG['pCreate_dbLog_createalias'] = 'создание алиаса';

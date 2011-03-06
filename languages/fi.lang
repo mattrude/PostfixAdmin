@@ -189,9 +189,6 @@ $PALANG['pViewlog_username'] = 'Admin';
 $PALANG['pViewlog_domain'] = 'Domain';
 $PALANG['pViewlog_action'] = 'Tapahtuma';
 $PALANG['pViewlog_data'] = 'Tiedot';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'luo sähköpostilaatikko';
 $PALANG['pViewlog_action_delete_mailbox'] = 'poista sähköpostilaatikko';
 $PALANG['pViewlog_action_edit_mailbox'] = 'muokkaa sähköpostilaatikkoa';
@@ -350,8 +347,6 @@ $PALANG['pUsersVacation_button_away'] = 'Lomalle';
 $PALANG['pUsersVacation_button_back'] = 'Takaisin lomalta';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Automaattivastauksen asettaminen epäonnistui!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Automaattivastaus on poistettu käytöstä!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'luo sähköpostilaatikko';
 $PALANG['pCreate_dbLog_createalias'] = 'luo alias';

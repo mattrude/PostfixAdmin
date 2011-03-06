@@ -17,13 +17,10 @@
  * environment and ensures other functions are loaded.
  */
 
-if(!defined('POSTFIXADMIN')) { # already defined if called from setup.php
+if(!defined('POSTFIXADMIN')) {
     session_start();
-    define('POSTFIXADMIN', 1); # checked in included files
-    if(empty($_SESSION['flash'])) {
-        $_SESSION['flash'] = array();
-    }
 }
+define('POSTFIXADMIN', 1); # checked in included files
 
 $incpath = dirname(__FILE__);
 (ini_get('magic_quotes_gpc') ? ini_set('magic_quotes_runtime', '0') : '1');
@@ -48,8 +45,7 @@ if(isset($CONF['configured'])) {
 
 require_once("$incpath/languages/language.php");
 require_once("$incpath/functions.inc.php");
-$_SESSION['lang'] = $language = check_language (); # TODO: storing the language only at login instead of calling check_language() on every page would save some processor cycles ;-)
-require_once("$incpath/languages/" . $_SESSION['lang'] . ".lang");
+require_once("$incpath/languages/" . check_language () . ".lang");
 
 /**
  * @param string $class
@@ -66,11 +62,4 @@ function postfixadmin_autoload($class) {
 }
 spl_autoload_register('postfixadmin_autoload');
 
-//*****
-if(!is_file("$incpath/smarty.inc.php")) {
-    die("smarty.inc.php is missing! Something is wrong...");
-}
-require_once ("$incpath/smarty.inc.php");
-//*****
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
-?>

@@ -190,9 +190,6 @@ $PALANG['pViewlog_username'] = 'Amministratore';
 $PALANG['pViewlog_domain'] = 'Dominio';
 $PALANG['pViewlog_action'] = 'Azione';
 $PALANG['pViewlog_data'] = 'Dati';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'crea casella';
 $PALANG['pViewlog_action_delete_mailbox'] = 'distruggi casella';
 $PALANG['pViewlog_action_edit_mailbox'] = 'modifica casella';
@@ -351,8 +348,6 @@ $PALANG['pUsersVacation_button_away'] = 'Imposta autorisponditore';
 $PALANG['pUsersVacation_button_back'] = 'Rimuovi autorisponditore';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Impossibile registrare i valori per l\'autorisponditore!</span>';
 $PALANG['pUsersVacation_result_success'] = 'La tua risposta automatica &egrave; stata tolta!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'crea casella';     
 $PALANG['pCreate_dbLog_createalias'] = 'crea alias';

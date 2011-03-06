@@ -191,9 +191,6 @@ $PALANG['pViewlog_username'] = 'Admin';
 $PALANG['pViewlog_domain'] = 'Domän';
 $PALANG['pViewlog_action'] = 'Åtgärd';
 $PALANG['pViewlog_data'] = 'Data';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'skapa brevlåda';
 $PALANG['pViewlog_action_delete_mailbox'] = 'radera brevlåda';
 $PALANG['pViewlog_action_edit_mailbox'] = 'ändra brevlåda';
@@ -352,8 +349,6 @@ $PALANG['pUsersVacation_button_away'] = 'Försvinner';
 $PALANG['pUsersVacation_button_back'] = 'Kommer tillbaka';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Kan inte uppdatera dina autosvar inställningar!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Ditt autosvar har taqits bort!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'skapa brevlåda';     
 $PALANG['pCreate_dbLog_createalias'] = 'skapa alias';

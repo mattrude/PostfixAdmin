@@ -193,9 +193,6 @@ $PALANG['pViewlog_username'] = 'Admin';
 $PALANG['pViewlog_domain'] = 'Domain';
 $PALANG['pViewlog_action'] = 'Akció';
 $PALANG['pViewlog_data'] = 'Adat';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 
 $PALANG['pViewlog_action_create_mailbox'] = 'postafiók létrehozása';
 $PALANG['pViewlog_action_delete_mailbox'] = 'postafiók törlése';
@@ -358,8 +355,6 @@ $PALANG['pUsersVacation_button_away'] = 'Automatikus válaszadás bekapcsolása'
 $PALANG['pUsersVacation_button_back'] = 'Automatikus válaszadás kikapcsolása';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Nem sikerült megváltoztatni az automatikus válasz konfigurációdat!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Az automatikus válaszadás sikeresen kikapcsolva!';
-$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
-$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'postafiók létrehozása';
 $PALANG['pCreate_dbLog_createalias'] = 'alias létrehozása';
