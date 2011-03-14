@@ -143,19 +143,6 @@ else
 }
 
 //
-// Check if templates directory is writable
-//
-
-if (!is_writeable($incpath.'/templates_c'))
-{
-    print "<li><b>Error: Smarty template compile directory templates_c is not writable.</b><br />\n";
-	print "<b>Please make it writable.</b><br />\n";
-    $error =+ 1;
-} else {
-	print "<li>Smarty template compile directory is writable - OK<br />\n";
-}
-
-//
 // Check if there is support for at least 1 database
 //
 if (($f_mysql_connect == 0) and ($f_mysqli_connect == 0) and ($f_pg_connect == 0))

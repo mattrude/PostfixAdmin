@@ -30,11 +30,7 @@ authentication_require_role('global-admin');
 // TODO: make backup supported for postgres
 if ('pgsql'==$CONF['database_type'])
 {
-	$smarty->assign ('tMessage', '<p>Sorry: Backup is currently not supported for your DBMS ('.$CONF['database_type'].').</p>');
-	$smarty->assign ('smarty_template', 'message');
-	$smarty->display ('index.tpl');
-//    print '<p>Sorry: Backup is currently not supported for your DBMS.</p>';
-die;
+    print '<p>Sorry: Backup is currently not supported for your DBMS.</p>';
 }
 /*
 	SELECT attnum,attname,typname,atttypmod-4,attnotnull,atthasdef,adsrc
@@ -67,10 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
    if (!$fh = fopen ($backup, 'w'))
    {
       $tMessage = "<div class=\"error_msg\">Cannot open file ($backup)</div>";
-		$smarty->assign ('tMessage', $tMessage);
-		$smarty->assign ('smarty_template', 'message');
-		$smarty->display ('index.tpl');
-//      include ("templates/message.php");
+      include ("templates/header.php");
+      include ("templates/menu.php");
+      include ("templates/message.php");
+      include ("templates/footer.php");
    } 
    else
    {
@@ -86,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
          'fetchmail',
          'log',
          'mailbox',
-		 'quota',
-		 'quota2',
+         'quota',
+         'quota2',
          'vacation',
          'vacation_notification'
       );

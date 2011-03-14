@@ -32,9 +32,6 @@ require_once('../common.php');
 authentication_require_role('user');
 $username = authentication_get_username();
 
-$pPassword_password_text = "";
-$pPassword_password_current_text = "";
-
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
     if(isset($_POST['fCancel'])) {
@@ -64,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     if ($error == 0)
     {
         $uh = new UserHandler($username);
-        if($uh->change_pw($fPassword, $fPassword_current) ) {
+        if($uh->change_pass($fPassword_current, $fPassword)) {
             flash_info($PALANG['pPassword_result_success']);
             header("Location: main.php");
             exit(0);
@@ -76,13 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     }
 }
 
-$smarty->assign ('USERID_USERNAME', $username);
-$smarty->assign ('pPassword_password_current_text', $pPassword_password_current_text, false);
-$smarty->assign ('pPassword_password_text', $pPassword_password_text, false);
-$smarty->assign ('tMessage', $tMessage, false);
-
-$smarty->assign ('smarty_template', 'users_password');
-$smarty->display ('index.tpl');
+include ("../templates/header.php");
+include ("../templates/users_menu.php");
+include ("../templates/users_password.php");
+include ("../templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

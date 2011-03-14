@@ -1,4 +1,5 @@
-<?php /**
+<?php
+/** 
  * Postfix Admin 
  * 
  * LICENSE 
@@ -13,7 +14,7 @@
  * 
  * File: list-domain.php
  * List all domains as a quick overview.
- * Template File: adminlistdomain.tpl
+ * Template File: admin_list-domain.php
  *
  * Template Variables:
  *
@@ -29,7 +30,6 @@ require_once('common.php');
 authentication_require_role('admin');
 
 if (authentication_has_role('global-admin')) {
-//if (authentication_has_role('admin')) {
    $list_admins = list_admins ();
    $is_superadmin = 1;
    $fUsername = escape_string(safepost('fUsername', safeget('username'))); # prefer POST over GET variable
@@ -56,15 +56,14 @@ $table_mailbox = table_by_key('mailbox');
 $table_alias   = table_by_key('alias');
 
 if ($list_all_domains == 1) {
-	$where = " WHERE $table_domain.domain != 'ALL' "; # TODO: the ALL dummy domain is annoying...
+   $where = " WHERE $table_domain.domain != 'ALL' "; # TODO: the ALL dummy domain is annoying...
 } else {
-	$list_domains = escape_string($list_domains);
-	$where = " WHERE $table_domain.domain IN ('" . join("','", $list_domains) . "') ";
+   $list_domains = escape_string($list_domains);
+   $where = " WHERE $table_domain.domain IN ('" . join("','", $list_domains) . "') ";
 }
 
 # fetch domain data and number of mailboxes
 # (PgSQL requires the extensive GROUP BY statement, https://sourceforge.net/forum/message.php?msg_id=7386240)
-# TODO: SELECT domain.* -> domain.field1, domain.field2 -> see bugreport
 $query = "
    SELECT $table_domain.* , COUNT( DISTINCT $table_mailbox.username ) AS mailbox_count
    FROM $table_domain
@@ -100,19 +99,15 @@ while ($row = db_array ($result['result'])) {
    $domain_properties [$row['domain']] ['alias_count'] = $row['alias_count'] - $domain_properties [$row['domain']] ['mailbox_count'];
 }
 
-$smarty->assign ('domain_properties', $domain_properties);
-if ($is_superadmin)
-{
-	$smarty->assign('select_options', select_options($list_admins, array ($fUsername)), false);
-	$smarty->assign('smarty_template', 'adminlistdomain');
-}
-else
-{
-	$smarty->assign ('select_options', select_options ($list_domains, array ($_GET['domain'])));
-	$smarty->assign ('smarty_template', 'overview-get');
-}
+include ("templates/header.php");
+include ("templates/menu.php");
 
-$smarty->display ('index.tpl');
+if ($is_superadmin) {
+   include ("templates/admin_list-domain.php");
+} else {
+   include ("templates/overview-get.php");
+}
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

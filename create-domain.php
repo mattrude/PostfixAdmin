@@ -14,7 +14,7 @@
  * 
  * File: create-domain.php
  * Allows administrators to create new domains.
- * Template File: admin_create-domain.tpl
+ * Template File: admin_create-domain.php
  *
  * Template Variables:
  *
@@ -48,7 +48,7 @@ $form_fields = array(
     'fMailboxes'      => array('type' => 'int', 'default' => $CONF['mailboxes']), 
     'fMaxquota'       => array('type' => 'int', 'default' => $CONF['maxquota']), 
     'fTransport'      => array('type' => 'str', 'default' => $CONF['transport_default'], 'options' => $CONF['transport_options']), 
-    'fDefaultaliases' => array('type' => 'str', 'default' => 'on', 'options' => array('on', 'off')), 
+    'fDefaultaliases' => array('type' => 'str', 'default' => 'off', 'options' => array('on', 'off')), 
     'fBackupmx'       => array('type' => 'str', 'default' => 'off', 'options' => array('on', 'off')) 
 );
 
@@ -142,18 +142,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     }
 }
 
-$smarty->assign ('tDomain', $tDomain);
-$smarty->assign ('pAdminCreate_domain_domain_text', $pAdminCreate_domain_domain_text, false);
-$smarty->assign ('tDescription', $tDescription, false);
-$smarty->assign ('tAliases', $tAliases);
-$smarty->assign ('tMailboxes', $tMailboxes);
-$smarty->assign ('tMaxquota', $tMaxquota,false);
-$smarty->assign ('select_options', select_options ($CONF ['transport_options'], array ($tTransport)),false);
-$smarty->assign ('tDefaultaliases', ($tDefaultaliases == 'on') ? ' checked="checked"' : '');
-$smarty->assign ('tBackupmx', ($tBackupmx == 'on') ? ' checked="checked"' : '');
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'admin_create-domain');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/admin_create-domain.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

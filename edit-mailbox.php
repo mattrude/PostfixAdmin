@@ -14,7 +14,7 @@
  * 
  * File: edit-mailbox.php 
  * Used to update an existing mailboxes settings.
- * Template File: edit-mailbox.tpl
+ * Template File: edit-mailbox.php
  *
  * Template Variables:
  *
@@ -154,13 +154,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       if(preg_match('/^(.*)@/', $fUsername, $matches)) {
          $formvars['local_part'] = $matches[1];
       }
-      $result = db_update_q('mailbox', "username='$fUsername' AND domain='$fDomain'", $formvars); # TODO: check if we need the AND domain=... clause, if not, switch to db_update()
+      $result = db_update('mailbox', "username='$fUsername' AND domain='$fDomain'", $formvars, array('modified'));
       $maildir = $user_details['maildir'];
       if ($result != 1 || !mailbox_postedit($fUsername,$fDomain,$maildir, $quota)) {
          $tMessage = $PALANG['pEdit_mailbox_result_error'];
       }
       else {
-         db_log ($fDomain, 'edit_mailbox', $fUsername);
+         db_log ($SESSID_USERNAME, $fDomain, 'edit_mailbox', $fUsername);
 
          header ("Location: list-virtual.php?domain=$fDomain");
          exit(0);
@@ -175,16 +175,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    }
 }
 
-$smarty->assign ('fUsername', $fUsername);
-$smarty->assign ('pEdit_mailbox_password_text', $pEdit_mailbox_password_text, false);
-$smarty->assign ('tName', $tName, false);
-$smarty->assign ('pEdit_mailbox_name_text', $pEdit_mailbox_name_text,false);
-$smarty->assign ('tMaxquota', $tMaxquota);
-$smarty->assign ('tQuota', $tQuota);
-$smarty->assign ('pEdit_mailbox_quota_text', $pEdit_mailbox_quota_text);
-if ($tActive)	$smarty->assign ('tActive', ' checked="checked"');
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'edit-mailbox');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/edit-mailbox.php");
+include ("templates/footer.php");
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

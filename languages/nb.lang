@@ -4,7 +4,7 @@
 // Language file Norwegian (bokmål)
 // by Odd Henriksen
 //
-// Last updated: 2010-11-28 / Odd Henriksen
+// Last updated: 2009-04-19 / Odd Henriksen
 //
 
 $PALANG['YES'] = 'JA';
@@ -190,9 +190,6 @@ $PALANG['pViewlog_username'] = 'Administrator';
 $PALANG['pViewlog_domain'] = 'Domene';
 $PALANG['pViewlog_action'] = 'Handling';
 $PALANG['pViewlog_data'] = 'Data';
-$PALANG['pViewlog_action_create_domain'] = 'create domain'; # XXX
-$PALANG['pViewlog_action_delete_domain'] = 'delete domain'; # XXX
-$PALANG['pViewlog_action_edit_domain'] = 'edit domain'; # XXX
 $PALANG['pViewlog_action_create_mailbox'] = 'opprett e-postkonto';
 $PALANG['pViewlog_action_delete_mailbox'] = 'slett e-postkonto';
 $PALANG['pViewlog_action_edit_mailbox'] = 'rediger e-postkonto';
@@ -351,8 +348,8 @@ $PALANG['pUsersVacation_button_away'] = 'Merk meg som fraværende';
 $PALANG['pUsersVacation_button_back'] = 'Merk meg som tilstede';
 $PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Kunne ikke oppdatere dine autosvar-innstillinger!</span>';
 $PALANG['pUsersVacation_result_success'] = 'Ditt automatiske svar er blitt fjernet!';
-$PALANG['pUsersVacation_activefrom'] = 'Aktiv fra';
-$PALANG['pUsersVacation_activeuntil'] = 'Aktiv til';
+$PALANG['pUsersVacation_activefrom'] = 'Active from'; # XXX
+$PALANG['pUsersVacation_activeuntil'] = 'Active until'; # XXX
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'opprett e-postkonto';
 $PALANG['pCreate_dbLog_createalias'] = 'opprett alias';

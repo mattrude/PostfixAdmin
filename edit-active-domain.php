@@ -14,7 +14,7 @@
  * 
  * File: edit-active-domain.php 
  * Responsible for toggling the status of a domain
- * Template File: message.tpl
+ * Template File: message.php
  *
  * Template Variables:
  *
@@ -50,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
    }
 }
 
-$smarty->assign ('tMessage', $tMessage);
-$smarty->assign ('smarty_template', 'message');
-$smarty->display ('index.tpl');
-
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/message.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

@@ -35,7 +35,6 @@ require_once(dirname(__FILE__) . '/common.php');
 if($CONF['xmlrpc_enabled'] == false) {
     die("xmlrpc support disabled");
 }
-
 require_once('Zend/XmlRpc/Server.php');
 $server = new Zend_XmlRpc_Server();
 
@@ -74,7 +73,7 @@ class UserProxy {
      */
     public function changePassword($old_password, $new_password) {
         $uh = new UserHandler($_SESSION['username']);
-        return $uh->change_pw($new_password, $old_password);
+        return $uh->change_pass($old_password, $new_password);
     }
 
    /**
@@ -141,8 +140,7 @@ class AliasProxy {
     public function get() {
         $ah = new AliasHandler($_SESSION['username']);
         /* I see no point in returning special addresses to the user. */
-        $ah->get(false);
-        return $ah->result;
+        return $ah->get(false);
     }
 
     /**
@@ -168,4 +166,3 @@ class AliasProxy {
         return $ah->hasStoreAndForward();
     }
 }
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

@@ -11,7 +11,7 @@
  *     http://www.postfixadmin.com or http://postfixadmin.sf.net
  *
  * File: create-alias.php
- * Template File: create-alias.tpl
+ * Template File: create-alias.php
  * Responsible for allowing for the creation of mail aliases.
  *
  * @version $Id$
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         $tAddress = escape_string ($_POST['fAddress']);
         $tGoto = $fGoto;
         $tDomain = $fDomain;
-	$pCreate_alias_address_text = $PALANG['pCreate_alias_address_text_error2'];
+        $pCreate_alias_address_text = $PALANG['pCreate_alias_address_text_error2'];
     }
 
     if ($fActive == "on") {
@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
             $tMessage = $PALANG['pCreate_alias_result_error'] . "<br />($fAddress -> $fGoto)<br />\n";
         }
         else {
-            db_log ($fDomain, 'create_alias', "$fAddress -> $fGoto");
+            db_log ($SESSID_USERNAME, $fDomain, 'create_alias', "$fAddress -> $fGoto");
 
             $tDomain = $fDomain;
             $tMessage = $PALANG['pCreate_alias_result_success'] . "<br />($fAddress -> $fGoto)<br />\n";
@@ -190,17 +190,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         $tAddress = htmlentities($_POST['fAddress']);
         $tGoto = htmlentities($_POST['fGoto']);
         $tDomain = htmlentities($_POST['fDomain']);
+
     }
 }
 
-$smarty->assign ('tAddress', $tAddress);
-$smarty->assign ('select_options', select_options ($list_domains, array ($tDomain)), false);
-$smarty->assign ('pCreate_alias_address_text', $pCreate_alias_address_text, false);
-$smarty->assign ('tGoto', $tGoto, false);
-$smarty->assign ('pCreate_alias_goto_text', $pCreate_alias_goto_text);
-$smarty->assign ('tMessage', $tMessage, false);
-$smarty->assign ('smarty_template', 'create-alias');
-$smarty->display ('index.tpl');
-
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/create-alias.php");
+include ("templates/footer.php");
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>
