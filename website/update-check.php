@@ -9,6 +9,9 @@ if(!isset($_GET['version'])) {
 else {
 	$version = $_GET['version'];
 }
+
+$version = preg_replace("/[^0-9.]/", "", $version);
+
 if(version_compare2($version,$latest) >= 0) {
 	echo "Congratulations - you're running the latest version of PostfixAdmin";
 }
