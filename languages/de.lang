@@ -12,20 +12,17 @@ $PALANG['edit'] = 'editieren';
 $PALANG['del'] = 'l&ouml;schen';
 $PALANG['exit'] = 'Verlassen';
 $PALANG['cancel'] = 'Abbrechen';
-$PALANG['save'] = '&Auml;nderungen speichern';
+$PALANG['save'] = 'Speichern';
 $PALANG['confirm'] = 'Sind Sie sicher dass Sie das l&ouml;schen wollen?\n';
 $PALANG['confirm_domain'] = 'Wollen Sie wirklich alle Eintr&auml;ge dieser Domain l&ouml;schen? Dies kann NICHT r&uuml;ckg&auml;ngig gemacht werden!\n';
 $PALANG['check_update'] = 'Auf Updates &uuml;berpr&uuml;fen';
 $PALANG['invalid_parameter'] = 'Ung&uuml;ltiger Parameter!';
-$PALANG['show'] = 'Anzeigen:';
-$PALANG['all'] = 'Alle';
 
 $PALANG['pFooter_logged_as'] = 'Angemeldet als %s';
 
 $PALANG['pLogin_welcome'] = 'Mail-Administratoren loggen sich bitte hier ein.';
 $PALANG['pLogin_username'] = 'Login (eMail)';
 $PALANG['pLogin_password'] = 'Passwort';
-$PALANG['pLogin_language'] = 'Sprache';
 $PALANG['pLogin_button'] = 'Login';
 $PALANG['pLogin_failed'] = 'Ihre Mailadresse oder das Passwort sind nicht korrekt.';
 $PALANG['pLogin_login_users'] = 'eMail-Benutzer bitte hier einloggen.';
@@ -62,7 +59,7 @@ $PALANG['pOverview_mailbox_title'] = ':: Mailboxen';
 $PALANG['pOverview_button'] = 'Los';
 $PALANG['pOverview_welcome'] = '&Uuml;berblick &uuml;ber ';
 $PALANG['pOverview_alias_domain_aliases'] = 'Alias-Domains';
-$PALANG['pOverview_alias_domain_target'] = '%s ist eine Alias-Domain f&uuml;r:'; # obsolete
+$PALANG['pOverview_alias_domain_target'] = '%s ist eine Alias-Domain f&uuml;r:';
 $PALANG['pOverview_alias_alias_count'] = 'Aliase';
 $PALANG['pOverview_alias_mailbox_count'] = 'Mailboxen';
 $PALANG['pOverview_alias_address'] = 'Von';
@@ -88,12 +85,12 @@ $PALANG['pOverview_get_mailboxes'] = 'Mailboxen';
 $PALANG['pOverview_get_quota'] = 'Mailbox Quota (MB)';
 $PALANG['pOverview_get_modified'] = 'Zuletzt ver&auml;ndert';
 
-$PALANG['pDelete_delete_error'] = 'Eintrag konnte nicht gel&ouml;scht werden ';
+$PALANG['pDelete_delete_error'] = '<span class="error_msg">Eintrag konnte nicht gel&ouml;scht werden ';
 $PALANG['pDelete_delete_success'] = '%s gel&ouml;scht.';
-$PALANG['pDelete_postdelete_error'] = 'Mailbox konnte nicht gel&ouml;scht werden '; # obsolete
-$PALANG['pDelete_domain_error'] = 'Diese Domain geh&ouml;rt nicht Ihnen ';
-$PALANG['pDelete_domain_alias_error'] = 'Diese Domain geh&ouml;rt nicht Ihnen '; # obsolete
-$PALANG['pDelete_alias_error'] = 'Alias konnte nicht gel&ouml;scht werden ';
+$PALANG['pDelete_postdelete_error'] = '<span class="error_msg">Mailbox konnte nicht gel&ouml;scht werden ';
+$PALANG['pDelete_domain_error'] = '<span class="error_msg">Diese Domain geh&ouml;rt nicht Ihnen ';
+$PALANG['pDelete_domain_alias_error'] = '<span class="error_msg">Diese Domain geh&ouml;rt nicht Ihnen ';
+$PALANG['pDelete_alias_error'] = '<span class="error_msg">Alias konnte nicht gel&ouml;scht werden ';
 $PALANG['pCreate_alias_domain_welcome'] = 'Adressen einer Ihrer Domains auf eine andere Domain weiterleiten.';
 $PALANG['pCreate_alias_domain_alias'] = 'Alias-Domain';
 $PALANG['pCreate_alias_domain_alias_text'] = 'Die Domain, f&uuml;r die Mails hereinkommen.';
@@ -108,86 +105,85 @@ $PALANG['pCreate_alias_domain_error4'] = 'Alle Domains sind bereits Alias-Domain
 $PALANG['pCreate_alias_domain_success'] = 'Die Alias-Domain wurde in der Datenbank eingetragen!';
 
 $PALANG['pCreate_alias_welcome'] = 'Neuen Alias f&uuml;r Ihre Domain anlegen';
-$PALANG['pCreate_alias_address'] = 'Alias'; # obsolete
-$PALANG['pCreate_alias_address_text_error1'] = 'Dieses ALIAS ist nicht erlaubt!';
-$PALANG['pCreate_alias_address_text_error2'] = 'Diese eMail-Adresse existiert bereits. Bitte w&auml;hlen Sie eine andere!';
-$PALANG['pCreate_alias_address_text_error3'] = 'Sie haben Ihr Limit f&uuml;r Aliase auf dieser Domain erreicht!';
+$PALANG['pCreate_alias_address'] = 'Alias';
+$PALANG['pCreate_alias_address_text_error1'] = '<br /><span class="error_msg">Dieses ALIAS ist nicht erlaubt!</span>';
+$PALANG['pCreate_alias_address_text_error2'] = '<br /><span class="error_msg">Diese eMail-Adresse existiert bereits. Bitte w&auml;hlen Sie eine andere!</span>';
+$PALANG['pCreate_alias_address_text_error3'] = '<br /><span class="error_msg">Sie haben Ihr Limit f&uuml;r Aliase auf dieser Domain erreicht!</span>';
 $PALANG['pCreate_alias_goto'] = 'An';
 $PALANG['pCreate_alias_active'] = 'Aktiv';
 $PALANG['pCreate_alias_button'] = 'Alias hinzuf&uuml;gen';
 $PALANG['pCreate_alias_goto_text'] = 'Wohin soll die eMail weitergeleitet werden?';
-$PALANG['pCreate_alias_goto_text_error'] = 'Das An-Feld ist falsch!';
-$PALANG['pCreate_alias_result_error'] = 'Unm&ouml;glich dieses Alias in die Alias-Tabelle einzutragen!';
+$PALANG['pCreate_alias_goto_text_error'] = 'Wohin die eMail weitergeleitet werden soll<br /><span class="error_msg">Das An-Feld ist falsch!</span>';
+$PALANG['pCreate_alias_result_error'] = '<span class="error_msg">Unm&ouml;glich dieses Alias in die Alias-Tabelle einzutragen!</span>';
 $PALANG['pCreate_alias_result_success'] = 'Das Alias wurde in die Alias-Tabelle hinzugef&uuml;gt!';
-$PALANG['pCreate_alias_catchall_text'] = 'Um alle Adressen abzudecken benutzen Sie einen "*" als Alias. Um ganze Domains an andere Domains weiterzuleiten benutzen Sie "*@domain.tld" im "An"-Feld.';
+$PALANG['pCreate_alias_catchall_text'] = 'Um alle Adressen abzudecken benutzen Sie einen "*" als Alias.<br />Um ganze Domains an andere Domains weiterzuleiten benutzen Sie "*@domain.tld" im "An"-Feld.';
 
-$PALANG['pEdit_alias_welcome'] = 'Weiterleitungs-Einstellungen &auml;ndern';
-$PALANG['pEdit_alias_help'] = 'Angabe mehrerer Ziele m&ouml;glich, ein Eintrag pro Zeile.';
+$PALANG['pEdit_alias_welcome'] = '&Auml;ndern Sie einen Alias f&uuml;r Ihre Domain<br />EIN Eintrag pro Zeile!';
 $PALANG['pEdit_alias_address'] = 'Alias';
-$PALANG['pEdit_alias_address_error'] = 'Auffinden des Alias schlug fehl!'; # obsolete
+$PALANG['pEdit_alias_address_error'] = '<span class="error_msg">Auffinden des Alias schlug fehl!</span>';
 $PALANG['pEdit_alias_goto'] = 'An';
 $PALANG['pEdit_alias_active'] = 'Aktiv';
-$PALANG['pEdit_alias_goto_text_error1'] = 'Sie haben im "To"-Feld nichts angegeben!';
-$PALANG['pEdit_alias_goto_text_error2'] = 'Die angegebene eMail-Adresse ist nicht korrekt: ';
-$PALANG['pEdit_alias_domain_error'] = 'Diese Domain geh&ouml;rt nicht Ihnen: '; # obsolete
-$PALANG['pEdit_alias_domain_result_error'] = 'Alias-Domain kann nicht ge&auml;ndert werden!';
+$PALANG['pEdit_alias_goto_text_error1'] = '<span class="error_msg">Sie haben im "To"-Feld nichts angegeben!</span>';
+$PALANG['pEdit_alias_goto_text_error2'] = '<span class="error_msg">Die angegebene eMail-Adresse ist nicht korrekt: ';
+$PALANG['pEdit_alias_domain_error'] = '<span class="error_msg">Diese Domain geh&ouml;rt nicht Ihnen: ';
+$PALANG['pEdit_alias_domain_result_error'] = '<span class="error_msg">Alias-Domain kann nicht ge&auml;ndert werden!</span>';
 $PALANG['pEdit_alias_forward_and_store'] = 'Mail in der lokalen Mailbox ablegen.';
 $PALANG['pEdit_alias_forward_only'] = 'Nur zur angegebenen Adresse weiterleiten.';
-$PALANG['pEdit_alias_button'] = 'Alias &auml;ndern'; # obsolete
-$PALANG['pEdit_alias_result_error'] = '&Auml;ndern des Aliases nicht m&ouml;glich!';
+$PALANG['pEdit_alias_button'] = 'Alias &auml;ndern';
+$PALANG['pEdit_alias_result_error'] = '<span class="error_msg">&Auml;ndern des Aliases nicht m&ouml;glich!</span>';
 
 $PALANG['pCreate_mailbox_welcome'] = 'Legen Sie eine neue Mailbox f&uuml;r Ihre Domain an.';
-$PALANG['pCreate_mailbox_username'] = 'Benutzername'; # obsolete
-$PALANG['pCreate_mailbox_username_text_error1'] = 'Die EMAIL ist nicht korrekt!';
-$PALANG['pCreate_mailbox_username_text_error2'] = 'Diese Email-Adresse existiert bereits. Bitte w&auml;hlen Sie eine andere!';
-$PALANG['pCreate_mailbox_username_text_error3'] = 'Sie d&uuml;rfen leider nicht mehr Mailboxen f&uuml;r diese Domain anlegen!';
+$PALANG['pCreate_mailbox_username'] = 'Benutzername';
+$PALANG['pCreate_mailbox_username_text_error1'] = '<br /><span class="error_msg">Die EMAIL ist nicht korrekt!</span>';
+$PALANG['pCreate_mailbox_username_text_error2'] = '<br /><span class="error_msg">Diese Email-Adresse existiert bereits. Bitte w&auml;hlen Sie eine andere!</span>';
+$PALANG['pCreate_mailbox_username_text_error3'] = '<br /><span class="error_msg">Sie d&uuml;rfen leider nicht mehr Mailboxen f&uuml;r diese Domain anlegen!</span>';
 $PALANG['pCreate_mailbox_password'] = 'Passwort';
 $PALANG['pCreate_mailbox_password2'] = 'Passwort (nochmal)';
 $PALANG['pCreate_mailbox_password_text'] = 'Passwort f&uuml;r POP3/IMAP';
-$PALANG['pCreate_mailbox_password_text_error'] = 'Die beiden Passw&ouml;rter sind nicht identisch oder ganz leer!';
-$PALANG['pCreate_mailbox_name'] = 'Name'; # obsolete
-$PALANG['pCreate_mailbox_name_text'] = 'Vollst&auml;ndiger Name';
-$PALANG['pCreate_mailbox_quota'] = 'Quota'; # obsolete
-$PALANG['pCreate_mailbox_quota_text'] = 'MB'; # obsolete
-$PALANG['pCreate_mailbox_quota_text_error'] = 'Das angegebene Quota ist zu hoch!';
+$PALANG['pCreate_mailbox_password_text_error'] = 'Passwort f&uuml;r POP3/IMAP<br /><span class="error_msg">Die beiden Passw&ouml;rter sind nicht identisch!<br />Oder ganz leer!</span>';
+$PALANG['pCreate_mailbox_name'] = 'Name';
+$PALANG['pCreate_mailbox_name_text'] = 'Voller Name';
+$PALANG['pCreate_mailbox_quota'] = 'Quota';
+$PALANG['pCreate_mailbox_quota_text'] = 'MB';
+$PALANG['pCreate_mailbox_quota_text_error'] = 'MB<br /><span class="error_msg">Das angegebene Quota ist zu hoch!</span>';
 $PALANG['pCreate_mailbox_active'] = 'Aktiv';
 $PALANG['pCreate_mailbox_mail'] = 'Mailbox anlegen';
 $PALANG['pCreate_mailbox_button'] = 'Mailbox hinzuf&uuml;gen';
-$PALANG['pCreate_mailbox_result_error'] = 'Unm&ouml;glich die Mailbox in die Mailbox-Tabelle einzutragen!';
+$PALANG['pCreate_mailbox_result_error'] = '<span class="error_msg">Unm&ouml;glich die Mailbox in die Mailbox-Tabelle einzutragen!</span>';
 $PALANG['pCreate_mailbox_result_success'] = 'Die Mailbox wurde in die Mailbox-Tabelle eingetragen!';
 $PALANG['pCreate_mailbox_result_succes_nosubfolders'] = 'Die Mailbox wurde in der Mailbox-Tabelle eingetragen, aber keine (oder nur einige) der vorkonfigurierten Unterordner konnte erstellt werden';
 
 $PALANG['pEdit_mailbox_welcome'] = '&Auml;ndern Sie ihre Mailbox hier.';
 $PALANG['pEdit_mailbox_username'] = 'Benutzername';
-$PALANG['pEdit_mailbox_username_error'] = 'Unm&ouml;glich die Mailbox aufzufinden!'; # obsolete
-$PALANG['pEdit_mailbox_password'] = 'Neues Passwort'; # obsolete
-$PALANG['pEdit_mailbox_password2'] = 'Neues Passwort (nochmal)'; # obsolete
-$PALANG['pEdit_mailbox_password_text_error'] = 'Die beiden Passw&ouml;rter sind nicht identisch!';
+$PALANG['pEdit_mailbox_username_error'] = '<span class="error_msg">Unm&ouml;glich die Mailbox aufzufinden!</span>';
+$PALANG['pEdit_mailbox_password'] = 'Neues Passwort';
+$PALANG['pEdit_mailbox_password2'] = 'Neues Passwort (nochmal)';
+$PALANG['pEdit_mailbox_password_text_error'] = '<span class="error_msg">Die beiden Passw&ouml;rter sind nicht identisch!</span>';
 $PALANG['pEdit_mailbox_name'] = 'Name';
-$PALANG['pEdit_mailbox_name_text'] = 'Vollst&auml;ndiger Name'; # obsolete
+$PALANG['pEdit_mailbox_name_text'] = 'Vollst&auml;ndiger Name';
 $PALANG['pEdit_mailbox_quota'] = 'Quota';
 $PALANG['pEdit_mailbox_quota_text'] = 'MB';
-$PALANG['pEdit_mailbox_quota_text_error'] = 'Das angegebene Quota ist zu hoch!';
-$PALANG['pEdit_mailbox_domain_error'] = 'Diese Domain geh&ouml;rt nicht Ihnen: ';
-$PALANG['pEdit_mailbox_button'] = 'Mailbox editieren'; # obsolete
-$PALANG['pEdit_mailbox_result_error'] = 'Mailbox kann nicht ge&auml;ndert werden!';
+$PALANG['pEdit_mailbox_quota_text_error'] = 'MB<br /><span class="error_msg">Das angegebene Quota ist zu hoch!</span>';
+$PALANG['pEdit_mailbox_domain_error'] = '<span class="error_msg">Diese Domain geh&ouml;rt nicht Ihnen: ';
+$PALANG['pEdit_mailbox_button'] = 'Mailbox editieren';
+$PALANG['pEdit_mailbox_result_error'] = '<span class="error_msg">Mailbox kann nicht ge&auml;ndert werden!</span>';
 
 $PALANG['pPassword_welcome'] = '&Auml;ndern Sie Ihr Login-Passwort.';
 $PALANG['pPassword_admin'] = 'Login';
-$PALANG['pPassword_admin_text_error'] = 'Das angegebene Login entspricht keiner Mailbox!'; # obsolete
+$PALANG['pPassword_admin_text_error'] = '<span class="error_msg">Das angegebene Login entspricht keiner Mailbox!</span>';
 $PALANG['pPassword_password_current'] = 'Jetziges Password';
-$PALANG['pPassword_password_current_text_error'] = 'Sie haben Ihr derzeitiges Passwort nicht angegeben!';
+$PALANG['pPassword_password_current_text_error'] = '<span class="error_msg">Sie haben Ihr derzeitiges Passwort nicht angegeben!</span>';
 $PALANG['pPassword_password'] = 'Neues Passwort';
 $PALANG['pPassword_password2'] = 'Neues Password (nochmal)';
-$PALANG['pPassword_password_text_error'] = 'Die beiden angegebenen Passw&ouml;rter sind nicht identisch oder leer!';
+$PALANG['pPassword_password_text_error'] = '<span class="error_msg">Die beiden angegebenen Passw&ouml;rter sind nicht identische!<br />Oder leer!</span>';
 $PALANG['pPassword_button'] = 'Passwort &auml;ndern';
-$PALANG['pPassword_result_error'] = 'Unm&ouml;glich das Passwort zu &auml;ndern!';
+$PALANG['pPassword_result_error'] = '<span class="error_msg">Unm&ouml;glich das Passwort zu &auml;ndern!</span>';
 $PALANG['pPassword_result_success'] = 'Ihr Passwort wurde ge&auml;ndert!';
 
 $PALANG['pEdit_vacation_set'] = 'Automatische Antwort &auml;ndern / einrichten';
 $PALANG['pEdit_vacation_remove'] = 'Automatische Antwort abschalten';
 
-$PALANG['pVacation_result_error'] = '&Auml;nderungen der automatischen Antwort konnten nicht gespeichert werden!';
+$PALANG['pVacation_result_error'] = '<span class="error_msg">&Auml;nderungen der automatischen Antwort konnten nicht gespeichert werden!</span>';
 $PALANG['pVacation_result_removed'] = 'Automatische Antwort wurde abgeschaltet!';
 $PALANG['pVacation_result_added'] = 'Automatische Antwort wurde aktiviert!';
 
@@ -198,9 +194,6 @@ $PALANG['pViewlog_domain'] = 'Domain';
 $PALANG['pViewlog_action'] = 'Aktion';
 $PALANG['pViewlog_data'] = 'Daten';
 
-$PALANG['pViewlog_action_create_domain'] = 'Domain erstellen';
-$PALANG['pViewlog_action_delete_domain'] = 'Domain l&ouml;schen';
-$PALANG['pViewlog_action_edit_domain'] = 'Domain bearbeiten';
 $PALANG['pViewlog_action_create_mailbox'] = 'Mailbox erstellen';
 $PALANG['pViewlog_action_delete_mailbox'] = 'Mailbox l&ouml;schen';
 $PALANG['pViewlog_action_edit_mailbox'] = 'Mailbox bearbeiten';
@@ -215,17 +208,17 @@ $PALANG['pViewlog_action_edit_alias_domain_state'] = 'Alias-Domain Aktiv bearbei
 $PALANG['pViewlog_action_edit_password'] = 'Passwort &auml;ndern';
 
 $PALANG['pViewlog_button'] = 'Los';
-$PALANG['pViewlog_result_error'] = 'Kann keine Eintr&auml;ge finden!';
+$PALANG['pViewlog_result_error'] = '<span class="error_msg">Kann keine Eintr&auml;ge finden!</span>';
 
 $PALANG['pSendmail_welcome'] = 'eMail versenden.';
 $PALANG['pSendmail_admin'] = 'Von';
 $PALANG['pSendmail_to'] = 'An';
-$PALANG['pSendmail_to_text_error'] = 'Das "An"-Feld ist leer bzw. ung&uuml;ltig!';
+$PALANG['pSendmail_to_text_error'] = '<span class="error_msg">Das "An"-Feld ist leer bzw. ung&uuml;ltig!</span>';
 $PALANG['pSendmail_subject'] = 'Betreff';
 $PALANG['pSendmail_subject_text'] = 'Willkommen';
 $PALANG['pSendmail_body'] = 'Text';
 $PALANG['pSendmail_button'] = 'Versende Nachricht';
-$PALANG['pSendmail_result_error'] = 'Mail konnte nicht gesendet werden!';
+$PALANG['pSendmail_result_error'] = '<span class="error_msg">Mail konnte nicht gesendet werden!</span>';
 $PALANG['pSendmail_result_success'] = 'Mail gesendet!';
 
 $PALANG['pAdminMenu_list_admin'] = 'Admin Liste';
@@ -249,8 +242,7 @@ $PALANG['pAdminList_domain_domain'] = 'Domain';
 $PALANG['pAdminList_domain_description'] = 'Beschreibung';
 $PALANG['pAdminList_domain_aliases'] = 'Aliase';
 $PALANG['pAdminList_domain_mailboxes'] = 'Mailboxen';
-$PALANG['pAdminList_domain_maxquota'] = 'Max Quota (MB)'; # obsolete
-$PALANG['pAdminList_domain_quota'] = 'Domain Quota (MB)';
+$PALANG['pAdminList_domain_maxquota'] = 'Max Quota (MB)';
 $PALANG['pAdminList_domain_transport'] = 'Transport';
 $PALANG['pAdminList_domain_backupmx'] = 'Backup MX';
 $PALANG['pAdminList_domain_modified'] = 'zuletzt ge&auml;ndert';
@@ -270,28 +262,27 @@ $PALANG['pAdminList_virtual_mailbox_modified'] = 'zuletzt ge&auml;ndert';
 $PALANG['pAdminList_virtual_mailbox_active'] = 'Aktiv';
 
 $PALANG['pAdminCreate_domain_welcome'] = 'Domain hinzuf&uuml;gen';
-$PALANG['pAdminCreate_domain_domain'] = 'Domain'; # obsolete
-$PALANG['pAdminCreate_domain_domain_text_error'] = 'Diese Domain existiert bereits!';
-$PALANG['pAdminCreate_domain_domain_text_error2'] = 'Diese Domain ist ung&uuml;ltig!';
-$PALANG['pAdminCreate_domain_description'] = 'Beschreibung'; # obsolete
-$PALANG['pAdminCreate_domain_aliases'] = 'Aliase'; # obsolete
-$PALANG['pAdminCreate_domain_aliases_text'] = '-1 = ausschalten | 0 = kein Limit'; # obsolete
-$PALANG['pAdminCreate_domain_mailboxes'] = 'Mailboxen'; # obsolete
-$PALANG['pAdminCreate_domain_mailboxes_text'] = '-1 = ausschalten | 0 = kein Limit'; # obsolete
-$PALANG['pAdminCreate_domain_maxquota'] = 'Max Quota'; # obsolete
-$PALANG['pAdminCreate_domain_maxquota_text'] = 'MB | -1 = ausschalten | 0 = kein Limit'; # obsolete
-$PALANG['pAdminCreate_domain_transport'] = 'Transport'; # obsolete
-$PALANG['pAdminCreate_domain_transport_text'] = 'Define transport'; # obsolete
+$PALANG['pAdminCreate_domain_domain'] = 'Domain';
+$PALANG['pAdminCreate_domain_domain_text_error'] = '<span class="error_msg">Diese Domain existiert bereits!</span>';
+$PALANG['pAdminCreate_domain_domain_text_error2'] = '<span class="error_msg">Diese Domain ist ung&uuml;ltig!</span>';
+$PALANG['pAdminCreate_domain_description'] = 'Beschreibung';
+$PALANG['pAdminCreate_domain_aliases'] = 'Aliase';
+$PALANG['pAdminCreate_domain_aliases_text'] = '-1 = ausschalten | 0 = kein Limit';
+$PALANG['pAdminCreate_domain_mailboxes'] = 'Mailboxen';
+$PALANG['pAdminCreate_domain_mailboxes_text'] = '-1 = ausschalten | 0 = kein Limit';
+$PALANG['pAdminCreate_domain_maxquota'] = 'Max Quota';
+$PALANG['pAdminCreate_domain_maxquota_text'] = 'MB<br /> -1 = ausschalten | 0 = kein Limit';
+$PALANG['pAdminCreate_domain_transport'] = 'Transport';
+$PALANG['pAdminCreate_domain_transport_text'] = 'Define transport';
 $PALANG['pAdminCreate_domain_defaultaliases'] = 'Standard-Aliase hinzuf&uuml;gen';
 $PALANG['pAdminCreate_domain_defaultaliases_text'] = '';
-$PALANG['pAdminCreate_domain_backupmx'] = 'Mail server is backup MX'; # obsolete
+$PALANG['pAdminCreate_domain_backupmx'] = 'Mail server is backup MX';
 $PALANG['pAdminCreate_domain_button'] = 'Domain hinzuf&uuml;gen';
-$PALANG['pAdminCreate_domain_result_error'] = 'Konnte Domain nicht anlegen!';
+$PALANG['pAdminCreate_domain_result_error'] = '<span class="error_msg">Konnte Domain nicht anlegen!</span>';
 $PALANG['pAdminCreate_domain_result_success'] = 'Domain wurde angelegt!';
-$PALANG['pAdminDelete_admin_error'] = 'Admin kann nicht gel&ouml;scht werden!';
 
-$PALANG['pAdminDelete_domain_error'] = 'Domain konnte nicht gel&ouml;scht werden!';
-$PALANG['pAdminDelete_alias_domain_error'] = 'Alias-Domain konnte nicht gel&ouml;scht werden!';
+$PALANG['pAdminDelete_domain_error'] = '<span class="error_msg">Domain konnte nicht gel&ouml;scht werden!</span>';
+$PALANG['pAdminDelete_alias_domain_error'] = '<span class="error_msg">Alias-Domain konnte nicht gel&ouml;scht werden!</span>';
 
 $PALANG['pAdminEdit_domain_welcome'] = 'Domain editieren';
 $PALANG['pAdminEdit_domain_domain'] = 'Domain';
@@ -301,25 +292,24 @@ $PALANG['pAdminEdit_domain_aliases_text'] = '-1 = ausschalten | 0 = kein Limit';
 $PALANG['pAdminEdit_domain_mailboxes'] = 'Mailboxen';
 $PALANG['pAdminEdit_domain_mailboxes_text'] = '-1 = ausschalten | 0 = kein Limit';
 $PALANG['pAdminEdit_domain_maxquota'] = 'Max Quota';
-$PALANG['pAdminEdit_domain_maxquota_text'] = 'MB | -1 = ausschalten | 0 = kein Limit';
-$PALANG['pAdminEdit_domain_quota'] = 'Domain Quota';
+$PALANG['pAdminEdit_domain_maxquota_text'] = 'MB<br /> -1 = ausschalten | 0 = kein Limit';
 $PALANG['pAdminEdit_domain_transport'] = 'Transport';
 $PALANG['pAdminEdit_domain_transport_text'] = 'Define transport';
 $PALANG['pAdminEdit_domain_backupmx'] = 'Mail server is backup MX';
 $PALANG['pAdminEdit_domain_active'] = 'Aktiv';
-$PALANG['pAdminEdit_domain_button'] = 'Domain editieren'; # obsolete
-$PALANG['pAdminEdit_domain_result_error'] = 'Konnte Domain nicht editieren!';
+$PALANG['pAdminEdit_domain_button'] = 'Domain editieren';
+$PALANG['pAdminEdit_domain_result_error'] = '<span class="error_msg">Konnte Domain nicht editieren!</span>';
 
 $PALANG['pAdminCreate_admin_welcome'] = 'Neuen Domain-Admin hinzuf&uuml;gen';
-$PALANG['pAdminCreate_admin_username'] = 'Admin'; # obsolete
+$PALANG['pAdminCreate_admin_username'] = 'Admin';
 $PALANG['pAdminCreate_admin_username_text'] = 'Email Adresse';
-$PALANG['pAdminCreate_admin_username_text_error1'] = 'Admin-Adresse ist keine echte Email-Adresse!';
-$PALANG['pAdminCreate_admin_username_text_error2'] = 'Der Admin existiert bereits bzw. ist nicht korrekt';
-$PALANG['pAdminCreate_admin_password'] = 'Passwort'; # obsolete
-$PALANG['pAdminCreate_admin_password2'] = 'Passwort (nochmal)'; # obsolete
-$PALANG['pAdminCreate_admin_password_text_error'] = 'Die angegebenen Passw&ouml;rter sind nicht identisch oder leer!';
+$PALANG['pAdminCreate_admin_username_text_error1'] = 'Email Adresse<br /><span class="error_msg">Admin-Adresse ist keine echte Email-Adresse!</span>';
+$PALANG['pAdminCreate_admin_username_text_error2'] = 'Email Adresse<br /><span class="error_msg">Der Admin existiert bereits bzw. ist nicht korrekt</span>';
+$PALANG['pAdminCreate_admin_password'] = 'Passwort';
+$PALANG['pAdminCreate_admin_password2'] = 'Passwort (nochmal)';
+$PALANG['pAdminCreate_admin_password_text_error'] = '<span class="error_msg">Die angegebenen Passw&ouml;rter sind nicht identisch<br />Oder leer!</span>';
 $PALANG['pAdminCreate_admin_button'] = 'Admin hinzuf&uuml;gen';
-$PALANG['pAdminCreate_admin_result_error'] = 'Konnte den Admin nicht anlegen!';
+$PALANG['pAdminCreate_admin_result_error'] = '<span class="error_msg">Konnte den Admin nicht anlegen!</span>';
 $PALANG['pAdminCreate_admin_result_success'] = 'Admin angelegt!';
 $PALANG['pAdminCreate_admin_address'] = 'Domain';
 
@@ -327,18 +317,17 @@ $PALANG['pAdminEdit_admin_welcome'] = 'Domain Admin editieren';
 $PALANG['pAdminEdit_admin_username'] = 'Admin';
 $PALANG['pAdminEdit_admin_password'] = 'Passwort';
 $PALANG['pAdminEdit_admin_password2'] = 'Passwort (nochmal)';
-$PALANG['pAdminEdit_admin_password_text_error'] = 'Die beiden Passw&ouml;rter sind nicht identisch oder leer!';
+$PALANG['pAdminEdit_admin_password_text_error'] = '<span class="error_msg">Die beiden Passw&ouml;rter sind nicht identisch<br />Oder leer!</span>';
 $PALANG['pAdminEdit_admin_active'] = 'Aktiv';
 $PALANG['pAdminEdit_admin_super_admin'] = 'Super-Admin';
-$PALANG['pAdminEdit_admin_button'] = 'Admin editieren'; # obsolete
-$PALANG['pAdminEdit_admin_result_error'] = 'Konnte Admin nicht &auml;ndern';
+$PALANG['pAdminEdit_admin_button'] = 'Admin editieren';
+$PALANG['pAdminEdit_admin_result_error'] = '<span class="error_msg">Konnte Admin nicht &auml;ndern</span>';
 $PALANG['pAdminEdit_admin_result_success'] = 'Admin ge&auml;ndert!';
 
 $PALANG['pUsersLogin_welcome'] = 'Benutzer bitte hier einloggen, um Weiterleitungen bzw. das Passwort zu &auml;ndern.';
-$PALANG['pUsersLogin_username'] = 'Login (email)'; # obsolete
-$PALANG['pUsersLogin_password'] = 'Passwort'; # obsolete
-$PALANG['pUsersLogin_language'] = 'Sprache'; # obsolete
-$PALANG['pUsersLogin_button'] = 'Login'; # obsolete
+$PALANG['pUsersLogin_username'] = 'Login (email)';
+$PALANG['pUsersLogin_password'] = 'Passwort';
+$PALANG['pUsersLogin_button'] = 'Login';
 $PALANG['pUsersLogin_username_incorrect'] = 'Falscher Login! Bitte benutzen Sie ihre Email-Adresse als Login';
 $PALANG['pUsersLogin_password_incorrect'] = 'Falsches Passwort!';
 
@@ -361,12 +350,12 @@ Ich bin vom <date> bis <date> nicht zu Hause / im B&uuml;ro.
 In dringenden F&auml;llen setzen Sie sich bitte mit <contact person> in Verbindung.
 Vielen Dank f&uuml;r Ihr Verst&auml;ndnis.
 EOM;
-$PALANG['pUsersVacation_button_away'] = 'Ich gehe weg'; # obsolete
-$PALANG['pUsersVacation_button_back'] = 'Ich bin zur&uuml;ck'; # obsolete
-$PALANG['pUsersVacation_result_error'] = 'Konnte Ihre Automatische Antwort nicht einstellen!'; # obsolete
-$PALANG['pUsersVacation_result_success'] = 'Ihre Automatische Antwort wurde gel&ouml;scht!'; # obsolete
-$PALANG['pUsersVacation_activefrom'] = 'Aktiv ab dem'; # obsolete
-$PALANG['pUsersVacation_activeuntil'] = 'Aktiv bis zum'; # obsolete
+$PALANG['pUsersVacation_button_away'] = 'Ich gehe weg';
+$PALANG['pUsersVacation_button_back'] = 'Ich bin zur&uuml;ck';
+$PALANG['pUsersVacation_result_error'] = '<span class="error_msg">Konnte Ihre Automatische Antwort nicht einstellen!</span>';
+$PALANG['pUsersVacation_result_success'] = 'Ihre Automatische Antwort wurde gel&ouml;scht!';
+$PALANG['pUsersVacation_activefrom'] = 'Aktiv ab dem';
+$PALANG['pUsersVacation_activeuntil'] = 'Aktiv bis zum';
 
 $PALANG['pCreate_dbLog_createmailbox'] = 'Mailbox hinzuf&uuml;gen';     
 $PALANG['pCreate_dbLog_createalias'] = 'Alias hinzu&uuml;gen';

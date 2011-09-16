@@ -15,11 +15,11 @@
  * File: edit-active-admin.php 
  * Edit an active administrator. This is used as a 'toggle' page from list-admin.
  *
- * Template File: message.tpl
+ * Template File: message.php
  *
  * Template Variables:
  *
- * none
+ * tMessage
  *
  * Form POST \ GET Variables:
  *
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
    if ($result['rows'] != 1)
    {
       $error = 1;
-      flash_error($PALANG['pAdminEdit_admin_result_error']);
+      $tMessage = $PALANG['pAdminEdit_admin_result_error'];
    }
    
    if ($error != 1)
@@ -50,9 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
       exit;
    }
 }
-$smarty->assign ('smarty_template', 'message');
-$smarty->display ('index.tpl');
 
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/message.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 

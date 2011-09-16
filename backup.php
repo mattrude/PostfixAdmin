@@ -25,30 +25,13 @@ require_once('common.php');
 
 authentication_require_role('global-admin');
 
-(($CONF['backup'] == 'NO') ? header("Location: main.php") && exit : '1');
+(($CONF['backup'] == 'NO') ? header("Location: " . $CONF['postfix_admin_url'] . "/main.php") && exit : '1');
 
 // TODO: make backup supported for postgres
-if ('pgsql'==$CONF['database_type']) {
-	flash_error('<p>Sorry: Backup is currently not supported for your DBMS ('.$CONF['database_type'].').</p>');
-	$smarty->assign ('smarty_template', 'message');
-	$smarty->display ('index.tpl');
-   die;
+if ('pgsql'==$CONF['database_type'])
+{
+    print '<p>Sorry: Backup is currently not supported for your DBMS.</p>';
 }
-
-if (safeget('download') == "") {
-	flash_error('
-         <p><span class="error_msg">Warning:</span> The backup module of PostfixAdmin is poorly maintained and might contain bugs.</p>
-         <p>Please use <tt>mysqldump</tt> to get a reliable backup of your database.</p>
-         <p>&nbsp;</p>
-         <p>If you still trust this backup module, you can <a href="backup.php?download=1" class="button">download the database dump now</a></p>
-   ');
-	$smarty->assign ('smarty_template', 'message');
-	$smarty->display ('index.tpl');
-   die;
-}
-
-# Still here? Then let's create the database dump...
-
 /*
 	SELECT attnum,attname,typname,atttypmod-4,attnotnull,atthasdef,adsrc
 	AS def FROM pg_attribute,pg_class,pg_type,pg_attrdef
@@ -72,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
    umask (077);
    $path = (ini_get('upload_tmp_dir') != '') ? ini_get('upload_tmp_dir') : '/tmp';
-   date_default_timezone_set(@date_default_timezone_get()); # Suppress date.timezone warnings
    $filename = "postfixadmin-" . date ("Ymd") . "-" . getmypid() . ".sql";
    $backup = $path . DIRECTORY_SEPARATOR . $filename;
 
@@ -80,9 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
 
    if (!$fh = fopen ($backup, 'w'))
    {
-      flash_error("<div class=\"error_msg\">Cannot open file ($backup)</div>");
-		$smarty->assign ('smarty_template', 'message');
-		$smarty->display ('index.tpl');
+      $tMessage = "<div class=\"error_msg\">Cannot open file ($backup)</div>";
+      include ("templates/header.php");
+      include ("templates/menu.php");
+      include ("templates/message.php");
+      include ("templates/footer.php");
    } 
    else
    {
@@ -98,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
          'fetchmail',
          'log',
          'mailbox',
-		 'quota',
-		 'quota2',
+         'quota',
+         'quota2',
          'vacation',
          'vacation_notification'
       );

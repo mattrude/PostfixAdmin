@@ -1,4 +1,5 @@
-<?php /**
+<?php
+/** 
  * Postfix Admin 
  * 
  * LICENSE 
@@ -13,7 +14,7 @@
  * 
  * File: list-domain.php
  * List all domains as a quick overview.
- * Template File: adminlistdomain.tpl
+ * Template File: admin_list-domain.php
  *
  * Template Variables:
  *
@@ -29,7 +30,6 @@ require_once('common.php');
 authentication_require_role('admin');
 
 if (authentication_has_role('global-admin')) {
-//if (authentication_has_role('admin')) {
    $list_admins = list_admins ();
    $is_superadmin = 1;
    $fUsername = escape_string(safepost('fUsername', safeget('username'))); # prefer POST over GET variable
@@ -56,10 +56,10 @@ $table_mailbox = table_by_key('mailbox');
 $table_alias   = table_by_key('alias');
 
 if ($list_all_domains == 1) {
-	$where = " WHERE $table_domain.domain != 'ALL' "; # TODO: the ALL dummy domain is annoying...
+   $where = " WHERE $table_domain.domain != 'ALL' "; # TODO: the ALL dummy domain is annoying...
 } else {
-	$list_domains = escape_string($list_domains);
-	$where = " WHERE $table_domain.domain IN ('" . join("','", $list_domains) . "') ";
+   $list_domains = escape_string($list_domains);
+   $where = " WHERE $table_domain.domain IN ('" . join("','", $list_domains) . "') ";
 }
 
 # fetch domain data and number of mailboxes
@@ -73,7 +73,7 @@ $table_domain_fieldlist = "
 ";
 
 $query = "
-   SELECT $table_domain_fieldlist , COUNT( DISTINCT $table_mailbox.username ) AS mailbox_count, SUM( $table_mailbox.quota ) AS total_quota
+   SELECT $table_domain_fieldlist , COUNT( DISTINCT $table_mailbox.username ) AS mailbox_count
    FROM $table_domain
    LEFT JOIN $table_mailbox ON $table_domain.domain = $table_mailbox.domain
    $where
@@ -103,24 +103,17 @@ $result = db_query($query);
 while ($row = db_array ($result['result'])) {
    # add number of aliases to $domain_properties array. mailbox aliases do not count.
    $domain_properties [$row['domain']] ['alias_count'] = $row['alias_count'] - $domain_properties [$row['domain']] ['mailbox_count'];
-   $domain_properties [$row['domain']] ['total_quota'] = (int) divide_quota($domain_properties [$row['domain']] ['total_quota']); # convert to MB
-   if ($domain_properties [$row['domain']] ['quota'] == -1) $domain_properties [$row['domain']] ['quota'] = $PALANG['pOverview_unlimited'];
-   if ($domain_properties [$row['domain']] ['maxquota'] == -1) $domain_properties [$row['domain']] ['maxquota'] = $PALANG['pOverview_unlimited'];
 }
 
-$smarty->assign ('domain_properties', $domain_properties);
-if ($is_superadmin)
-{
-	$smarty->assign('select_options', select_options($list_admins, array ($fUsername)), false);
-	$smarty->assign('smarty_template', 'adminlistdomain');
-}
-else
-{
-	$smarty->assign ('select_options', select_options($list_admins, array ($fUsername)), false);
-	$smarty->assign ('smarty_template', 'overview-get');
-}
+include ("templates/header.php");
+include ("templates/menu.php");
 
-$smarty->display ('index.tpl');
+if ($is_superadmin) {
+   include ("templates/admin_list-domain.php");
+} else {
+   include ("templates/overview-get.php");
+}
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

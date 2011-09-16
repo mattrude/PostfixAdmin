@@ -29,57 +29,18 @@ $CONF['configured'] = false;
 // To create the hash, visit setup.php in a browser and type a password into the field,
 // on submission it will be echoed out to you as a hashed value.
 $CONF['setup_password'] = 'changeme';
+
 // Postfix Admin Path
 // Set the location of your Postfix Admin installation here.
 // YOU MUST ENTER THE COMPLETE URL e.g. http://domain.tld/postfixadmin
 $CONF['postfix_admin_url'] = '';
 
+// shouldn't need changing.
+$CONF['postfix_admin_path'] = dirname(__FILE__);
+
 // Language config
 // Language files are located in './languages', change as required..
 $CONF['default_language'] = 'en';
-
-// Hook to override or add translations in $PALANG
-// Set to the function name you want to use as hook function (see language_hook example function below)
-$CONF['language_hook'] = '';
-
-/*
-    language_hook example function
- 
-    Called if $CONF['language_hook'] == '<name_of_the_function>'
-    Allows to add or override $PALANG interface texts.
-
-    If you add new texts, please always prefix them with 'x_' (for example 
-    $PALANG['x_mytext'] = 'foo') to avoid they clash with texts that might be
-    added to languages/*.lang in future versions of PostfixAdmin.
-
-    Please also make sure that all your added texts are included in all
-    sections - that includes all 'case "XY":' sections and the 'default:'
-    section (for users that don't have any of the languages specified
-    in the 'case "XY":' section). 
-    Usually the 'default:' section should contain english text.
-
-    If you modify an existing text/translation, please consider to report it
-    to the bugtracker on http://sf.net/projects/postfixadmin so that all users
-    can benefit from the corrected text/translation.
-
-    Returns: modified $PALANG array
-*/
-/*
-function language_hook($PALANG, $language) {
-    switch ($language) {
-        case "de":
-            $PALANG['x_whatever'] = 'foo';
-            break;
-        case "fr":
-            $PALANG['x_whatever'] = 'bar';
-            break;
-        default:
-            $PALANG['x_whatever'] = 'foobar';
-    }
-
-    return $PALANG;
-}
-*/
 
 // Database Config
 // mysql = MySQL 3.23 and 4.0, 4.1 or 5
@@ -96,6 +57,7 @@ $CONF['database_name'] = 'postfix';
 //   uncomment and change the following
 // $CONF['database_port'] = '5432';
 
+
 // Here, if you need, you can customize table names.
 $CONF['database_prefix'] = '';
 $CONF['database_tables'] = array (
@@ -111,15 +73,13 @@ $CONF['database_tables'] = array (
     'vacation' => 'vacation',
     'vacation_notification' => 'vacation_notification',
     'quota' => 'quota',
-	'quota2' => 'quota2',
+    'quota2' => 'quota2',
 );
 
 // Site Admin
-// Define the Site Admin's email address below.
-// This will be used to send emails from to create mailboxes and
-// from Send Email / Broadcast message pages.
-// Leave blank to send email from the logged-in Admin's Email address.
-$CONF['admin_email'] = '';
+// Define the Site Admins email address below.
+// This will be used to send emails from to create mailboxes.
+$CONF['admin_email'] = 'postmaster@change-this-to-your.domain.tld';
 
 // Mail Server
 // Hostname (FQDN) of your mail server.
@@ -224,13 +184,10 @@ function maildir_name_hook($domain, $user) {
 $CONF['aliases'] = '10';
 $CONF['mailboxes'] = '10';
 $CONF['maxquota'] = '10';
-$CONF['domain_quota_default'] = '2048';
 
 // Quota
 // When you want to enforce quota for your mailbox users set this to 'YES'.
 $CONF['quota'] = 'NO';
-// If you want to enforce domain-level quotas set this to 'YES'.
-$CONF['domain_quota'] = 'YES';
 // You can either use '1024000' or '1048576'
 $CONF['quota_multiplier'] = '1024000';
 
@@ -322,19 +279,15 @@ $CONF['fetchmail_extra_options'] = 'NO';
 $CONF['show_header_text'] = 'NO';
 $CONF['header_text'] = ':: Postfix Admin ::';
 
+// link to display under 'Main' menu when logged in as a user.
+$CONF['user_footer_link'] = "http://change-this-to-your.domain.tld/main";
+
 // Footer
 // Below information will be on all pages.
 // If you don't want the footer information to appear set this to 'NO'.
 $CONF['show_footer_text'] = 'YES';
 $CONF['footer_text'] = 'Return to change-this-to-your.domain.tld';
 $CONF['footer_link'] = 'http://change-this-to-your.domain.tld';
-
-// MOTD ("Motto of the day")
-// You can display a MOTD below the menu on all pages.
-// This can be configured seperately for users, domain admins and superadmins
-$CONF['motd_user'] = '';
-$CONF['motd_admin'] = '';
-$CONF['motd_superadmin'] = '';
 
 // Welcome Message
 // This message is send to every newly created mailbox.
@@ -385,6 +338,7 @@ $CONF['show_custom_colors']=array("lightgreen","lightblue");
 // Example: $CONF['recipient_delimiter'] = "+";
 // Set to "" to disable this check.
 $CONF['recipient_delimiter'] = "";
+
 
 // Optional:
 // Script to run after creation of mailboxes.
@@ -469,15 +423,13 @@ $CONF['new_quota_table'] = 'NO';
 // Specify your own logo and CSS file
 $CONF['theme_logo'] = 'images/logo-default.png';
 $CONF['theme_css'] = 'css/default.css';
-// If you want to customize some styles without editing the $CONF['theme_css'] file,
-// you can add a custom CSS file. It will be included after $CONF['theme_css'].
-$CONF['theme_custom_css'] = '';
 
 // XMLRPC Interface.
-// This should be only of use if you wish to use e.g the
+// This should be only of use if you wish to use e.g the 
 // Postfixadmin-Squirrelmail package
 //  change to boolean true to enable xmlrpc
 $CONF['xmlrpc_enabled'] = false;
+
 
 // If you want to keep most settings at default values and/or want to ensure 
 // that future updates work without problems, you can use a separate config 

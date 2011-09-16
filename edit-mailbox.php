@@ -14,10 +14,11 @@
  * 
  * File: edit-mailbox.php 
  * Used to update an existing mailboxes settings.
- * Template File: edit-mailbox.tpl
+ * Template File: edit-mailbox.php
  *
  * Template Variables:
  *
+ * tMessage
  * tName
  * tQuota
  *
@@ -45,8 +46,9 @@ if (isset ($_GET['username'])) $fUsername = escape_string ($_GET['username']);
 $fUsername = strtolower ($fUsername);
 if (isset ($_GET['domain'])) $fDomain = escape_string ($_GET['domain']);
 
-$pEdit_mailbox_quota_text_error = "";
-$mailbox_password_text_error = "";
+$pEdit_mailbox_name_text = $PALANG['pEdit_mailbox_name_text'];
+$pEdit_mailbox_quota_text = $PALANG['pEdit_mailbox_quota_text'];
+
 
 if (!(check_owner ($SESSID_USERNAME, $fDomain) || authentication_has_role('global-admin')) )
 {
@@ -54,7 +56,7 @@ if (!(check_owner ($SESSID_USERNAME, $fDomain) || authentication_has_role('globa
    $tName = $fName;
    $tQuota = $fQuota;
    $tActive = $fActive;
-   flash_error($PALANG['pEdit_mailbox_domain_error'] . "$fDomain");
+   $tMessage = $PALANG['pEdit_mailbox_domain_error'] . "$fDomain</span>";
 }
 
 $result = db_query("SELECT * FROM $table_mailbox WHERE username = '$fUsername' AND domain = '$fDomain'");
@@ -74,7 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
          $tActive = ('t'==$user_details['active']) ? 1 : 0;
       }
 
-      $tMaxquota = allowed_quota($fDomain, $user_details['quota']);
+      $result = db_query ("SELECT * FROM $table_domain WHERE domain='$fDomain'");
+      if ($result['rows'] == 1)
+      {
+         $row = db_array ($result['result']);
+         $tMaxquota = $row['maxquota'];
+      }
    }
 }
 
@@ -97,28 +104,26 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       if($fPassword == $fPassword2) {
          if ($fPassword != "") {
             if($min_length > 0 && strlen($fPassword) < $min_length) {
-               $mailbox_password_text_error = sprintf($PALANG['pPasswordTooShort'], $CONF['min_password_length']);
+               flash_error(sprintf($PALANG['pPasswordTooShort'], $CONF['min_password_length']));
                $error = 1;
             }
             $formvars['password'] = pacrypt($fPassword);
          }
       }
       else {
-         $mailbox_password_text_error = $PALANG['pEdit_mailbox_password_text_error'];
+         flash_error($PALANG['pEdit_mailbox_password_text_error']);
          $error = 1;
       }
    }
    if ($CONF['quota'] == "YES")
    {
-      if (!check_quota ($fQuota, $fDomain, $fUsername))
+      if (!check_quota ($fQuota, $fDomain))
       {
          $error = 1;
          $tName = $fName;
          $tQuota = $fQuota;
          $tActive = $fActive;
-         $tMaxquota = allowed_quota($fDomain, $user_details['quota']);
-
-         $pEdit_mailbox_quota_text_error = $PALANG['pEdit_mailbox_quota_text_error'];
+         $pEdit_mailbox_quota_text = $PALANG['pEdit_mailbox_quota_text_error'];
       }
    }
    if ($error != 1)
@@ -149,13 +154,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       if(preg_match('/^(.*)@/', $fUsername, $matches)) {
          $formvars['local_part'] = $matches[1];
       }
-      $result = db_update_q('mailbox', "username='$fUsername' AND domain='$fDomain'", $formvars); # TODO: check if we need the AND domain=... clause, if not, switch to db_update()
+      $result = db_update('mailbox', "username='$fUsername' AND domain='$fDomain'", $formvars, array('modified'));
       $maildir = $user_details['maildir'];
       if ($result != 1 || !mailbox_postedit($fUsername,$fDomain,$maildir, $quota)) {
-         flash_error($PALANG['pEdit_mailbox_result_error']);
+         $tMessage = $PALANG['pEdit_mailbox_result_error'];
       }
       else {
-         db_log ($fDomain, 'edit_mailbox', $fUsername);
+         db_log ($SESSID_USERNAME, $fDomain, 'edit_mailbox', $fUsername);
 
          header ("Location: list-virtual.php?domain=$fDomain");
          exit(0);
@@ -170,15 +175,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    }
 }
 
-$smarty->assign ('mode', 'edit');
-$smarty->assign ('fUsername', $fUsername);
-$smarty->assign ('tName', $tName, false);
-$smarty->assign ('tMaxquota', $tMaxquota);
-$smarty->assign ('tQuota', $tQuota);
-$smarty->assign ('mailbox_quota_text_error', $pEdit_mailbox_quota_text_error);
-$smarty->assign ('mailbox_password_text_error', $mailbox_password_text_error);
-if ($tActive)	$smarty->assign ('tActive', ' checked="checked"');
-$smarty->assign ('smarty_template', 'edit-mailbox');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/edit-mailbox.php");
+include ("templates/footer.php");
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

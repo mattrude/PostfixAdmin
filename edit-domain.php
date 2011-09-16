@@ -14,7 +14,7 @@
  * 
  * File: edit-domain.php 
  * Updates the properties of a domain.
- * Template File: admin_edit-domain.tpl
+ * Template File: admin_edit-domain.php
  *
  * Template Variables:
  *
@@ -47,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
         $tDescription = $domain_properties['description'];
         $tAliases = $domain_properties['aliases'];
         $tMailboxes = $domain_properties['mailboxes'];
-        $tDomainquota = $domain_properties['quota'];
         $tMaxquota = $domain_properties['maxquota'];
         $tTransport = $domain_properties['transport'];
         $tBackupmx = $domain_properties['backupmx'];
@@ -59,12 +58,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
     if (isset ($_GET['domain'])) $domain = escape_string ($_GET['domain']);
 
-    $fDescription   =       safepost('fDescription');
-    $fAliases       = (int) safepost('fAliases');
-    $fMailboxes     = (int) safepost('fMailboxes');
-    $fMaxquota      = (int) safepost('fMaxquota', 0);
-    $fDomainquota   = (int) safepost('fDomainquota', $CONF['domain_quota_default']);
-    # TODO: check for / error out on values < -1
+    if (isset ($_POST['fDescription'])) $fDescription = escape_string ($_POST['fDescription']);
+    if (isset ($_POST['fAliases'])) $fAliases = intval($_POST['fAliases']);
+    if (isset ($_POST['fMailboxes'])) $fMailboxes = intval($_POST['fMailboxes']);
+    if (isset ($_POST['fMaxquota'])) {
+        $fMaxquota = intval($_POST['fMaxquota']);
+    } else {
+        $fMaxquota = 0;
+    }
 
     $fTransport = $CONF['transport_default'];
     if($CONF['transport'] != 'NO' && isset ($_POST['fTransport'])) {
@@ -95,42 +96,27 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         $sqlActive = db_get_boolean(False);
     }
 
-    $db_values = array(
-       'description'=> $fDescription,
-       'aliases'    => $fAliases,
-       'mailboxes'  => $fMailboxes,
-       'maxquota'   => $fMaxquota,
-       'quota'      => $fDomainquota,
-       'backupmx'   => $sqlBackupmx,
-       'active'     => $sqlActive,
-    );
-
+    $sqltransport = "";
     if($CONF['transport'] != 'NO') { # only change transport if it is allowed in config. Otherwise, keep the old value.
-        $db_values['transport'] =$fTransport;
+       $sqltransport = "transport='$fTransport',";
     }
 
-    $result = db_update('domain', 'domain', $domain, $db_values);
-
-    if ($result == 1) {
+    $result = db_query ("UPDATE $table_domain SET description='$fDescription',aliases=$fAliases,mailboxes=$fMailboxes,maxquota=$fMaxquota,$sqltransport backupmx='$sqlBackupmx',active='$sqlActive',modified=NOW() WHERE domain='$domain'");
+    if ($result['rows'] == 1)
+    {
         header ("Location: list-domain.php");
         exit;
-    } else {
-        flash_error($PALANG['pAdminEdit_domain_result_error']);
+    }
+    else
+    {
+        $tMessage = $PALANG['pAdminEdit_domain_result_error'];
     }
 }
 
-$smarty->assign ('mode', 'edit');
-$smarty->assign ('pAdminCreate_domain_domain_text_error', '');
-$smarty->assign ('domain', $domain);
-$smarty->assign ('tDescription', $tDescription);
-$smarty->assign ('tAliases', $tAliases);
-$smarty->assign ('tMailboxes', $tMailboxes);
-$smarty->assign ('tMaxquota', $tMaxquota);
-$smarty->assign ('tDomainquota', $tDomainquota);
-$smarty->assign ('select_options', select_options($CONF['transport_options'], array($tTransport)), false);
-if ($tBackupmx)	$smarty->assign ('tBackupmx', ' checked="checked"');
-if ($tActive)	$smarty->assign ('tActive', ' checked="checked"');
-$smarty->assign ('smarty_template', 'admin_edit-domain');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/admin_edit-domain.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
+?>

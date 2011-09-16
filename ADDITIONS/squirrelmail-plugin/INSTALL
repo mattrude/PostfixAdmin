@@ -6,7 +6,9 @@ Requirements:
 
  - PHP 5.2.x with php5-xmlrpc installed (if available; it should be available by default anyway)
  - http access to a local/remote postfixadmin interface
-
+ - Zend Framework - download from http://framework.zend.com 
+    - the Zend directory needs to be in PHP's include_path, or in the same directory 
+      as the plugin. Suggested version 1.10; older versions should work.
 
 Installation :
 ==============

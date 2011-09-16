@@ -14,10 +14,11 @@
  * 
  * File: create-domain.php
  * Allows administrators to create new domains.
- * Template File: admin_create-domain.tpl
+ * Template File: admin_create-domain.php
  *
  * Template Variables:
  *
+ * tMessage
  * tDomain
  * tDescription
  * tAliases
@@ -45,22 +46,14 @@ $form_fields = array(
     'fDescription'    => array('type' => 'str', 'default' =>''), 
     'fAliases'        => array('type' => 'int', 'default' => $CONF['aliases']), 
     'fMailboxes'      => array('type' => 'int', 'default' => $CONF['mailboxes']), 
-    'fMaxquota'       => array('type' => 'int', 'default' => $CONF['maxquota']),
-    'fDomainquota'    => array('type' => 'int', 'default' => $CONF['domain_quota_default']),
+    'fMaxquota'       => array('type' => 'int', 'default' => $CONF['maxquota']), 
     'fTransport'      => array('type' => 'str', 'default' => $CONF['transport_default'], 'options' => $CONF['transport_options']), 
-    'fDefaultaliases' => array('type' => 'bool', 'default' => 'on', 'options' => array('on', 'off')), 
-    'fBackupmx'       => array('type' => 'bool', 'default' => 'off', 'options' => array('on', 'off')) 
+    'fDefaultaliases' => array('type' => 'str', 'default' => 'off', 'options' => array('on', 'off')), 
+    'fBackupmx'       => array('type' => 'str', 'default' => 'off', 'options' => array('on', 'off')) 
 );
 
-$fDefaultaliases = "";
-$tDefaultaliases = "";
-
-# TODO: this foreach block should only be executed for POST
 foreach($form_fields  as $key => $default) {
-    if($default['type'] == 'bool' && $_SERVER['REQUEST_METHOD'] == "POST") {
-        $$key = escape_string(safepost($key, 'off')); # isset for unchecked checkboxes is always false
-    } 
-    elseif (isset($_POST[$key]) && (strlen($_POST[$key]) > 0)) {
+    if(isset($_POST[$key]) && (strlen($_POST[$key]) > 0)) {
         $$key = escape_string($_POST[$key]);
     }
     else {
@@ -87,7 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
     $tTransport = $fTransport;
     $tAliases = $fAliases;
     $tMaxquota = $fMaxquota;
-    $tDomainquota = $fDomainquota;
     $tMailboxes = $fMailboxes;
     $tDefaultaliases = $fDefaultaliases;
     $tBackupmx = $fBackupmx;
@@ -104,12 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         $tAliases = $fAliases;
         $tMailboxes = $fMailboxes;
         if (isset ($_POST['fMaxquota'])) $tMaxquota = $fMaxquota;
-        if (isset ($_POST['fDomainquota'])) $tDomainquota = $fDomainquota;
         if (isset ($_POST['fTransport'])) $tTransport = $fTransport;
         if (isset ($_POST['fDefaultaliases'])) $tDefaultaliases = $fDefaultaliases;
         if (isset ($_POST['fBackupmx'])) $tBackupmx = $fBackupmx;
-        $pAdminCreate_domain_domain_text_error = $PALANG['pAdminCreate_domain_domain_text_error2'];
-        if (domain_exist ($fDomain)) $pAdminCreate_domain_domain_text_error = $PALANG['pAdminCreate_domain_domain_text_error'];
+        $pAdminCreate_domain_domain_text = $PALANG['pAdminCreate_domain_domain_text_error2'];
+        if (domain_exist ($fDomain)) $pAdminCreate_domain_domain_text = $PALANG['pAdminCreate_domain_domain_text_error'];
     }
 
     if ($error != 1)
@@ -117,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         $tAliases = $CONF['aliases'];
         $tMailboxes = $CONF['mailboxes'];
         $tMaxquota = $CONF['maxquota'];
-        $tDomainquota = $CONF['domain_quota_default'];
 
         if ($fBackupmx == "on")
         {
@@ -130,11 +120,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
             $sqlBackupmx = db_get_boolean(false);
         }
 
-        $sql_query = "INSERT INTO $table_domain (domain,description,aliases,mailboxes,maxquota,quota,transport,backupmx,created,modified) VALUES ('$fDomain','$fDescription',$fAliases,$fMailboxes,$fMaxquota,$fDomainquota,'$fTransport','$sqlBackupmx',NOW(),NOW())";
+        $sql_query = "INSERT INTO $table_domain (domain,description,aliases,mailboxes,maxquota,transport,backupmx,created,modified) VALUES ('$fDomain','$fDescription',$fAliases,$fMailboxes,$fMaxquota,'$fTransport','$sqlBackupmx',NOW(),NOW())";
         $result = db_query($sql_query);
         if ($result['rows'] != 1)
         {
-            $pAdminCreate_domain_domain_text_error = $PALANG['pAdminCreate_domain_result_error'] . "<br />($fDomain)"; # TODO: remove a sprintf string
+            $tMessage = $PALANG['pAdminCreate_domain_result_error'] . "<br />($fDomain)<br />";
         }
         else
         {
@@ -146,30 +136,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
                     $result = db_query ("INSERT INTO $table_alias (address,goto,domain,created,modified) VALUES ('$address','$goto','$fDomain',NOW(),NOW())");
                 }
             }
-            flash_info($PALANG['pAdminCreate_domain_result_success'] . "<br />($fDomain)"); # TODO: use a sprintf string
+            $tMessage = $PALANG['pAdminCreate_domain_result_success'] . "<br />($fDomain)</br />";
         }
         if (!domain_postcreation($fDomain))
         {
-             flash_error($PALANG['pAdminCreate_domain_error']);
+             $tMessage = $PALANG['pAdminCreate_domain_error'];
         }
     }
 }
 
-
-$smarty->assign ('mode', 'create');
-$smarty->assign ('tDomain', $tDomain);
-$smarty->assign ('pAdminCreate_domain_domain_text', $pAdminCreate_domain_domain_text, false);
-$smarty->assign ('pAdminCreate_domain_domain_text_error', $pAdminCreate_domain_domain_text_error, false);
-$smarty->assign ('tDescription', $tDescription, false);
-$smarty->assign ('tAliases', $tAliases);
-$smarty->assign ('tMailboxes', $tMailboxes);
-$smarty->assign ('tDomainquota', $tDomainquota);
-$smarty->assign ('tMaxquota', $tMaxquota,false); # TODO: why is sanitize disabled? Should be just integer...
-$smarty->assign ('select_options', select_options ($CONF ['transport_options'], array ($tTransport)),false);
-$smarty->assign ('tDefaultaliases', ($tDefaultaliases == 'on') ? ' checked="checked"' : '');
-$smarty->assign ('tBackupmx', ($tBackupmx == 'on') ? ' checked="checked"' : '');
-$smarty->assign ('smarty_template', 'admin_edit-domain');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/admin_create-domain.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>
