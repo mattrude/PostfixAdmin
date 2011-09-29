@@ -10,7 +10,10 @@ else {
 	$version = $_GET['version'];
 }
 
-$version = preg_replace("/[^0-9.]/", "", $version);
+# remove anything that is not a digit and not a dot
+# also remove anything after such an invalid character to avoid wrong results
+# TODO: this will fail to compare versions like "2.3rc7" with "2.3rc8"
+$version = preg_replace("/[^0-9.].*/", "", $version);
 
 if(version_compare2($version,$latest) >= 0) {
 	echo "Congratulations - you're running the latest version of PostfixAdmin";
