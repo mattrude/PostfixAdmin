@@ -1321,7 +1321,23 @@ function upgrade_1284() {
         }
     }
 }
+function upgrade_1284() {
+    # migrate the ALL domain to the superadmin column
+    # Note: The ALL domain is not (yet) deleted to stay backwards-compatible for now (will be done in a later upgrade function)
 
+    $result = db_query("SELECT username FROM " . table_by_key('domain_admins') . " where domain='ALL'");
+
+    if ($result['rows'] > 0) {
+        while ($row = db_array ($result['result'])) {
+            printdebug ("Setting superadmin flag for " . $row['username']);
+            db_update('admin', 'username', $row['username'], array('superadmin' => db_get_boolean(true)) );
+        }
+    }
+}
+function upgrade_1314() {
+    db_query_parsed("ALTER TABLE `admin` ADD `locale` VARCHAR( 2 ) NOT NULL DEFAULT 'en' AFTER `modified`");
+}
+ 
 
 # TODO MySQL:
 # - various varchar fields do not have a default value
