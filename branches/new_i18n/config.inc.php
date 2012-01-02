@@ -23,16 +23,16 @@
  * Doing this implies you have changed this file as required.
  * i.e. configuring database etc; specifying setup.php password etc.
  */
-$CONF['configured'] = false;
+$CONF['configured'] = true;
 
 // In order to setup Postfixadmin, you MUST specify a hashed password here.
 // To create the hash, visit setup.php in a browser and type a password into the field,
 // on submission it will be echoed out to you as a hashed value.
-$CONF['setup_password'] = 'changeme';
+$CONF['setup_password'] = '0c39631c7560cac1bbbd267a10b4fb00:61d0624d620696c65bfb8d497e0c40a84c92ac9e';
 // Postfix Admin Path
 // Set the location of your Postfix Admin installation here.
 // YOU MUST ENTER THE COMPLETE URL e.g. http://domain.tld/postfixadmin
-$CONF['postfix_admin_url'] = '';
+$CONF['postfix_admin_url'] = 'http://server1/postfixadmin-trunk';
 
 // Language config
 // Language files are located in './languages', change as required..
@@ -43,41 +43,20 @@ $CONF['default_language'] = 'en';
 $CONF['language_hook'] = '';
 
 /*
-    language_hook example function
- 
-    Called if $CONF['language_hook'] == '<name_of_the_function>'
-    Allows to add or override $PALANG interface texts.
-
-    If you add new texts, please always prefix them with 'x_' (for example 
-    $PALANG['x_mytext'] = 'foo') to avoid they clash with texts that might be
-    added to languages/*.lang in future versions of PostfixAdmin.
-
-    Please also make sure that all your added texts are included in all
-    sections - that includes all 'case "XY":' sections and the 'default:'
-    section (for users that don't have any of the languages specified
-    in the 'case "XY":' section). 
-    Usually the 'default:' section should contain english text.
-
-    If you modify an existing text/translation, please consider to report it
-    to the bugtracker on http://sf.net/projects/postfixadmin so that all users
-    can benefit from the corrected text/translation.
-
-    Returns: modified $PALANG array
+ *   language_alter
+ *
+ *  If you want to alter the existing localization
+ *  Add easily $lang[<langcode>][<existing string>] = <new string>;
+ * @param string $string The string to be replaced
+ * @param string $language the ISO language code
+ * Return replacement or false
 */
-/*
-function language_hook($PALANG, $language) {
-    switch ($language) {
-        case "de":
-            $PALANG['x_whatever'] = 'foo';
-            break;
-        case "fr":
-            $PALANG['x_whatever'] = 'bar';
-            break;
-        default:
-            $PALANG['x_whatever'] = 'foobar';
-    }
 
-    return $PALANG;
+function language_alter($string, $language) {
+            $lang['de']['foo'] = 'foo';
+            $lang['en']['bar'] = 'bar';
+
+    return (isset($lang[$language][$string]) ? $lang[$language][$string] : false ;
 }
 */
 
@@ -87,9 +66,9 @@ function language_hook($PALANG, $language) {
 // pgsql = PostgreSQL
 $CONF['database_type'] = 'mysql';
 $CONF['database_host'] = 'localhost';
-$CONF['database_user'] = 'postfix';
-$CONF['database_password'] = 'postfixadmin';
-$CONF['database_name'] = 'postfix';
+$CONF['database_user'] = 'pfa_trunk';
+$CONF['database_password'] = '';
+$CONF['database_name'] = 'pfa_trunk';
 // If you need to specify a different port for a MYSQL database connection, use e.g.
 //   $CONF['database_host'] = '172.30.33.66:3308';
 // If you need to specify a different port for POSTGRESQL database connection
@@ -278,7 +257,7 @@ $CONF['domain_quota_default'] = '2048';
 
 // Quota
 // When you want to enforce quota for your mailbox users set this to 'YES'.
-$CONF['quota'] = 'NO';
+$CONF['quota'] = 'YES';
 // If you want to enforce domain-level quotas set this to 'YES'.
 $CONF['domain_quota'] = 'YES';
 // You can either use '1024000' or '1048576'
@@ -397,7 +376,7 @@ EOM;
 
 // When creating mailboxes or aliases, check that the domain-part of the
 // address is legal by performing a name server look-up.
-$CONF['emailcheck_resolve_domain']='YES';
+$CONF['emailcheck_resolve_domain']='NO';
 
 
 // Optional:
@@ -411,16 +390,16 @@ $CONF['emailcheck_resolve_domain']='YES';
 // color names available on most browsers
 
 //set to YES to enable this feature
-$CONF['show_status']='NO';
+$CONF['show_status']='YES';
 //display a guide to what these colors mean
-$CONF['show_status_key']='NO';
+$CONF['show_status_key']='YES';
 // 'show_status_text' will be displayed with the background colors
 // associated with each status, you can customize it here
 $CONF['show_status_text']='&nbsp;&nbsp;';
 // show_undeliverable is useful if most accounts are delivered to this
 // postfix system.  If many aliases and mailboxes are forwarded
 // elsewhere, you will probably want to disable this.
-$CONF['show_undeliverable']='NO';
+$CONF['show_undeliverable']='YES';
 $CONF['show_undeliverable_color']='tomato';
 // mails to these domains will never be flagged as undeliverable
 $CONF['show_undeliverable_exceptions']=array("unixmail.domain.ext","exchangeserver.domain.ext","gmail.com");
@@ -496,11 +475,11 @@ $CONF['create_mailbox_subdirs_prefix']='INBOX.';
 // See: DOCUMENTATION/DOVECOT.txt
 //      http://wiki.dovecot.org/Quota/Dict
 //
-$CONF['used_quotas'] = 'NO';
+$CONF['used_quotas'] = 'YES';
 
 // if you use dovecot >= 1.2, set this to yes.
 // Note about dovecot config: table "quota" is for 1.0 & 1.1, table "quota2" is for dovecot 1.2 and newer
-$CONF['new_quota_table'] = 'NO';
+$CONF['new_quota_table'] = 'YES';
 
 //
 // Normally, the TCP port number does not have to be specified.

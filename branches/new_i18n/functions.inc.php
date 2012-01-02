@@ -2259,6 +2259,202 @@ function boolconf($setting) {
     }
 }
 
+/**
+ * Translates a string to the current language or to a given language.
+ *
+ * The t() function serves two purposes. First, at run-time it translates
+ * user-visible text into the appropriate language. Second, various mechanisms
+ * that figure out what text needs to be translated work off t() -- the text
+ * inside t() calls is added to the database of strings to be translated.
+ * These strings are expected to be in English, so the first argument should
+ * always be in English. To enable a fully-translatable site, it is important
+ * that all human-readable text that will be displayed on the site or sent to
+ * a user is passed through the t() function, or a related function. See the
+ * @link http://drupal.org/node/322729 Localization API @endlink pages for
+ * more information, including recommendations on how to break up or not
+ * break up strings for translation.
+ *
+ * You should never use t() to translate variables, such as calling
+ * @code t($text); @endcode, unless the text that the variable holds has been
+ * passed through t() elsewhere (e.g., $text is one of several translated
+ * literal strings in an array). It is especially important never to call
+ * @code t($user_text); @endcode, where $user_text is some text that a user
+ * entered - doing that can lead to cross-site scripting and other security
+ * problems. However, you can use variable substitution in your string, to put
+ * variable text such as user names or link URLs into translated text. Variable
+ * substitution looks like this:
+ * @code
+ * $text = t("@name's blog", array('@name' => format_username($account)));
+ * @endcode
+ * Basically, you can put variables like @name into your string, and t() will
+ * substitute their sanitized values at translation time (see $args below or
+ * the Localization API pages referenced above for details). Translators can
+ * then rearrange the string as necessary for the language (e.g., in Spanish,
+ * it might be "blog de @name").
+ *
+ * During the Drupal installation phase, some resources used by t() wil not be
+ * available to code that needs localization. See st() and get_t() for
+ * alternatives.
+ *
+ * @param $string
+ *   A string containing the English string to translate.
+ * @param $args
+ *   An associative array of replacements to make after translation.
+ *   See format_string().
+ * @param $options
+ *   An associative array of additional options, with the following elements:
+ *   - 'langcode' (defaults to the current language): The language code to
+ *     translate to a language other than what is used to display the page.
+ *   - 'context' (defaults to the empty context): The context the source string
+ *     belongs to.
+ *
+ * @return
+ *   The translated string.
+ *
+ * @see st()
+ * @see get_t()
+ * @ingroup sanitization
+ */
+function t($string, array $args = array()) {
+  global $language;
+  static $custom_strings;
+
+  $options['langcode'] = isset($_SESSION['sessid']['locale']) ? $_SESSION['sessid']['locale'] : 'en';
+
+
+  if ( ($string = language_alter($string, $options['langcode']) ) == false && $options['langcode'] != 'en' ) {
+    $string = locale($string, $options['langcode']);
+  }
+  if (empty($args)) {
+    return $string;
+  }
+  else {
+    return format_string($string, $args);
+  }
+}
+
+/**
+ * Replace placeholders with sanitized values in a string.
+ *
+ * @param $string
+ *   A string containing placeholders.
+ * @param $args
+ *   An associative array of replacements to make. Occurrences in $string of
+ *   any key in $args are replaced with the corresponding value, after
+ *   sanitization. The sanitization function depends on the first character of
+ *   the key:
+ *   - !variable: Inserted as is. Use this for text that has already been
+ *     sanitized.
+ *   - @variable: Escaped to HTML using check_plain(). Use this for anything
+ *     displayed on a page on the site.
+ *   - %variable: Escaped as a placeholder for user-submitted content, which shows up as <em>emphasized</em> text.
+ *
+ * @see t()
+ * @ingroup sanitization
+ */
+function format_string($string, array $args = array()) {
+  // Transform arguments before inserting them.
+  foreach ($args as $key => $value) {
+    switch ($key[0]) {
+      case '@':
+        // Escaped only.
+        $args[$key] = check_plain($value);
+        break;
+
+      case '%':
+      default:
+        // Escaped and placeholder.
+        $args[$key] = '<em class="placeholder">' . check_plain($value) . '</em>';
+        break;
+
+      case '!':
+        // Pass-through.
+    }
+  }
+  return strtr($string, $args);
+}
+
+function check_plain($text) {
+  return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+}
+
+
+/**
+ * Provides interface translation services.
+ *
+ * This function is called from t() to translate a string if needed.
+ *
+ * @param $string
+ *   A string to look up translation for. If omitted, all the
+ *   cached strings will be returned in all languages already
+ *   used on the page.
+ * @param $langcode
+ *   Language code to use for the lookup.
+ */
+function locale($string = NULL, $langcode = NULL) {
+  static $locale_t;
+// Store database cached translations in a static variable. Only build the
+  // cache after $language has been set to avoid an unnecessary cache rebuild.
+  if (!isset($locale_t[$langcode])) {
+    $locale_t[$langcode] = array();
+ 
+        $result = db_query("SELECT s.source, s.context, t.translation, t.language FROM {locales_source} s LEFT JOIN {locales_target} t ON s.lid = t.lid AND t.language = :language WHERE s.textgroup = 'default' AND s.version = :version AND LENGTH(s.source) < :length", array(':language' => $langcode, ':version' => VERSION, ':length' => variable_get('locale_cache_length', 75)));
+        while ($db_array($result) as $data) {
+          $locale_t[$langcode][$data['source']] = (empty($data['translation']) ? TRUE : $data->translation);
+        }
+      }
+    }
+  }
+
+  // If we have the translation cached, skip checking the database
+  if (!isset($locale_t[$langcode][$context][$string])) {
+
+    // We do not have this translation cached, so get it from the DB.
+    $translation = db_query("SELECT s.lid, t.translation, s.version FROM {locales_source} s LEFT JOIN {locales_target} t ON s.lid = t.lid AND t.language = :language WHERE s.source = :source AND s.context = :context AND s.textgroup = 'default'", array(
+      ':language' => $langcode,
+      ':source' => $string,
+      ':context' => (string) $context,
+    ))->fetchObject();
+    if ($translation) {
+      // We have the source string at least.
+      // Cache translation string or TRUE if no translation exists.
+      $locale_t[$langcode][$context][$string] = (empty($translation->translation) ? TRUE : $translation->translation);
+
+      if ($translation->version != VERSION) {
+        // This is the first use of this string under current Drupal version. Save version
+        // and clear cache, to include the string into caching next time. Saved version is
+        // also a string-history information for later pruning of the tables.
+        db_update('locales_source')
+          ->fields(array('version' => VERSION))
+          ->condition('lid', $translation->lid)
+          ->execute();
+        cache_clear_all('locale:', 'cache', TRUE);
+      }
+    }
+    else {
+      // We don't have the source string, cache this as untranslated.
+      db_insert('locales_source')
+        ->fields(array(
+          'location' => request_uri(),
+          'source' => $string,
+          'context' => (string) $context,
+          'textgroup' => 'default',
+          'version' => VERSION,
+        ))
+        ->execute();
+      $locale_t[$langcode][$context][$string] = TRUE;
+      // Clear locale cache so this string can be added in a later request.
+      cache_clear_all('locale:', 'cache', TRUE);
+    }
+  }
+
+  return ($locale_t[$langcode][$context][$string] === TRUE ? $string : $locale_t[$langcode][$context][$string]);
+
+}
+
+
+
+
 $table_admin = table_by_key ('admin');
 $table_alias = table_by_key ('alias');
 $table_alias_domain = table_by_key ('alias_domain');
