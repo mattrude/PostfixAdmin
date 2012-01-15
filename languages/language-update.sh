@@ -15,7 +15,7 @@
  # File: language-update.sh
  # Lists missing translations in language files and optionally patches the
  # english texts into the language file.
- # Can also do several other things that help handling the language files - see --help.
+ # Can also rename a $PALANG string.
  #
  # written by Christian Boltz
 
@@ -152,46 +152,6 @@ function addcomment() {
 } # end add_comment
 
 
-function obsolete() {
-	for file in $filelist ; do
-		# do not skip en.lang
-
-		line="$(grep "PALANG\['$text'\]" "$file")" || {
-			echo "*** $file does not contain \$PALANG['$text'] ***" >&2
-			continue
-		}
-
-		newline="$line # obsolete"
-
-		# create patch
-		echo "
---- $file.old
-+++ $file
-@@ -1,1 +1,1 @@
--$line
-+$newline
-		" > "$file.patch"
-
-		test $patch = 0 && cat $file.patch
-		test $patch = 1 && patch $file < $file.patch
-	done
-} # end add_comment
-
-
-
-function comparetext() {
-	for file in $filelist ; do
-		echo "<?php 
-			include('$file');
-			if (\$PALANG['$text1'] != \$PALANG['$text2']) {
-				echo '$file: ' . \$PALANG['$text1'] . ' -- $text1' . \"\\n\";
-				echo '$file: ' . \$PALANG['$text2'] . ' -- $text2' . \"\\n\";
-			}
-		" | php
-	done
-}
-
-
 
 function cleanup() {
 	# check for duplicated strings
@@ -202,7 +162,7 @@ function cleanup() {
 
 	# cleanup tempfiles
 	test $nocleanup = 0 && for file in $filelist ; do
-		rm -f $file.patch $file.strings $file.diff $file.orig
+		rm -f $file.patch $file.strings $file.diff
 	done
 } # end cleanup()
 
@@ -281,11 +241,6 @@ echo '
 	Useful if a string needs to be translated again.
 
 
-'"$0"' --obsolete string [--patch] [--nocleanup] [foo.lang [bar.lang [...] ] ]
-
-    Mark $PALANG['"'"'string'"'"'] as obsolete / no longer used
-
-
 '"$0"' --forcepatch [foo.lang [bar.lang [...] ] ]
 
     Similar to --patch, but applies the patch line by line. Useful if --patch
@@ -294,13 +249,6 @@ echo '
     --forcepatch patches 10 lines per run. When you only see messages like
     "patch: **** Only garbage was found in the patch input.", take it as 
     success message :-)  (no difference remaining)
-
-
-'"$0"' --comparetext string1 string2 [foo.lang [bar.lang [...] ] ]
-
-	Compare two texts in $PALANG.
-	This can be useful to find out if two equel texts in $PALANG are the 
-	same in all languages. No output means no difference.
 
 
 '"$0"' --stats
@@ -332,8 +280,6 @@ rename=0 # rename a string
 remove=0 # remove a string
 stats=0  # create translation statistics
 addcomment=0 # add translation comment
-obsolete=0 # add obsolete note
-comparetext=0 # compare two PALANG texts
 text=''
 comment=''
 rename_old=''
@@ -345,12 +291,6 @@ while [ -n "$1" ] ; do
 		--help)
 			usage
 			exit 0;
-			;;
-		--comparetext)
-			comparetext=1
-			shift; text1="$1"
-			shift; text2="$1"
-			test -z "$text2" && { echo '--comparetext needs two parameters' >&2 ; exit 1; }
 			;;
 		--notext)
 			notext=1
@@ -382,12 +322,6 @@ while [ -n "$1" ] ; do
 			echo "$comment" | grep '^[a-z_-]*\.lang$' && comment='' # error out on *.lang - probably a filename
 			test -z "$comment" && { echo '--addcomment needs two parameters' >&2 ; exit 1 ; }
 			;;
-		--obsolete)
-			obsolete=1
-			shift ; text="$1"
-			echo "$text" | grep '^[a-z_-]*\.lang$' && comment='' # error out on *.lang - probably a filename
-			test -z "$text" && { echo '--addcomment needs a parameter' >&2 ; exit 1 ; }
-			;;
 		--forcepatch)
 			forcepatch=1
 			;;
@@ -413,9 +347,7 @@ test "$filelist" = "" && filelist="`ls -1 *.lang`"
 test "$addcomment" = 1 && { addcomment ; cleanup ; exit 0 ; }
 test "$rename" = 1 && { rename_string ; cleanup ; exit 0 ; }
 test "$remove" = 1 && { remove_string ; cleanup ; exit 0 ; }
-test "$obsolete" = 1 && { obsolete ; cleanup ; exit 0 ; }
 test "$forcepatch" = 1 && { forcepatch ; cleanup ; exit 0 ; }
-test "$comparetext" = 1 && { comparetext ; cleanup ; exit 0 ; }
 
 test "$stats" = 1 && { statistics ; exit 0 ; }
 

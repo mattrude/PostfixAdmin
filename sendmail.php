@@ -14,10 +14,11 @@
  * 
  * File: sendmail.php
  * Used to send an email to a user.
- * Template File: sendmail.tpl
+ * Template File: sendmail.php
  *
  * Template Variables:
  *
+ * tMessage
  * tFrom
  * tSubject
  * tBody
@@ -33,44 +34,56 @@ require_once('common.php');
 
 authentication_require_role('admin');
 
-(($CONF['sendmail'] == 'NO') ? header("Location: main.php") && exit : '1');
+(($CONF['sendmail'] == 'NO') ? header("Location: " . $CONF['postfix_admin_url'] . "/main.php") && exit : '1');
 
-$smtp_from_email = smtp_get_admin_email();
-
+$SESSID_USERNAME = authentication_get_username();
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
    $fTo = safepost('fTo');
-   $fFrom = $smtp_from_email;
-   $fSubject = safepost('fSubject');
+   $fFrom = $SESSID_USERNAME;
+   $fHeaders = "To: " . $fTo . "\n";
+   $fHeaders .= "From: " . $fFrom . "\n";
+
+   mb_internal_encoding("UTF-8");
+   $fHeaders .= "Subject: " . mb_encode_mimeheader( safepost('fSubject'), 'UTF-8', 'Q') . "\n";
+   $fHeaders .= "MIME-Version: 1.0\n";
+   $fHeaders .= "Content-Type: text/plain; charset=utf-8\n";
+   $fHeaders .= "Content-Transfer-Encoding: 8bit\n";
+   $fHeaders .= "\n";
 
    $tBody = $_POST['fBody'];
    if (get_magic_quotes_gpc ())
    {
-      $tBody = stripslashes($tBody); # TODO: check for get_magic_quotes_gpc inside safepost/safeget
+      $tBody = stripslashes($tBody);
    }
+   $fHeaders .= $tBody;
 
    if (empty ($fTo) or !check_email ($fTo))
    {
       $error = 1;
       $tTo = escape_string ($_POST['fTo']);
       $tSubject = escape_string ($_POST['fSubject']);
-      flash_error($PALANG['pSendmail_to_text_error']);
+      $tMessage = $PALANG['pSendmail_to_text_error'];
    }
 
    if ($error != 1)
    {
-      if (!smtp_mail ($fTo, $fFrom, $fSubject, $tBody)) {
-         flash_error($PALANG['pSendmail_result_error']);
-      } else {
-         flash_info($PALANG['pSendmail_result_success']);
+      if (!smtp_mail ($fTo, $fFrom, $fHeaders))
+      {
+         $tMessage .= $PALANG['pSendmail_result_error'];
+      }
+      else
+      {
+         $tMessage .= $PALANG['pSendmail_result_success'];
       }
    }
 }
-$smarty->assign ('smtp_from_email', $smtp_from_email);
-$smarty->assign ('smarty_template', 'sendmail');
-$smarty->display ('index.tpl');
 
+include ("./templates/header.php");
+include ("./templates/menu.php");
+include ("./templates/sendmail.php");
+include ("./templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

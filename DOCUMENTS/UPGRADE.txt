@@ -57,13 +57,6 @@ to have change the permissions for Postfix Admin.
 
 (the last command assumes your Apache is running with group "www")
 
-Since version 2.4 we use smarty templates. That means the templates_c directory
-needs to be writeable for your webserver.
-
-  $ chown -R www-data templates_c/
-
-(if your Apache runs as user "www-data")
-
 
 4. Configure
 ------------
@@ -103,7 +96,6 @@ superadmin account to setup domains and domain admins.
 Since version 2.3, PostfixAdmin supports alias domains ($CONF['alias_domain']).
 If you want to use them, you have to add some queries to your postfix config -
 see POSTFIX_CONF for details.
-
 
 7. Done
 -------

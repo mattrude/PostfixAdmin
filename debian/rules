@@ -21,16 +21,16 @@ build-stamp: $(QUILT_STAMPFN)
 # Create a needed tar.gz file to build a non-nativ .dpkg
 prep:
 	rm -f ../postfixadmin_*orig.tar.gz
-	cd ..; tar --exclude-vcs --exclude=postfixadmin/debian  --exclude=postfixadmin/.pc -czf postfixadmin_${DEBVERSION}.orig.tar.gz postfixadmin
+	cd ..; tar --exclude-vcs --exclude=*.svn* --exclude=postfixadmin/debian  --exclude=postfixadmin/.pc -czf postfixadmin_${DEBVERSION}.orig.tar.gz postfixadmin-2.3
 
 # Call this target to build a shiny new .dpkg file.
-build-package: prep
+build-package: 
 	dh_testdir
 	cd ${PFADIR}; dpkg-buildpackage -rfakeroot
 
 clean: unpatch
 	dh_testdir
-	dh_testroot
+	#dh_testroot
 	dh_clean
 	debconf-updatepo
 
@@ -43,8 +43,6 @@ install: build
 	mv debian/postfixadmin/usr/share/postfixadmin/config.inc.php debian/postfixadmin/etc/postfixadmin/config.inc.php
 	find debian/postfixadmin -name .svn | xargs -r rm -r
 	cp debian/confd-link.sh debian/postfixadmin/usr/share/postfixadmin/
-	chmod +x debian/postfixadmin/usr/share/postfixadmin/scripts/postfixadmin-cli
-	chmod +x debian/postfixadmin/usr/share/postfixadmin/scripts/postfixadmin-cli.php
 
 # Build architecture-independent files here.
 binary-indep: build install

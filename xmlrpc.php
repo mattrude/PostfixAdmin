@@ -35,7 +35,6 @@ require_once(dirname(__FILE__) . '/common.php');
 if($CONF['xmlrpc_enabled'] == false) {
     die("xmlrpc support disabled");
 }
-
 require_once('Zend/XmlRpc/Server.php');
 $server = new Zend_XmlRpc_Server();
 
@@ -45,7 +44,7 @@ $server = new Zend_XmlRpc_Server();
  * @return boolean true on success, else false.
  */
 function login($username, $password) {
-    if(MailboxHandler::login($username, $password)) {
+    if(UserHandler::login($username, $password)) {
         session_regenerate_id();
         $_SESSION['authenticated'] = true;
         $_SESSION['username'] = $username;
@@ -73,8 +72,8 @@ class UserProxy {
      * @return boolean true on success
      */
     public function changePassword($old_password, $new_password) {
-        $uh = new MailboxHandler($_SESSION['username']);
-        return $uh->change_pw($new_password, $old_password);
+        $uh = new UserHandler($_SESSION['username']);
+        return $uh->change_pass($old_password, $new_password);
     }
 
    /**
@@ -83,7 +82,7 @@ class UserProxy {
      * @return boolean true if successful.
      */
     public function login($username, $password) {
-        $uh = new MailboxHandler($_SESSION['username']);
+        $uh = new UserHandler($_SESSION['username']);
         return $uh->login($username, $password);
     }
 }
@@ -139,11 +138,9 @@ class AliasProxy {
      * @return array - array of aliases this user has. Array may be empty.
      */
     public function get() {
-        $ah = new AliasHandler();
-        $ah->init($_SESSION['username']);
+        $ah = new AliasHandler($_SESSION['username']);
         /* I see no point in returning special addresses to the user. */
-        $ah->get(false);
-        return $ah->result;
+        return $ah->get(false);
     }
 
     /**
@@ -152,8 +149,7 @@ class AliasProxy {
      * @return boolean true
      */
     public function update($addresses, $flags) {
-        $ah = new AliasHandler();
-        $ah->init($_SESSION['username']);
+        $ah = new AliasHandler($_SESSION['username']);
         /**
          * if the user is on vacation, they should use VacationProxy stuff to remove it 
          * and we'll never return the vacation address from here anyway
@@ -166,9 +162,7 @@ class AliasProxy {
      * (i.e. their email address is also in the alias table). IF it returns false, then it's 'remote_only'
      */
     public function hasStoreAndForward() {
-        $ah = new AliasHandler();
-        $ah->init($_SESSION['username']);
+        $ah = new AliasHandler($_SESSION['username']);
         return $ah->hasStoreAndForward();
     }
 }
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

@@ -14,11 +14,11 @@
  * 
  * File: password.php
  * Used by users to change their mailbox (and login) password.
- * Template File: password.tpl
+ * Template File: users_password.php
  *
  * Template Variables:
  *
- * none
+ * tMessage
  *
  * Form POST \ GET Variables:
  *
@@ -32,9 +32,6 @@ require_once('../common.php');
 authentication_require_role('user');
 $username = authentication_get_username();
 
-$pPassword_password_text = "";
-$pPassword_password_current_text = "";
-
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
     if(isset($_POST['fCancel'])) {
@@ -47,14 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     $fPassword2 = $_POST['fPassword2'];
 
     $error = 0;
-
-    $validpass = validate_password($fPassword);
-    if(count($validpass) > 0) {
-        flash_error($validpass[0]); # TODO: honor all error messages, not only the first one
+    if(strlen($fPassword) < $CONF['min_password_length']) {
         $error += 1;
+        flash_error(sprintf($PALANG['pPasswordTooShort'], $CONF['min_password_length']));
     }
-  
-    if(!MailboxHandler::login($username, $fPassword_current)) {
+    if(!UserHandler::login($username, $fPassword_current)) {
         $error += 1;
         $pPassword_password_current_text = $PALANG['pPassword_password_current_text_error'];
     }
@@ -66,25 +60,23 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
     if ($error == 0)
     {
-        $uh = new MailboxHandler($username);
-        if($uh->change_pw($fPassword, $fPassword_current) ) {
+        $uh = new UserHandler($username);
+        if($uh->change_pass($fPassword_current, $fPassword)) {
             flash_info($PALANG['pPassword_result_success']);
             header("Location: main.php");
             exit(0);
         }
         else
         {
-            flash_error($PALANG['pPassword_result_error']);
+            $tMessage = $PALANG['pPassword_result_error'];
         }
     }
 }
 
-$smarty->assign ('SESSID_USERNAME', $username);
-$smarty->assign ('pPassword_password_current_text', $pPassword_password_current_text, false);
-$smarty->assign ('pPassword_password_text', $pPassword_password_text, false);
-
-$smarty->assign ('smarty_template', 'password');
-$smarty->display ('index.tpl');
+include ("../templates/header.php");
+include ("../templates/users_menu.php");
+include ("../templates/users_password.php");
+include ("../templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

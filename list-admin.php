@@ -14,7 +14,7 @@
  * 
  * File: list-admin.php
  * Lists all administrators
- * Template File: list-admin.tpl
+ * Template File: list-admin.php
  *
  * Template Variables: -none-
  *
@@ -25,19 +25,17 @@ require_once("common.php");
 
 authentication_require_role('global-admin');
 
-# TODO: move code to list_admins() in functions.inc.php?
-$handler = new AdminHandler(0 /*, $admin_username*/ );
-
-if ($handler->getList('1=1')) {
-    $admin_properties = $handler->result();
-} else {
-    $admin_properties = array();
-    # TODO: check if there was an error or simply no admins (which shouldn't happen because nobody could login then...)
+$list_admins = list_admins();
+if ((is_array ($list_admins) and sizeof ($list_admins) > 0)) {
+    for ($i = 0; $i < sizeof ($list_admins); $i++) {
+        $admin_properties[$i] = get_admin_properties ($list_admins[$i]);
+    }
 }
 
-$smarty->assign ('admin_properties', $admin_properties);
-$smarty->assign ('smarty_template', 'adminlistadmin');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/admin_list-admin.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

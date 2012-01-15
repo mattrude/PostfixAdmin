@@ -13,7 +13,7 @@
 #             subroutines, send reply from original to address
 #
 # 2004/11/09  David Osborn <ossdev at daocon.com>
-#             Added syslog support
+#             Added syslog support          
 #             Slightly better logging which includes messageid
 #             Avoid infinite loops with domain aliases
 #
@@ -44,7 +44,7 @@
 #
 # 2008-07-29  Patch from Luxten to add repeat notification after timeout. See:
 #             https://sourceforge.net/tracker/index.php?func=detail&aid=2031631&group_id=191583&atid=937966
-#
+#             
 # 2008-08-01  Luigi Iotti <luigi at iotti dot biz>
 #             Use envelope sender/recipient instead of using
 #             From: and To: header fields;
@@ -56,24 +56,21 @@
 #             Use Log4Perl
 #             Added better testing (and -t option)
 #
-# 2009-06-29  Stevan Bajic <stevan at bajic.ch>
+# 2009-06-29  Stevan Bajic <stevan@bajic.ch>
 #             Add Mail::Sender for SMTP auth + more flexibility
 #
-# 2009-07-07  Stevan Bajic <stevan at bajic.ch>
+# 2009-07-07  Stevan Bajic <stevan@bajic.ch>
 #             Add better alias lookups
 #             Check for more heades from Anti-Virus/Anti-Spam solutions
 #
-# 2009-08-10  Sebastian <reg9009 at yahoo dot de>
-#             Adjust SQL query for vacation timeframe. It is now possible to set from/until date for vacation message.
-#
 # Requirements - the following perl modules are required:
-# DBD::Pg or DBD::mysql
-# Mail::Sender, Email::Valid MIME::Charset, Log::Log4perl, Log::Dispatch, MIME::EncWords and GetOpt::Std
+# DBD::Pg or DBD::mysql 
+# Mail::Sender, Email::Valid MIME::Charset, Log::Log4perl, Log::Dispatch, MIME::EncWords and GetOpt::Std 
 #
 # You may install these via CPAN, or through your package tool.
 # CPAN: 'perl -MCPAN -e shell', then 'install Module::Whatever'
 #
-# On Debian based systems :
+# On Debian based systems : 
 #   libmail-sender-perl
 #   libdbd-pg-perl
 #   libemail-valid-perl
@@ -150,7 +147,7 @@ our $logfile='/var/log/vacation.log';
 # 2 = debug + info, 1 = info only, 0 = error only
 our $log_level = 2;
 # Whether to log to file or not, 0 = do not write to a log file
-our $log_to_file = 0;
+our $log_to_file = 0; 
 
 # notification interval, in seconds
 # set to 0 to notify only once
@@ -163,10 +160,10 @@ our $interval = 0;
 # or /etc/postfixadmin/vacation.conf just use Perl syntax there to fill the variables listed above
 # (without the "our" keyword). Example:
 # $db_username = 'mail';
-if (-f '/etc/mail/postfixadmin/vacation.conf') {
-    require '/etc/mail/postfixadmin/vacation.conf';
-} elsif (-f '/etc/postfixadmin/vacation.conf') {
-    require '/etc/postfixadmin/vacation.conf';
+if (-f "/etc/mail/postfixadmin/vacation.conf") {
+    require "/etc/mail/postfixadmin/vacation.conf";
+} elsif (-f "/etc/postfixadmin/vacation.conf") {
+    require "/etc/postfixadmin/vacation.conf";
 }
 
 # =========== end configuration ===========
@@ -178,7 +175,7 @@ if($log_to_file == 1) {
     }
 }
 
-my ($from, $to, $cc, $replyto , $subject, $messageid, $lastheader, $smtp_sender, $smtp_recipient, %opts, $test_mode, $logger);
+my ($from, $to, $cc, $replyto , $subject, $messageid, $lastheader, $smtp_sender, $smtp_recipient, %opts, $spam, $test_mode, $logger);
 
 $subject='';
 $messageid='unknown';
@@ -186,12 +183,12 @@ $messageid='unknown';
 # Setup a logger...
 #
 getopts('f:t:', \%opts) or die "Usage: $0 [-t yes] -f sender -- recipient\n\t-t for testing only\n";
-$opts{f} and $smtp_sender = $opts{f} or die '-f sender not present on command line';
+$opts{f} and $smtp_sender = $opts{f} or die "-f sender not present on command line";
 $test_mode = 0;
 $opts{t} and $test_mode = 1;
-$smtp_recipient = shift or die 'recipient not given on command line';
+$smtp_recipient = shift or die "recipient not given on command line";
 
-my $log_layout = Log::Log4perl::Layout::PatternLayout->new('%d %p> %F:%L %M - %m%n');
+my $log_layout = Log::Log4perl::Layout::PatternLayout->new("%d %p> %F:%L %M - %m%n");
 
 if($test_mode == 1) {
     $logger = get_logger();
@@ -199,13 +196,13 @@ if($test_mode == 1) {
     my $appender = Log::Log4perl::Appender->new('Log::Dispatch::Screen');
     $appender->layout($log_layout);
     $logger->add_appender($appender);
-    $logger->debug('Test mode enabled');
+    $logger->debug("Test mode enabled");
 } else {
     $logger = get_logger();
     if($log_to_file == 1) {
         # log to file
         my $appender = Log::Log4perl::Appender->new(
-            'Log::Dispatch::File',
+            'Log::Dispatch::File', 
             filename => $logfile,
             mode => 'append');
 
@@ -231,7 +228,7 @@ if($log_level == 2) {
     $logger->level($DEBUG);
 }
 
-binmode (STDIN,':encoding(UTF-8)');
+binmode (STDIN,':utf8');
 
 my $dbh;
 if ($db_host) {
@@ -241,13 +238,13 @@ if ($db_host) {
 }
 
 if (!$dbh) {
-    $logger->error('Could not connect to database'); # eval { } etc better here?
+    $logger->error("Could not connect to database"); # eval { } etc better here?
     exit(0);
 }
 
 my $db_true; # MySQL and PgSQL use different values for TRUE, and unicode support...
-if ($db_type eq 'mysql') {
-    $dbh->do('SET CHARACTER SET utf8;');
+if ($db_type eq "mysql") {
+    $dbh->do("SET CHARACTER SET utf8;");
     $db_true = '1';
 } else { # Pg
     $dbh->do("SET CLIENT_ENCODING TO 'UTF8'");
@@ -308,47 +305,45 @@ sub already_notified {
     return 0;
 }
 
-# try and determine if email address has vacation turned on; we
+# try and determine if email address has vacation turned on; we 
 # have to do alias searching, and domain aliasing resolution for this.
 # If found, return ($num_matches, $real_email);
 sub find_real_address {
     my ($email) = @_;
     my $logger = get_logger();
     if (++$loopcount > 20) {
-        $logger->error("find_real_address loop! (more than 20 attempts!) currently: $email");
+        $logger->error("find_real_address loop! (more than 20 attempts!) currently: $email"); 
         exit(1);
     }
     my $realemail = '';
-    # TODO: make a function from the following query - the same query is used at 3 different places in this script...
-    my $query = qq{SELECT email FROM vacation WHERE email=? and active=$db_true and activefrom <= NOW() and activeuntil >= NOW()};
+    my $query = qq{SELECT email FROM vacation WHERE email=? AND active=$db_true};
     my $stm = $dbh->prepare($query) or panic_prepare($query);
     $stm->execute($email) or panic_execute($query,"email='$email'");
     my $rv = $stm->rows;
 
 # Recipient has vacation
-   if ($rv == 1) {
-      $realemail = $email;
-      $logger->debug("Found '$email' has vacation active");
-   } else {
-      my $vemail = $email;
-      $vemail =~ s/\@/#/g;
-      $vemail = $vemail . "\@" . $vacation_domain;
-      $logger->debug("Looking for alias records that '$email' resolves to with vacation turned on");
-      $query = qq{SELECT goto FROM alias WHERE address=? AND (goto LIKE ? OR goto LIKE ? OR goto LIKE ? OR goto = ?)};
-      $stm = $dbh->prepare($query) or panic_prepare($query);
-      $stm->execute($email,"$vemail,%","%,$vemail","%,$vemail,%", "$vemail") or panic_execute($query,"address='$email'");
-      $rv = $stm->rows;
-
+    if ($rv == 1) {
+        $realemail = $email;
+        $logger->debug("Found '$email' has vacation active");
+    } else {
+        my $vemail = $email;
+        $vemail =~ s/\@/#/g;
+        $vemail = $vemail . "\@" . $vacation_domain;
+        $logger->debug("Looking for alias records that '$email' resolves to with vacation turned on");
+        $query = qq{SELECT goto FROM alias WHERE address=? AND (goto LIKE ? OR goto LIKE ? OR goto LIKE ? OR goto = ?)};
+        $stm = $dbh->prepare($query) or panic_prepare($query);
+        $stm->execute($email,"$vemail,%","%,$vemail","%,$vemail,%", "$vemail") or panic_execute($query,"address='$email'");
+        $rv = $stm->rows;
 
 # Recipient is an alias, check if mailbox has vacation
-        if ($rv == 1) {
+        if ($rv == 1) { 
             my @row = $stm->fetchrow_array;
             my $alias = $row[0];
             if ($alias =~ /,/) {
                 for (split(/\s*,\s*/, lc($alias))) {
                     my $singlealias = $_;
                     $logger->debug("Found alias \'$singlealias\' for email \'$email\'. Looking if vacation is on for alias.");
-                    $query = qq{SELECT email FROM vacation WHERE email=? AND active=$db_true and activefrom <= NOW() and activeuntil >= NOW()};
+                    $query = qq{SELECT email FROM vacation WHERE email=? AND active=$db_true};
                     $stm = $dbh->prepare($query) or panic_prepare($query);
                     $stm->execute($singlealias) or panic_execute($query,"email='$singlealias'");
                     $rv = $stm->rows;
@@ -359,7 +354,7 @@ sub find_real_address {
                     }
                 }
             } else {
-                $query = qq{SELECT email FROM vacation WHERE email=? AND active=$db_true and activefrom <= NOW() and activeuntil >= NOW()};
+                $query = qq{SELECT email FROM vacation WHERE email=? AND active=$db_true};
                 $stm = $dbh->prepare($query) or panic_prepare($query);
                 $stm->execute($alias) or panic_prepare($query,"email='$alias'");
                 $rv = $stm->rows;
@@ -385,7 +380,7 @@ sub find_real_address {
                 ($rv, $realemail) = find_real_address ("$user\@$alias_domain_dest");
 
 # We still have to look for domain level aliases...
-            } else {
+            } else { 
                 my ($user, $domain) = split(/@/, $email);
                 $logger->debug("Looking for domain level aliases for $domain / $email / $user");
                 $query = qq{SELECT goto FROM alias WHERE address=?};
@@ -394,16 +389,16 @@ sub find_real_address {
                 $rv = $stm->rows;
 
 # The receipient has a domain level alias
-                if ($rv == 1) {
+                if ($rv == 1) { 
                     my @row = $stm->fetchrow_array;
                     my $wildcard_dest = $row[0];
                     my ($wilduser, $wilddomain) = split(/@/, $wildcard_dest);
 
 # Check domain alias
-                    if ($wilduser) {
-                        ($rv, $realemail) = find_real_address ($wildcard_dest);
+                    if ($wilduser) { 
+                        ($rv, $realemail) = find_real_address ($wildcard_dest);    
                     } else {
-                        ($rv, $realemail) = find_real_address ("$user\@$wilddomain");
+                        ($rv, $realemail) = find_real_address ("$user\@$wilddomain");    
                     }
                 } else {
                     $logger->debug("No domain level alias present for $domain / $email / $user");
@@ -426,9 +421,9 @@ sub send_vacation_email {
     my $rv = $stm->rows;
     if ($rv == 1) {
         my @row = $stm->fetchrow_array;
-        if (already_notified($email, $orig_from) == 1) {
+        if (already_notified($email, $orig_from) == 1) { 
             $logger->debug("Already notified $email, or some error prevented us from doing so");
-            return;
+            return; 
         }
 
         $logger->debug("Will send vacation response for $orig_messageid: FROM: $email (orig_to: $orig_to), TO: $orig_from; VACATION SUBJECT: $row[0] ; VACATION BODY: $row[1]");
@@ -466,7 +461,7 @@ sub send_vacation_email {
         my $sender = new Mail::Sender({%smtp_connection});
         $sender->Open({%mail});
         $sender->SendLineEnc($body);
-        $sender->Close() or $logger->error('Failed to send vacation response: ' . $sender->{'error_msg'});
+        $sender->Close() or $logger->error("Failed to send vacation response: " . $sender->{'error_msg'});
         $logger->debug("Vacation response sent to $to, from $from");
     }
 }
@@ -497,11 +492,12 @@ sub strip_address {
     # remove duplicates
     my %seen = ();
     my @uniq;
-    foreach my $item (@ok) {
+    my $item;
+    foreach $item (@ok) {
         push(@uniq, $item) unless $seen{$item}++
     }
 
-    my $result = lc(join(', ', @uniq));
+    my $result = lc(join(", ", @uniq));
     #$logger->debug("Result: $result");
     return $result;
 }
@@ -526,13 +522,13 @@ sub check_and_clean_from_address {
     my ($address) = @_;
     my $logger = get_logger();
 
-    if($address =~ /^(noreply|postmaster|mailer\-daemon|listserv|majordomo|owner\-|request\-|bounces\-)/i ||
-        $address =~ /\-(owner|request|bounces)\@/i ) {
-        $logger->debug("sender $address contains $1 - will not send vacation message");
-        exit(0);
+    if($address =~ /^(noreply|postmaster|mailer\-daemon|listserv|majordomo|owner\-|request\-|bounces\-)/i || 
+        $address =~ /\-(owner|request|bounces)\@/i ) { 
+        $logger->debug("sender $address contains $1 - will not send vacation message"); 
+        exit(0); 
     }
     $address = strip_address($address);
-    if($address eq '') {
+    if($address eq "") {
         $logger->error("Address $address is not valid; exiting");
         exit(0);
     }
@@ -548,26 +544,26 @@ $replyto = '';
 $logger->debug("Script argument SMTP recipient is : '$smtp_recipient' and smtp_sender : '$smtp_sender'");
 while (<STDIN>) {
     last if (/^$/);
-    if (/^\s+(.*)/ and $lastheader) { $$lastheader .= " $1"; next; }
-    elsif (/^from:\s*(.*)\n$/i) { $from = $1; $lastheader = \$from; }
-    elsif (/^to:\s*(.*)\n$/i) { $to = $1; $lastheader = \$to; }
-    elsif (/^cc:\s*(.*)\n$/i) { $cc = $1; $lastheader = \$cc; }
-    elsif (/^Reply\-to:\s*(.*)\s*\n$/i) { $replyto = $1; $lastheader = \$replyto; }
-    elsif (/^subject:\s*(.*)\n$/i) { $subject = $1; $lastheader = \$subject; }
-    elsif (/^message\-id:\s*(.*)\s*\n$/i) { $messageid = $1; $lastheader = \$messageid; }
-    elsif (/^x\-spam\-(flag|status):\s+yes/i) { $logger->debug("x-spam-$1: yes found; exiting"); exit (0); }
+    if (/^\s+(.*)/ and $lastheader) { $$lastheader .= " $1"; next; }  
+    elsif (/^from:\s*(.*)\n$/i) { $from = $1; $lastheader = \$from; }  
+    elsif (/^to:\s*(.*)\n$/i) { $to = $1; $lastheader = \$to; }  
+    elsif (/^cc:\s*(.*)\n$/i) { $cc = $1; $lastheader = \$cc; }  
+    elsif (/^Reply\-to:\s*(.*)\s*\n$/i) { $replyto = $1; $lastheader = \$replyto; }  
+    elsif (/^subject:\s*(.*)\n$/i) { $subject = $1; $lastheader = \$subject; }  
+    elsif (/^message\-id:\s*(.*)\s*\n$/i) { $messageid = $1; $lastheader = \$messageid; }  
+    elsif (/^x\-spam\-(flag|status):\s+yes/i) { $logger->debug("x-spam-$1: yes found; exiting"); exit (0); }  
     elsif (/^x\-facebook\-notify:/i) { $logger->debug('Mail from facebook, ignoring'); exit(0); }
-    elsif (/^precedence:\s+(bulk|list|junk)/i) { $logger->debug("precedence: $1 found; exiting"); exit (0); }
-    elsif (/^x\-loop:\s+postfix\ admin\ virtual\ vacation/i) { $logger->debug('x-loop: postfix admin virtual vacation found; exiting'); exit (0); }
-    elsif (/^Auto\-Submitted:\s*no/i) { next; }
-    elsif (/^Auto\-Submitted:/i) { $logger->debug('Auto-Submitted: something found; exiting'); exit (0); }
-    elsif (/^List\-(Id|Post|Unsubscribe):/i) { $logger->debug("List-$1: found; exiting"); exit (0); }
+    elsif (/^precedence:\s+(bulk|list|junk)/i) { $logger->debug("precedence: $1 found; exiting"); exit (0); }  
+    elsif (/^x\-loop:\s+postfix\ admin\ virtual\ vacation/i) { $logger->debug("x-loop: postfix admin virtual vacation found; exiting"); exit (0); }  
+    elsif (/^Auto\-Submitted:\s*no/i) { next; }  
+    elsif (/^Auto\-Submitted:/i) { $logger->debug("Auto-Submitted: something found; exiting"); exit (0); }
+    elsif (/^List\-(Id|Post):/i) { $logger->debug("List-$1: found; exiting"); exit (0); }
     elsif (/^(x\-(barracuda\-)?spam\-status):\s+(yes)/i) { $logger->debug("$1: $3 found; exiting"); exit (0); }
     elsif (/^(x\-dspam\-result):\s+(spam|bl[ao]cklisted)/i) { $logger->debug("$1: $2 found; exiting"); exit (0); }
     elsif (/^(x\-(anti|avas\-)?virus\-status):\s+(infected)/i) { $logger->debug("$1: $3 found; exiting"); exit (0); }
     elsif (/^(x\-(avas\-spam|spamtest|crm114|razor|pyzor)\-status):\s+(spam)/i) { $logger->debug("$1: $3 found; exiting"); exit (0); }
     elsif (/^(x\-osbf\-lua\-score):\s+[0-9\/\.\-\+]+\s+\[([-S])\]/i) { $logger->debug("$1: $2 found; exiting"); exit (0); }
-    else {$lastheader = '' ; }
+    else {$lastheader = "" ; }
 }
 
 if($smtp_recipient =~ /\@$vacation_domain/) {
@@ -581,31 +577,31 @@ if($smtp_recipient =~ /\@$vacation_domain/) {
 }
 
 # If either From: or To: are not set, exit
-if(!$from || !$to || !$messageid || !$smtp_sender || !$smtp_recipient) {
-    $logger->info("One of from=$from, to=$to, messageid=$messageid, smtp sender=$smtp_sender, smtp recipient=$smtp_recipient empty");
-    exit(0);
+if(!$from || !$to || !$messageid || !$smtp_sender || !$smtp_recipient) { 
+    $logger->info("One of from=$from, to=$to, messageid=$messageid, smtp sender=$smtp_sender, smtp recipient=$smtp_recipient empty"); 
+    exit(0); 
 }
 $logger->debug("Email headers have to: '$to' and From: '$from'");
 $to = strip_address($to);
 $cc = strip_address($cc);
 $from = check_and_clean_from_address($from);
-if($replyto ne '') {
+if($replyto ne "") {
     # if reply-to is invalid, or looks like a mailing list, then we probably don't want to send a reply.
     $replyto = check_and_clean_from_address($replyto);
 }
 $smtp_sender = check_and_clean_from_address($smtp_sender);
 $smtp_recipient = check_and_clean_from_address($smtp_recipient);
 
-if ($smtp_sender eq $smtp_recipient) {
-    $logger->debug("smtp sender $smtp_sender and recipient $smtp_recipient are the same; aborting");
-    exit(0);
+if ($smtp_sender eq $smtp_recipient) { 
+    $logger->debug("smtp sender $smtp_sender and recipient $smtp_recipient are the same; aborting"); 
+    exit(0); 
 }
 
 for (split(/,\s*/, lc($to)), split(/,\s*/, lc($cc))) {
     my $header_recipient = strip_address($_);
-    if ($smtp_sender eq $header_recipient) {
-        $logger->debug("sender header $smtp_sender contains recipient $header_recipient (mailing myself?)");
-        exit(0);
+    if ($smtp_sender eq $header_recipient) { 
+        $logger->debug("sender header $smtp_sender contains recipient $header_recipient (mailing myself?)"); 
+        exit(0); 
     }
 }
 

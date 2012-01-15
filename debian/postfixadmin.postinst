@@ -26,6 +26,4 @@ fi
 
 #DEBHELPER#
 
-chown www-data /usr/share/postfixadmin/templates_c
-
 exit 0
