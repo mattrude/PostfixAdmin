@@ -1,7 +1,7 @@
 <?php
 require_once('header.php');
 
-$latest = "2.3.5";
+$latest = "2.3.6";
 
 if(!isset($_GET['version'])) {
 	$version = '0.1'; # dummy version to enforce displaying the latest one

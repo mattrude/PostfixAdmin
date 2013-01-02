@@ -30,17 +30,16 @@ require_once('header.php');
 
 <h3>Plans...</h3>
 <ul>
-<li>Release 2.4 - Merge in the Smarty branch - this should bring protection against XSS etc - November 2009?</li>
-<li>Release 3.0 - ???????????? - Smarty / Doctrine refactoring, better vacation functionality, user controllable fetchmail</li>
+<li>Release 3.0 - Smarty refactoring, big code cleanup, use PHP classes, easy customization, better vacation functionality, user controllable fetchmail, commandline client</li>
 </ul>
 
 <h3>Download - version 2.3</h3>
 
 <p><a href='https://sourceforge.net/projects/postfixadmin/files/'>Download the latest release</a></p>
 
-<p>Version 2.3 was released October 26th 2009...</p>
+<p>Version 2.3 was released October 26th 2009, followed by several 2.3.x releases.</p>
 
-<p>New features/changes/things of significance :</p>
+<p>New features/changes/things of significance in 2.3.x:</p>
 <ul>
 <li>Improved Aliased domains support (no longer relying on catch-all domains) - Note this requires Postfix configuration changes; old configuration(s) will continue to work.</li>
 <li>Security fix for setup.php (password required to access; setup.php can generate this and help you)</li>
@@ -59,7 +58,7 @@ require_once('header.php');
 
 <h3>Download - Development/Subversion release</h3>
 
-<p>'trunk' currently contains a working domain-domain aliasing implementation, but to use it, you'll need to alter some Postfix settings first. Once this is finished, it will probably form 2.3.0, which may be released within the next month or so.</p>
+<p>'trunk' currently contains a working preview of what will be the 3.0 release (see "Plans" above for details of new features). The web interface should work without problems (even if WIP), the commandline client is not fully functional yet. </p>
 
 <code>svn co https://postfixadmin.svn.sourceforge.net/svnroot/postfixadmin/trunk postfixadmin</code>
 
