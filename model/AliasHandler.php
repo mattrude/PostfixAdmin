@@ -1,372 +1,189 @@
 <?php
-# $Id$ 
 
 /** 
  * Handlers User level alias actions - e.g. add alias, get aliases, update etc.
- * @property $username name of alias
- * @property $return return of methods
  */
-class AliasHandler extends PFAHandler {
+class AliasHandler {
 
-    protected $domain_field = 'domain';
-    
-    /**
-     *
-     * @public
-     */
-    public $return = null;
-
-    protected function initStruct() {
-        $this->db_table = 'alias';
-        $this->id_field = 'address';
-
-        # hide 'goto_mailbox' if $this->new
-        # (for existing aliases, init() hides it for non-mailbox aliases)
-        $mbgoto = 1 - $this->new;
-
-        $this->struct=array(
-            # field name                allow       display in...   type    $PALANG label                     $PALANG description                 default / ...
-            #                           editing?    form    list
-            'address'       => pacol(   $this->new, 1,      1,      'mail', 'pEdit_alias_address'           , 'pCreate_alias_catchall_text'     ),
-            'localpart'     => pacol(   $this->new, 0,      0,      'text', 'pEdit_alias_address'           , 'pCreate_alias_catchall_text'     , '', 
-                /*options*/ '', 
-                /*not_in_db*/ 1                         ),
-            'domain'        => pacol(   $this->new, 0,      0,      'enum', ''                              , ''                                , '', 
-                /*options*/ $this->allowed_domains      ),
-            'goto'          => pacol(   1,          1,      1,      'txtl', 'pEdit_alias_goto'              , 'pEdit_alias_help'                ),
-            'is_mailbox'    => pacol(   0,          0,      1,      'int', ''                             , ''                                , 0 ,
-                # technically 'is_mailbox' is bool, but the automatic bool conversion breaks the query. Flagging it as int avoids this problem.
-                # Maybe having a vbool type (without the automatic conversion) would be cleaner - we'll see if we need it.
-                /*options*/ '',
-                /*not_in_db*/ 0,
-                /*dont_write_to_db*/ 1,
-                /*select*/ 'coalesce(__is_mailbox,0) as is_mailbox',
-                /*extrafrom*/ 'LEFT JOIN ( ' .
-                    ' SELECT 1 as __is_mailbox, username as __mailbox_username ' .
-                    ' FROM ' . table_by_key('mailbox') .
-                    ' WHERE username IS NOT NULL ' .
-                    ' ) AS __mailbox ON __mailbox_username = address' ),
-            'goto_mailbox'  => pacol(   $mbgoto,    $mbgoto,$mbgoto,'bool', 'pEdit_alias_forward_and_store' , ''                                , 0,
-                /*options*/ '',
-                /*not_in_db*/ 1                         ), # read_from_db_postprocess() sets the value
-            'on_vacation'   => pacol(   1,          0,      1,      'bool', 'pUsersMenu_vacation'           , ''                                , 0 ,
-                /*options*/ '', 
-                /*not_in_db*/ 1                         ), # read_from_db_postprocess() sets the value - TODO: read active flag from vacation table instead?
-            'active'        => pacol(   1,          1,      1,      'bool', 'pAdminEdit_domain_active'      , ''                                , 1     ),
-            'created'       => pacol(   0,          0,      1,      'ts',   'created'                       , ''                                ),
-            'modified'      => pacol(   0,          0,      1,      'ts',   'pAdminList_domain_modified'    , ''                                ),
-            'editable'      => pacol(   0,          0,      1,      'int', ''                             , ''                                , 0 ,
-                # aliases listed in $CONF[default_aliases] are read-only for domain admins if $CONF[special_alias_control] is NO.
-                # technically 'editable' is bool, but the automatic bool conversion breaks the query. Flagging it as int avoids this problem.
-                # Maybe having a vbool type (without the automatic conversion) would be cleaner - we'll see if we need it.
-                /*options*/ '',
-                /*not_in_db*/ 0,
-                /*dont_write_to_db*/ 1,
-                /*select*/ '1 as editable'              ),
-        );
-    }
-
-    protected function initMsg() {
-        $this->msg['error_already_exists'] = 'pCreate_alias_address_text_error2';
-        $this->msg['error_does_not_exist'] = 'pCreate_alias_address_text_error1'; # TODO: better error message
-        if ($this->new) {
-            $this->msg['logname'] = 'create_alias';
-            $this->msg['store_error'] = 'pCreate_alias_result_error';
-        } else {
-            $this->msg['logname'] = 'edit_alias';
-            $this->msg['store_error'] = 'pEdit_alias_result_error';
-        }
-    }
-
-
-    public function webformConfig() {
-        if ($this->new) { # the webform will display a localpart field + domain dropdown on $new
-            $this->struct['address']['display_in_form'] = 0;
-            $this->struct['localpart']['display_in_form'] = 1;
-            $this->struct['domain']['display_in_form'] = 1;
-        }
-
-        return array(
-            # $PALANG labels
-            'formtitle_create'  => 'pCreate_alias_welcome',
-            'formtitle_edit'    => 'pEdit_alias_welcome',
-            'create_button'     => 'pCreate_alias_button',
-            'successmessage'    => 'pCreate_alias_result_success', # TODO: better message for edit
-
-            # various settings
-            'required_role' => 'admin',
-            'listview' => 'list-virtual.php',
-            'early_init' => 0,
-        );
-    }
-
+    private $username = null;
 
     /**
-     * AliasHandler needs some special handling in init() and therefore overloads the function.
-     * It also calls parent::init()
+     * @param string $username
      */
-    public function init($id) {
-        @list($local_part,$domain) = explode ('@', $id); # supress error message if $id doesn't contain '@'
+    public function __construct($username) {
+        $this->username = $username;
+    }
 
-        if ($local_part == '*') { # catchall - postfix expects '@domain', not '*@domain'
-            $id = '@' . $domain;
+    /**
+     * @return array - list of email addresses the user's mail is forwarded to.
+     * (may be an empty list, especially if $CONF['alias_control'] is turned off...
+     * @param boolean - by default we don't return special addresses (e.g. vacation and mailbox alias); pass in true here if you wish to.
+     */
+    public function get($all=false) {
+        $username = escape_string($this->username);
+        $table_alias = table_by_key('alias');
+
+        $sql = "SELECT * FROM $table_alias WHERE address='$username'";
+        $result = db_query($sql);
+        if($result['rows'] == 1) {
+            $row = db_array ($result['result']);
+            // At the moment Postfixadmin stores aliases in it's database in a comma seperated list; this may change one day.
+            $list = explode(',', $row['goto']);
+            if($all) {
+                return $list;
+            }
+
+            $new_list = array();
+            /* if !$all, remove vacation & mailbox aliases */
+            foreach($list as $address) {
+                if($address != '' ) {
+                    if($this->is_vacation_address($address) || $this->is_mailbox_alias($address)) {
+                    }
+                    else {
+                        $new_list[] = $address;
+                    }
+                }
+            }
+            $list = $new_list;
+            return $list;
         }
+        return array();
+    }
 
-        $retval = parent::init($id);
-
-        # hide 'goto_mailbox' for non-mailbox aliases
-        # parent::init called view() before, so we can rely on having $this->return filled
-        # (only validate_new_id() is called from parent::init and could in theory change $this->return)
-        if ($this->new || $this->return['is_mailbox'] == 0) {
-            $this->struct['goto_mailbox']['editable']        = 0;
-            $this->struct['goto_mailbox']['display_in_form'] = 0;
-            $this->struct['goto_mailbox']['display_in_list'] = 0;
+   /** 
+    * @param string $address
+    * @param string $username
+    * @return boolean true if the username is an alias for the mailbox AND we have alias_control turned off.
+    */
+    public function is_mailbox_alias($address) {
+        global $CONF;
+        $username = $this->username;
+        if($address == $username) {
+            return true;
         }
+        return false;
+    }
 
-        if ( !$this->new && $this->return['is_mailbox'] && $this->admin_username != ''&& !authentication_has_role('global-admin') ) {
-            # domain admins are not allowed to change mailbox alias $CONF['alias_control_admin'] = NO
-            if (!boolconf('alias_control_admin')) {
-                # TODO: make translateable
-                $this->errormsg[] = "Domain administrators do not have the ability to edit user's aliases (check config.inc.php - alias_control_admin)";
-                return false;
+    /**
+     * @param string $address
+     * @return boolean true if the address contains the vacation domain
+     */
+    public function is_vacation_address($address) {
+        global $CONF;
+        if($CONF['vacation'] == 'YES') {
+            if(stripos($address, '@' . $CONF['vacation_domain'])) {
+                return true;
             }
         }
-
-        return $retval;
+        return false;
     }
-
-    protected function validate_new_id() {
-        if ($this->id == '') {
-            $this->errormsg[] = Lang::read('pCreate_alias_address_text_error1');
-            return false;
-        }
-
-        list($local_part,$domain) = explode ('@', $this->id);
-
-        if(!$this->create_allowed($domain)) {
-            $this->errormsg[] = Lang::read('pCreate_alias_address_text_error3');
-            return false;
-        }
- 
-        # TODO: already checked in set() - does it make sense to check it here also? Only advantage: it's an early check
-#        if (!in_array($domain, $this->allowed_domains)) { 
-#            $this->errormsg[] = Lang::read('pCreate_alias_address_text_error1');
-#            return false;
-#        }
-
-        if ($local_part == '') { # catchall
-            $valid = true;
-        } else {
-            $valid = check_email($this->id); # TODO: check_email should return error message instead of using flash_error itsself
-        }
-
-        return $valid;
-    }
-
     /**
-     * check number of existing aliases for this domain - is one more allowed?
+     * @return boolean true on success
+     * @param string $username
+     * @param array $addresses - list of aliases to set for the user.
+     * @param string flags - forward_and_store or remote_only or ''
+     * @param boolean $vacation_persist - set to false to stop the vacation address persisting across updates
+     * Set the user's aliases to those provided. If $addresses ends up being empty the alias record is removed.
      */
-    private function create_allowed($domain) {
-        $limit = get_domain_properties ($domain);
+    public function update($addresses, $flags = '', $vacation_persist=true) {
+        // find out if the user is on vacation or not; if they are, 
+        // then the vacation alias needs adding to the db (as we strip it out in the get method) 
+        // likewise with the alias_control address.
 
-        if ($limit['aliases'] == 0) return true; # unlimited
-        if ($limit['aliases'] < 0) return false; # disabled
-        if ($limit['alias_count'] >= $limit['aliases']) return false;
+        $valid_flags = array('', 'forward_and_store', 'remote_only');
+        if(!in_array($flags, $valid_flags)) {
+            die("Invalid flag passed into update()... : $flag - valid options are :" . implode(',', $valid_flags));
+        } 
+        $addresses = array_unique($addresses);
+
+        $original = $this->get(true);
+        $tmp = preg_split('/@/', $this->username);
+        $domain = $tmp[1];
+
+        foreach($original as $address) {
+            if($vacation_persist) {
+                if($this->is_vacation_address($address)) {
+                    $addresses[] = $address;
+                }
+            }
+            if($flags != 'remote_only') {
+                if($this->is_mailbox_alias($address)) {
+                    $addresses[] = $address;
+                }
+            }
+        }
+        $addresses = array_unique($addresses);
+
+        $new_list = array();
+        if($flags == 'remote_only') {
+            foreach($addresses as $address) {
+                // strip out our username... if it's in the list given.
+                if($address != $this->username) {
+                    $new_list[] = $address;            
+                }
+            }
+            $addresses = $new_list;
+        }
+        
+        if($flags == 'forward_and_store') {
+            if(!in_array($this->username, $addresses)) {
+                $addresses[] = $this->username;
+            }
+        }
+        $new_list = array();
+        foreach($addresses as $address) {
+            if($address != '') {
+                $new_list[] = $address;
+            }
+        } 
+        $addresses = array_unique($new_list);
+        $username = escape_string($this->username);
+        $goto = escape_string(implode(',', $addresses));
+        $table_alias = table_by_key('alias');
+        if(sizeof($addresses) == 0) {
+            $sql = "DELETE FROM $table_alias WHERE address = '$username'";
+        }
+        if($this->hasAliasRecord() == false) {
+            $true = db_get_boolean(True);
+            $sql = "INSERT INTO $table_alias (address, goto, domain, created, modified, active) VALUES ('$username', '$goto', '$domain', NOW(), NOW(), '$true')";
+        }
+        else {
+            $sql = "UPDATE $table_alias SET goto = '$goto', modified = NOW() WHERE address = '$username'";
+        }
+        $result = db_query($sql);
+        if($result['rows'] != 1) {
+            return false;
+        }
+        db_log($username, $domain, 'edit_alias', "$username -> $goto");
         return true;
     }
 
-
-   /**
-    * merge localpart and domain to address
-    * called by edit.php (if id_field is editable and hidden in editform) _before_ ->init
-    */
-    public function mergeId($values) {
-        if ($this->struct['localpart']['display_in_form'] == 1 && $this->struct['domain']['display_in_form']) { # webform mode - combine to 'address' field
-            if (empty($values['localpart']) || empty($values['domain']) ) { # localpart or domain not set
-                return "";
-            }
-            if ($values['localpart'] == '*') $values['localpart'] = ''; # catchall
-            return $values['localpart'] . '@' . $values['domain'];
-        } else {
-            return $values[$this->id_field];
-        }
-    }
-
-    protected function setmore($values) {
-        if ($this->new) {
-            if ($this->struct['address']['display_in_form'] == 1) { # default mode - split off 'domain' field from 'address' # TODO: do this unconditional?
-                list(/*NULL*/,$domain) = explode('@', $values['address']);
-                $this->values['domain'] = $domain;
-            }
-        }
-
-        if (! $this->new) { # edit mode - preserve vacation and mailbox alias if they were included before
-            $old_ah = new AliasHandler();
-
-            if (!$old_ah->init($this->id)) {
-                $this->errormsg[] = $old_ah->errormsg[0];
-            } elseif (!$old_ah->view()) {
-                $this->errormsg[] = $old_ah->errormsg[0];
-            } else {
-                $oldvalues = $old_ah->result();
-
-                if (!isset($values['on_vacation'])) { # no new value given?
-                    $values['on_vacation'] = $oldvalues['on_vacation'];
-                }
-
-                if ($values['on_vacation']) { 
-                    $values['goto'][] = $this->getVacationAlias();
-                }
-
-                if ($oldvalues['is_mailbox']) { # alias belongs to a mailbox - add/keep mailbox to/in goto
-                    if (!isset($values['goto_mailbox'])) { # no new value given?
-                        $values['goto_mailbox'] = $oldvalues['goto_mailbox'];
-                    }
-                    if ($values['goto_mailbox']) {
-                        $values['goto'][] = $this->id;
-
-                        # if the alias points to the mailbox, don't display the "empty goto" error message
-                        if (isset($this->errormsg['goto']) && $this->errormsg['goto'] == Lang::read('pEdit_alias_goto_text_error1') ) {
-                            unset($this->errormsg['goto']);
-                        }
-                    }
-                }
-            }
-        }
-
-        $this->values['goto'] = join(',', $values['goto']);
-    }
-
-    protected function read_from_db_postprocess($db_result) {
-        foreach ($db_result as $key => $value) {
-            # split comma-separated 'goto' into an array
-            $db_result[$key]['goto'] = explode(',', $db_result[$key]['goto']);
-
-            # Vacation enabled?
-            list($db_result[$key]['on_vacation'], $db_result[$key]['goto']) = remove_from_array($db_result[$key]['goto'], $this->getVacationAlias() );
-
-            # if it is a mailbox, does the alias point to the mailbox?
-            if ($db_result[$key]['is_mailbox']) {
-                # this intentionally does not match mailbox targets with recipient delimiter.
-                # if it would, we would have to make goto_mailbox a text instead of a bool (which would annoy 99% of the users)
-                list($db_result[$key]['goto_mailbox'], $db_result[$key]['goto']) = remove_from_array($db_result[$key]['goto'], $key);
-            } else { # not a mailbox
-                $db_result[$key]['goto_mailbox'] = 0;
-            }
-
-            # TODO: set 'editable' to 0 if not superadmin, $CONF[special_alias_control] == NO and alias is in $CONF[default_aliases]
-            # TODO: see check_alias_owner() in functions.inc.php
-        }
-
-        return $db_result;
-    }
-
-    public function getList($condition, $limit=-1, $offset=-1) {
-        # only list aliases that do not belong to mailboxes
-        return parent::getList( "__is_mailbox IS NULL AND ( $condition )", $limit, $offset);
-    }
-
-/* delete is already implemented in the "old functions" section
-    public function delete() {
-        $this->errormsg[] = '*** Alias domain deletion not implemented yet ***';
-        return false; # XXX function aborts here until TODO below is implemented! XXX
-        # TODO: move the needed code from delete.php here
-    }
-*/
-
-    protected function _field_goto($field, $val) {
-        if (count($val) == 0) {
-            # empty is ok for mailboxes - this is checked in setmore() which can clear the error message
-            $this->errormsg[$field] = Lang::read('pEdit_alias_goto_text_error1');
-            return false;
-        }
-
-        $errors = array();
-
-        foreach ($val as $singlegoto) {
-            if (substr($singlegoto, 0, 1) == '@') { # domain-wide forward - check only the domain part
-                # Note: alias domains are better, but we should keep this way supported for backward compatibility
-                #       and because alias domains can't forward to external domains
-                # TODO: allow this only if $this->id is a catchall?
-                list (/*NULL*/, $domain) = explode('@', $singlegoto);
-                if (!check_domain($domain)) {
-                     $errors[] = "invalid: $singlegoto"; # TODO: better error message
-                }
-            } elseif (!check_email($singlegoto)) {
-                $errors[] = "invalid: $singlegoto"; # TODO: better error message
-            }
-        }
-
-        if (count($errors)) {
-            $this->errormsg[$field] = join("   ", $errors); # TODO: find a way to display multiple error messages per field
-            return false;
-        } else {
+    /** 
+     * Determine whether a local delivery address is present. This is 
+     * stores as an alias with the same name as the mailbox name (username)
+     * @return boolean true if local delivery is enabled
+     */
+    public function hasStoreAndForward() {
+        $aliases = $this->get(true);
+        if(in_array($this->username, $aliases)) {
             return true;
         }
-    }
-
-    protected function _missing_on_vacation($field) { return $this->set_default_value($field); }
-    protected function _missing_active     ($field) { return $this->set_default_value($field); }
-
-    /**
-     * on $this->new, set localpart based on address
-     */
-    protected function _missing_localpart  ($field) {
-        if (isset($this->RAWvalues['address'])) {
-            $parts = explode('@', $this->RAWvalues['address']);
-            if (count($parts) == 2) $this->RAWvalues['localpart'] = $parts[0];
-        }
+        return false;
     }
 
     /**
-     * on $this->new, set localpart based on address
+     * @return boolean true if the user has an alias record (i.e row in alias table); else false.
      */
-    protected function _missing_domain     ($field) {
-        if (isset($this->RAWvalues['address'])) {
-            $parts = explode('@', $this->RAWvalues['address']);
-            if (count($parts) == 2) $this->RAWvalues['domain'] = $parts[1];
-        }
-    }
-
-
-     /**
-     * Returns the vacation alias for this user. 
-     * i.e. if this user's username was roger@example.com, and the autoreply domain was set to
-     * autoreply.fish.net in config.inc.php we'd return roger#example.com@autoreply.fish.net
-     * @return string an email alias.
-     */
-    protected function getVacationAlias() {
-        $vacation_goto = str_replace('@', '#', $this->id); 
-        return $vacation_goto . '@' . Config::read('vacation_domain');
-    }
- 
-/**********************************************************************************************************************************************************
-  old function from non-PFAHandler times of AliasHandler
-  Will be replaced by a global delete() function in PFAHandler
- **********************************************************************************************************************************************************/
-
-    /**
-     *  @return true on success false on failure
-     */
-    public function delete(){
-        if( ! $this->view() ) {
-            $this->errormsg[] = 'An alias with that address does not exist.'; # TODO: make translatable
-            return false;
-        }
-
-        if ($this->return['is_mailbox']) {
-            $this->errormsg[] = 'This alias belongs to a mailbox and can\'t be deleted.'; # TODO: make translatable
-            return false;
-        }
-
-        $result = db_delete('alias', 'address', $this->id);
-        if( $result == 1 ) {
-            list(/*NULL*/,$domain) = explode('@', $this->id);
-            db_log ($domain, 'delete_alias', $this->id);
+    public function hasAliasRecord() {
+        $username = escape_string($this->username);
+        $table_alias = table_by_key('alias');
+        $sql = "SELECT * FROM $table_alias WHERE address = '$username'";
+        $result = db_query($sql);
+        if($result['rows'] == 1) {
             return true;
         }
+        return false;
     }
-
- }
+}
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

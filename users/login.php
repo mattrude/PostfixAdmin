@@ -14,10 +14,11 @@
  * 
  * File: login.php
  * Used to authenticate want-to-be users.
- * Template File: login.tpl
+ * Template File: login.php
  *
  * Template Variables:
  *
+ *  tMessage
  *  tUsername
  *
  * Form POST \ GET Variables:  
@@ -27,12 +28,19 @@
  *  lang
  */
 
-$rel_path = '../';
 require_once("../common.php");
 
 
+if ($_SERVER['REQUEST_METHOD'] == "GET")
+{
+   include ("../templates/header.php");
+   include ("../templates/users_login.php");
+   include ("../templates/footer.php");
+}
+
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
+
    $lang = safepost('lang');
 
    if ( $lang != check_language(0) ) { # only set cookie if language selection was changed
@@ -43,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    $fUsername = escape_string ($_POST['fUsername']);
    $fPassword = escape_string ($_POST['fPassword']);
 
-   if(MailboxHandler::login($_POST['fUsername'], $_POST['fPassword'])) {
+   if(UserHandler::login($_POST['fUsername'], $_POST['fPassword'])) {
       session_regenerate_id();
       $_SESSION['sessid'] = array();
       $_SESSION['sessid']['roles'] = array();
@@ -54,14 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
    }
    else {   
          $error = 1;
-         flash_error($PALANG['pLogin_failed']);;
+         $tMessage = '<span class="error_msg">' . $PALANG['pLogin_failed'] . '</span>';
+         $tUsername = $fUsername;
    }
+
+   include ("../templates/header.php");
+   include ("../templates/users_login.php");
+   include ("../templates/footer.php");
 }
-
-$smarty->assign ('language_selector', language_selector(), false);
-$smarty->assign ('smarty_template', 'login');
-$smarty->assign ('logintype', 'user');
-$smarty->display ('index.tpl');
-
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

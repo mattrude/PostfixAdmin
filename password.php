@@ -14,11 +14,11 @@
  * 
  * File: password.php
  * Allows admins to change their own password.
- * Template File: password.tpl
+ * Template File: password.php
  *
  * Template Variables:
  *
- * none
+ * tMessage
  *
  * Form POST \ GET Variables:
  *
@@ -33,15 +33,12 @@ authentication_require_role('admin');
 
 $SESSID_USERNAME = authentication_get_username();
 
-$smarty->assign ('SESSID_USERNAME', $SESSID_USERNAME);
-$smarty->assign ('smarty_template', 'password');
-
-$pPassword_password_current_text = "";
-$pPassword_password_text = "";
-
 if ($_SERVER['REQUEST_METHOD'] == "GET")
 {
-	$smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/menu.php");
+    include ("./templates/password.php");
+    include ("./templates/footer.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
@@ -56,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     if ($result['rows'] == 1)
     {
         $row = db_array ($result['result']);
-        $checked_password = escape_string(pacrypt ($fPassword_current, $row['password']));
+        $checked_password = pacrypt ($fPassword_current, $row['password']);
 
         $result = db_query ("SELECT * FROM $table_admin WHERE username='$username' AND password='$checked_password'");
         if ($result['rows'] != 1)
@@ -79,21 +76,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
     if ($error != 1)
     {
-        $password = escape_string(pacrypt ($fPassword));
+        $password = pacrypt ($fPassword);
         $result = db_query ("UPDATE $table_admin SET password='$password',modified=NOW() WHERE username='$username'");
         if ($result['rows'] == 1)
         {
-            flash_info($PALANG['pPassword_result_success']);
+            $tMessage = $PALANG['pPassword_result_success'];
         }
         else
         {
-            flash_error($PALANG['pPassword_result_error']);
+            $tMessage = $PALANG['pPassword_result_error'];
         }
     }
 
-	$smarty->assign ('pPassword_password_current_text', $pPassword_password_current_text);
-	$smarty->assign ('pPassword_password_text', $pPassword_password_text);
-	$smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/menu.php");
+    include ("./templates/password.php");
+    include ("./templates/footer.php");
 }
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

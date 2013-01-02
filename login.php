@@ -14,11 +14,11 @@
  * 
  * File: login.php
  * Authenticates a user, and populates their $_SESSION as appropriate.
- * Template File: login.tpl
+ * Template File: login.php
  *
  * Template Variables:
  *
- *  none
+ *  tMessage
  *
  * Form POST \ GET Variables:
  *
@@ -30,10 +30,16 @@
 require_once('common.php');
 
 if($CONF['configured'] !== true) {
-    print "Installation not yet configured; please edit config.inc.php";
-    exit;
+  print "Installation not yet configured; please edit config.inc.php";
+  exit;
 }
 
+if ($_SERVER['REQUEST_METHOD'] == "GET")
+{
+    include ("./templates/header.php");
+    include ("./templates/login.php");
+    include ("./templates/footer.php");
+}
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
@@ -48,21 +54,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         # (language preference cookie is processed even if username and/or password are invalid)
     }
 
-    # TODO: move to AdminHandler->login
     $result = db_query ("SELECT password FROM $table_admin WHERE username='$fUsername' AND active='1'");
     if ($result['rows'] == 1)
     {
         $row = db_array ($result['result']);
-        $crypt_password = pacrypt ($fPassword, $row['password']);
-        if ($row['password'] != $crypt_password) {
+        $password = pacrypt ($fPassword, $row['password']);
+        $result = db_query ("SELECT * FROM $table_admin WHERE username='$fUsername' AND password='$password' AND active='1'");
+        if ($result['rows'] != 1)
+        {
             $error = 1;
-            flash_error($PALANG['pLogin_failed']);
+            $tMessage = '<span class="error_msg">' . $PALANG['pLogin_failed'] . '</span>';
         }
     }
     else
     {
         $error = 1;
-        flash_error($PALANG['pLogin_failed']);
+        $tMessage = '<span class="error_msg">' . $PALANG['pLogin_failed'] . '</span>';
     }
 
     if ($error != 1)
@@ -78,18 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         if ($result['rows'] == 1)
         {
             $_SESSION['sessid']['roles'][] = 'global-admin';
-            #            header("Location: admin/list-admin.php");
-            #            exit(0);
+#            header("Location: admin/list-admin.php");
+#            exit(0);
         }
         header("Location: main.php");
         exit(0);
     }
-}
 
-$smarty->assign ('language_selector', language_selector(), false);
-$smarty->assign ('logintype', 'admin');
-$smarty->assign ('smarty_template', 'login');
-$smarty->display ('index.tpl');
+    include ("./templates/header.php");
+    include ("./templates/login.php");
+    include ("./templates/footer.php");
+}
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>
