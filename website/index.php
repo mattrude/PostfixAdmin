@@ -60,7 +60,7 @@ require_once('header.php');
 
 <p>'trunk' currently contains a working preview of what will be the 3.0 release (see "Plans" above for details of new features). The web interface should work without problems (even if WIP), the commandline client is not fully functional yet. </p>
 
-<code>svn co https://postfixadmin.svn.sourceforge.net/svnroot/postfixadmin/trunk postfixadmin</code>
+<code>svn co http://svn.code.sf.net/p/postfixadmin/code/trunk postfixadmin-code</code>
 
 <h3>Upgrading Postfixadmin</h3>
 
