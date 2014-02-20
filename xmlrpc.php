@@ -35,7 +35,6 @@ require_once(dirname(__FILE__) . '/common.php');
 if($CONF['xmlrpc_enabled'] == false) {
     die("xmlrpc support disabled");
 }
-
 require_once('Zend/XmlRpc/Server.php');
 $server = new Zend_XmlRpc_Server();
 
@@ -45,13 +44,10 @@ $server = new Zend_XmlRpc_Server();
  * @return boolean true on success, else false.
  */
 function login($username, $password) {
-
-    $h = new MailboxHandler();
-    if($h->login($username, $password)) {
+    if(UserHandler::login($username, $password)) {
         session_regenerate_id();
         $_SESSION['authenticated'] = true;
-        $_SESSION['sessid'] = array();
-        $_SESSION['sessid']['username'] = $username;
+        $_SESSION['username'] = $username;
         return true;
     }
     return false;
@@ -76,9 +72,8 @@ class UserProxy {
      * @return boolean true on success
      */
     public function changePassword($old_password, $new_password) {
-        $uh = new MailboxHandler();
-        if (!$uh->init($_SESSION['sessid']['username'])) return false;
-        return $uh->change_pw($new_password, $old_password);
+        $uh = new UserHandler($_SESSION['username']);
+        return $uh->change_pass($old_password, $new_password);
     }
 
    /**
@@ -87,7 +82,7 @@ class UserProxy {
      * @return boolean true if successful.
      */
     public function login($username, $password) {
-        $uh = new MailboxHandler(); # $_SESSION['sessid']['username']);
+        $uh = new UserHandler($_SESSION['username']);
         return $uh->login($username, $password);
     }
 }
@@ -97,7 +92,7 @@ class VacationProxy {
      * @return boolean true if the vacation is removed successfully. Else false.
      */
     public function remove() {
-        $vh = new VacationHandler($_SESSION['sessid']['username']);
+        $vh = new VacationHandler($_SESSION['username']);
         return $vh->remove();
     }
 
@@ -106,7 +101,7 @@ class VacationProxy {
      * and the user has the ability to make changes to it.
      */
     public function isVacationSupported() {
-        $vh = new VacationHandler($_SESSION['sessid']['username']);
+        $vh = new VacationHandler($_SESSION['username']);
         return $vh->vacation_supported();
     }
 
@@ -114,7 +109,7 @@ class VacationProxy {
      * @return boolean true if the user has an active vacation record etc.
      */
     public function checkVacation() {
-        $vh = new VacationHandler($_SESSION['sessid']['username']);
+        $vh = new VacationHandler($_SESSION['username']);
         return $vh->check_vacation();
     }
 
@@ -122,22 +117,18 @@ class VacationProxy {
      * @return struct|boolean - either array of vacation details or boolean false if the user has none.
      */
     public function getDetails() {
-        $vh = new VacationHandler($_SESSION['sessid']['username']);
+        $vh = new VacationHandler($_SESSION['username']);
         return $vh->get_details();
     }
 
     /**
      * @param string $subject
      * @param string $body
-     * @param string $interval_time
-     * @param string $activeFrom
-     * @param string $activeUntil
      * @return boolean true on success.
-     * Whatiis @replyType?? for
      */
-    public function setAway($subject, $body, $interval_time = 0, $activeFrom = '2000-01-01', $activeUntil = '2099-12-31') {
-        $vh = new VacationHandler($_SESSION['sessid']['username']);
-        return $vh->set_away($subject, $body, $interval_time, $activeFrom, $activeUntil);
+    public function setAway($subject, $body) {
+        $vh = new VacationHandler($_SESSION['username']);
+        return $vh->set_away($subject, $body);
     }
 
 
@@ -147,12 +138,9 @@ class AliasProxy {
      * @return array - array of aliases this user has. Array may be empty.
      */
     public function get() {
-        $ah = new AliasHandler();
-        $ah->init($_SESSION['sessid']['username']);
+        $ah = new AliasHandler($_SESSION['username']);
         /* I see no point in returning special addresses to the user. */
-        $ah->view();
-        $result = $ah->result;
-        return $result['goto'];
+        return $ah->get(false);
     }
 
     /**
@@ -161,25 +149,12 @@ class AliasProxy {
      * @return boolean true
      */
     public function update($addresses, $flags) {
-        $ah = new AliasHandler();
-        $ah->init($_SESSION['sessid']['username']);
-        
-        $values['goto'] = $addresses;
-
-        if ($flags == 'forward_and_store') {
-            $values['goto_mailbox'] = 1;
-        } elseif ($flags == 'remote_only') {
-            $values['goto_mailbox'] = 0;
-        } else {
-            return false; # invalid parameter
-        }
-
-        if (!$ah->set($values)) {
-            //error_log('ah->set failed' . print_r($values, true));
-            return false;
-        }
-        $store = $ah->store();
-        return $store;
+        $ah = new AliasHandler($_SESSION['username']);
+        /**
+         * if the user is on vacation, they should use VacationProxy stuff to remove it 
+         * and we'll never return the vacation address from here anyway
+         */
+        return $ah->update($addresses, $flags, true);
     }
 
     /**
@@ -187,11 +162,7 @@ class AliasProxy {
      * (i.e. their email address is also in the alias table). IF it returns false, then it's 'remote_only'
      */
     public function hasStoreAndForward() {
-        $ah = new AliasHandler();
-        $ah->init($_SESSION['sessid']['username']);
-        $ah->view();
-        $result = $ah->result;
-        return $result['goto_mailbox'] == 1;
+        $ah = new AliasHandler($_SESSION['username']);
+        return $ah->hasStoreAndForward();
     }
 }
-/* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

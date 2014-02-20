@@ -6,7 +6,8 @@
  * This source file is subject to the GPL license that is bundled with  
  * this package in the file LICENSE.TXT. 
  * 
- * Further details on the project are available at http://postfixadmin.sf.net 
+ * Further details on the project are available at : 
+ *     http://www.postfixadmin.com or http://postfixadmin.sf.net 
  * 
  * @version $Id$ 
  * @license GNU GPL v2 or later. 
@@ -14,10 +15,11 @@
  * File: viewlog.php
  * Shows entries from the log table to users.
  *
- * Template File: viewlog.tpl
+ * Template File: viewlog.php
  *
  * Template Variables:
  *
+ * tMessage
  * tLog
  *
  * Form POST \ GET Variables:
@@ -48,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == "GET")
 if (! (check_owner ($SESSID_USERNAME, $fDomain) || authentication_has_role('global-admin')))
 {
    $error = 1;
-   flash_error($PALANG['pViewlog_result_error']);
+   $tMessage = $PALANG['pViewlog_result_error'];
 }
 
 // we need to initialize $tLog as an array!
@@ -56,9 +58,9 @@ $tLog = array();
 
 if ($error != 1)
 {
-   $table_log = table_by_key('log');
    $query = "SELECT timestamp,username,domain,action,data FROM $table_log WHERE domain='$fDomain' ORDER BY timestamp DESC LIMIT 10";
-   if (db_pgsql()) {
+   if ('pgsql'==$CONF['database_type'])
+   {
       $query = "SELECT extract(epoch from timestamp) as timestamp,username,domain,action,data FROM $table_log WHERE domain='$fDomain' ORDER BY timestamp DESC LIMIT 10";
    }
    $result=db_query($query);
@@ -66,7 +68,8 @@ if ($error != 1)
    {
       while ($row = db_array ($result['result']))
       {
-         if (db_pgsql()) {
+         if ('pgsql'==$CONF['database_type'])
+         {
             $row['timestamp']=gmstrftime('%c %Z',$row['timestamp']);
          }
          $tLog[] = $row;
@@ -74,14 +77,10 @@ if ($error != 1)
    }
 }
 
-for ($i = 0; $i < count ($tLog); $i++)
-	$tLog[$i]['action'] = $PALANG ['pViewlog_action_'.$tLog [$i]['action']];
-
-$smarty->assign ('select_options', select_options ($list_domains, array ($fDomain)), false);
-$smarty->assign ('tLog', $tLog,false);
-$smarty->assign ('fDomain', $fDomain);
-$smarty->assign ('smarty_template', 'viewlog');
-$smarty->display ('index.tpl');
+include ("templates/header.php");
+include ("templates/menu.php");
+include ("templates/viewlog.php");
+include ("templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>

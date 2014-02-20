@@ -6,14 +6,14 @@
  * This source file is subject to the GPL license that is bundled with  
  * this package in the file LICENSE.TXT. 
  * 
- * Further details on the project are available at http://postfixadmin.sf.net 
+ * Further details on the project are available at : 
+ *     http://www.postfixadmin.com or http://postfixadmin.sf.net 
  * 
  * @version $Id$ 
  * @license GNU GPL v2 or later. 
  * 
  * File: fetchmail.php
  * Responsible for setting up fetchmail
- * template : fetchmail.tpl
  *
  * @version $Id$
  * @license GNU GPL v2 or later.
@@ -64,9 +64,6 @@ $fm_struct=array(   //   list($editible,$view,$type)
    "keep"            => array(1,                1,                'bool'      ),
    "protocol"        => array(1,                1,                'enum'      ),
    "usessl"          => array(1,                1,                'bool'      ),
-   "sslcertck"       => array(1,                1,                'bool'      ),
-   "sslcertpath"     => array($extra_options,   $extra_options,   'text'      ), # TODO: input validation
-   "sslfingerprint"  => array($extra_options,   $extra_options,   'text'      ), # TODO: input validation
    "extra_options"   => array($extra_options,   $extra_options,   'longtext'  ),
    "mda"             => array($extra_options,   $extra_options,   'longtext'  ),
    "date"            => array(0,                $display_status,  'text'      ),
@@ -148,7 +145,7 @@ if ($cancel) { # cancel $new or $edit
    $result = db_query ("delete from $table_fetchmail WHERE id=".$delete);
    if ($result['rows'] != 1)
    {
-      flash_error($PALANG['pDelete_delete_error']);
+      flash_error($PALANG['pDelete_delete_error']) . '</span>';
    } else {
       flash_info(sprintf($PALANG['pDelete_delete_success'],$account));
    }
@@ -166,7 +163,7 @@ if ($cancel) { # cancel $new or $edit
       }
    }
    $formvars['id'] = $edit; # results in 0 on $new
-   if(db_pgsql() && $new) {
+   if($CONF['database_type'] == 'pgsql' && $new) {
       // skip - shouldn't need to specify this as it will default to the next available value anyway.
       unset($formvars['id']);
    }
@@ -213,11 +210,10 @@ if ($cancel) { # cancel $new or $edit
 } elseif ($edit) { # edit entry form
    $formvars = $edit_row;
    $formvars['src_password'] = '';
-   if (db_pgsql()) {
+   if ('pgsql'==$CONF['database_type']) {
       $formvars['fetchall']=('t'==$formvars['fetchall']) ? 1 : 0;
       $formvars['keep']=('t'==$formvars['keep']) ? 1 : 0;
       $formvars['usessl']=('t'==$formvars['usessl']) ? 1 : 0;
-      $formvars['sslcertck']=('t'==$formvars['sslcertck']) ? 1: 0;
    }
 } elseif ($new) { # create entry form
    foreach (array_keys($fm_struct) as $value) {
@@ -235,7 +231,7 @@ if ($edit + $new == 0) { # display list
    $res = db_query ("SELECT ".implode(",",escape_string(array_keys($fm_struct)))." FROM $table_fetchmail WHERE mailbox IN ($user_mailboxes_sql) ORDER BY mailbox,src_server,src_user");
    if ($res['rows'] > 0) {
       while ($row = db_array ($res['result'])) {
-         if (db_pgsql()) {
+         if ('pgsql'==$CONF['database_type']) {
             //. at least in my database, $row['modified'] already looks like : 2009-04-11 21:38:10.75586+01,
             // while gmstrftime expects an integer value. strtotime seems happy though.
             //$row['date']=gmstrftime('%c %Z',$row['date']);
@@ -243,7 +239,6 @@ if ($edit + $new == 0) { # display list
             $row['fetchall']=('t'==$row['fetchall']) ? 1 : 0;
             $row['keep']=('t'==$row['keep']) ? 1 : 0;
             $row['usessl']=('t'==$row['usessl']) ? 1 : 0;
-            $row['sslcertck']=('t'==$row['sslcertck']) ? 1: 0;
          }
          $tFmail[] = $row;
       }
@@ -261,144 +256,11 @@ function _inp_bool($val){
 function _inp_password($val){
    return base64_encode($val);
 }
-//*****
-$headers=array();
-foreach(array_keys($fm_struct) as $row){
-   list($editible,$view,$type)=$fm_struct[$row];
-   $title = $PALANG['pFetchmail_field_' . $row];
-   $comment = $PALANG['pFetchmail_desc_' . $row];
-   if ($view){
-      $headers[]=$title;
-//      $headers[]=array($editible, $view, $type, $title, $comment);
-   }
-}
-function fetchmail_edit_row($data=array())
-{
-	global $fm_struct,$fm_defaults,$PALANG;
-	$id = $data["id"];
-	$_id = $data["id"] * 100 + 1;
-	$ret = "<table>";
-   $ret .= '<tr><th colspan="3">'.$PALANG['pMenu_fetchmail'] . '</th></tr>';
-   # TODO: $formvars possibly contains db-specific boolean values
-   # TODO: no problems with MySQL, to be tested with PgSQL
-   # TODO: undefined values may also occour
-   foreach($fm_struct as $key=>$struct){
-      list($editible,$view,$type)=$struct;
-      $title = $PALANG['pFetchmail_field_' . $key];
-      $comment = $PALANG['pFetchmail_desc_' . $key];
-      if ($editible){
-         $ret.="<tr><td class=\"label\"><label for='${_id}'>${title}:</label></td>";
-         $ret.="<td>";
-         $func="_edit_".$type;
-         if (! function_exists($func))
-            $func="_edit_text";
-         $val=isset($data[$key])
-            ?$data[$key]
-            :(! is_array($fm_defaults[$key])
-               ?$fm_defaults[$key]
-               :''
-            );
-         $fm_defaults_key = ""; if (isset($fm_defaults[$key])) $fm_defaults_key = $fm_defaults[$key];
-         $ret.=$func($_id++,$key,$fm_defaults_key,$val);
-         $ret.="</td><td><em>${comment}</em></td></tr>\n";
-      }
-      elseif($view){
-         $func="_view_".$type;
-         $val=isset($data[$key])
-            ?(function_exists($func)
-               ?$func($data[$key])
-               :nl2br($data[$key])
-            )
-            :"--x--";
-         $ret.="<tr><td class=\"label\">${title}:</label></td>";
-         $ret.="<td >".$val;
-         $ret.="</td><td><em>${comment}</em></td></tr>\n";
-      }
-   }
-   $ret.="<tr><td>&nbsp;</td><td colspan=2>
-      <input type=submit class=\"button\" name=save value='" . $PALANG['save'] . "' /> &nbsp;
-      <input type=submit class=\"button\" name=cancel value='" . $PALANG['cancel'] . "' />
-   ";
-   if ($id){
-      $ret.="<input type=hidden name=edit value='${id}'>";
-   }
-   $ret.="</td></tr>\n";
-   $ret.="</table>\n";
-   $ret.="<br />\n";
-   $ret.="</form>\n";
-   $ret.="</div>\n";
-   return $ret;
-}
-function _edit_text($id,$key,$def_vals,$val=""){
-   $val=htmlspecialchars($val);
-   return "<input type=text name=${key} id=${id} value='${val}' />";
-}
 
-function _edit_password($id,$key,$def_vals,$val=""){
-   $val=preg_replace("{.}","*",$val);
-   return "<input type=password name=${key} id=${id} value='${val}' />";
-}
-
-function _edit_num($id,$key,$def_vals,$val=""){
-   $val=(int)($val);
-   return "<input type=text name=${key} id=${id} value='${val}' />";
-}
-
-function _edit_bool($id,$key,$def_vals,$val=""){
-   $ret="<input type=checkbox name=${key} id=${id}";
-   if ($val)
-      $ret.=' checked="checked"';
-   $ret.=" />";
-   return $ret;
-}
-
-function _edit_longtext($id,$key,$def_vals,$val=""){
-   $val=htmlspecialchars($val);
-   return "<textarea name=${key} id=${id}  rows=2 style='width:20em;'>${val}</textarea>";
-}
-
-function _edit_enum($id,$key,$def_vals,$val=""){
-   $ret="<select name=${key} id=${id}>";
-      foreach($def_vals as $opt_val){
-         $ret.="<option";
-         if ($opt_val==$val)
-            $ret.=" selected";
-         $ret.=">${opt_val}</option>\n";
-      }
-   $ret.="</select>\n";
-   return $ret;
-}
-
-function _listview_id($val){
-   return "<a href='?edit=${val}'>&nbsp;${val}&nbsp;</a>";
-}
-
-function _listview_bool($val){
-   return $val?"+":"";
-}
-
-function _listview_longtext($val){
-   return strlen($val)?"Text - ".strlen($val)." chars":"--x--";
-}
-
-function _listview_text($val){
-   return sizeof($val)?$val:"--x--";
-}
-
-function _listview_password($val){
-   return preg_replace("{.}","*",$val);
-}
-
-$smarty->assign ('edit', $edit);
-$smarty->assign ('new', $new);
-$smarty->assign ('fetchmail_edit_row', fetchmail_edit_row($formvars),false);
-$smarty->assign ('headers', $headers);
-$smarty->assign ('user_domains', $user_domains);
-$smarty->assign ('tFmail', $tFmail);
-$smarty->assign ('extra_options', $extra_options);
-
-$smarty->assign ('smarty_template', 'fetchmail');
-$smarty->display ('index.tpl');
+include ("./templates/header.php");
+include ("./templates/menu.php");
+include ("./templates/fetchmail.php");
+include ("./templates/footer.php");
 
 /* vim: set expandtab softtabstop=3 tabstop=3 shiftwidth=3: */
 ?>
