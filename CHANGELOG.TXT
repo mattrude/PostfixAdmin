@@ -10,9 +10,12 @@
 # Last update:
 # $Id$
 
+Changes since the 2.3.7 release:
+  - fix query to enable/disable alias in edit-mailbox for PostgreSQL (#311)
+
 Version 2.3.7 - 2014/02/20 - SVN r1651 (postfixadmin-2.3 branch)
 ----------------------------------------------------------------
-  - SECURITY: fix SQL injection in show_gen_status()
+  - SECURITY: fix SQL injection in show_gen_status() (CVE-2014-2655)
   - lt.lang, da.lang translation update
   - when enabling/disabling a mailbox, also update the corresponding alias
   - fix creating superadmin in setup.php with MariaDB (more strict SQL)
