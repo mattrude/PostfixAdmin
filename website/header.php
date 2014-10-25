@@ -17,7 +17,7 @@
    <li><a target='_top' href="/">Home</a></li>
    <li><a target="_top" href="/screenshots">Screenshots</a></li>
    <li><a target="_top" href="http://sf.net/projects/postfixadmin">Sourceforge page</a></li>
-   <li><a target="_top" href="http://sf.net/apps/mediawiki/postfixadmin/">Wiki</a></li>
+   <li><a target="_top" href="https://sourceforge.net/p/postfixadmin/wiki/">Wiki</a></li>
    <li><a target="_top" href="https://sourceforge.net/p/postfixadmin/bugs/">Report a Bug</a></li>
    <li><a target="_top" href="https://sourceforge.net/p/postfixadmin/discussion/676076/">Forum</a></li>
 </ul>
