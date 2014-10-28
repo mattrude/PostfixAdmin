@@ -10,6 +10,9 @@ else {
 	$version = $_GET['version'];
 }
 
+# using 3.0 beta1? Then recommend beta2
+if ($version == '2.91') $latest = "2.92";
+
 # remove anything that is not a digit and not a dot
 # also remove anything after such an invalid character to avoid wrong results
 # TODO: this will fail to compare versions like "2.3rc7" with "2.3rc8"
