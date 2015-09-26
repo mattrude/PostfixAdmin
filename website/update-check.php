@@ -10,8 +10,8 @@ else {
 	$version = $_GET['version'];
 }
 
-# using 3.0 beta1? Then recommend beta2
-if ($version == '2.91') $latest = "2.92";
+# using 3.0 beta? Then recommend a newer beta.
+if ($version == '2.91' || $version == '2.92') $latest = "2.93";
 
 # remove anything that is not a digit and not a dot
 # also remove anything after such an invalid character to avoid wrong results
@@ -22,7 +22,7 @@ if(version_compare2($version,$latest) >= 0) {
 	echo "Congratulations - you're running the latest version of PostfixAdmin";
 }
 else {
-	echo "Upgrade available - the latest version is $latest"; 
+	echo "Upgrade available - the latest version is $latest";
 }
 
 require_once('footer.php');
