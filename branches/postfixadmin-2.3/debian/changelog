@@ -1,3 +1,10 @@
+postfixadmin (2.3.8-1) unstable; urgency=low
+ 
+  * New upstream release (v2.3.8)
+  * update dependencies to allow mariadb as database
+
+ -- David Goodwin (PalePurple) <david@palepurple.co.uk>  Tue, 29 Sep 2015 09:30:00 +0100
+
 postfixadmin (2.3.7-1) unstable; urgency=low
  
   * New upstream release (v2.3.7)
