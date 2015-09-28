@@ -12,6 +12,8 @@
 
 Changes since the 2.3.7 release:
   - fix query to enable/disable alias in edit-mailbox for PostgreSQL (#311)
+  - don't prefill username in users/ login on failed logins - fixes (probably
+    harmless) XSS
 
 Version 2.3.7 - 2014/02/20 - SVN r1651 (postfixadmin-2.3 branch)
 ----------------------------------------------------------------
