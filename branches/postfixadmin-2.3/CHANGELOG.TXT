@@ -15,6 +15,7 @@ Version 2.3.8 - 2015/09/29 - SVN r1808 (postfixadmin-2.3 branch)
   - fix query to enable/disable alias in edit-mailbox for PostgreSQL (#311)
   - don't prefill username in users/ login on failed logins - fixes (probably
     harmless) XSS
+  - fix show_gen_status() to properly escape mail addresses in query (#356)
   - allow MariaDB in Debian package dependencies
 
 Version 2.3.7 - 2014/02/20 - SVN r1651 (postfixadmin-2.3 branch)
