@@ -12,7 +12,7 @@ if(isset($_SESSION['list_virtual_sticky_domain'])) {
    </tr>
    <tr>
       <td><?php print $PALANG['pCreate_mailbox_username'] . ":"; ?></td>
-      <td><input class="flat" type="text" name="fUsername" value="<?php print $tUsername; ?>" autocomplete="off"/></td>
+      <td><input class="flat" type="text" name="fUsername" value="<?php print htmlentities($tUsername); ?>" autocomplete="off"/></td>
       <td>@
       <select name="fDomain">
       <?php
@@ -44,7 +44,7 @@ if(isset($_SESSION['list_virtual_sticky_domain'])) {
    </tr>
    <tr>
       <td><?php print $PALANG['pCreate_mailbox_name'] . ":"; ?></td>
-      <td><input class="flat" type="text" name="fName" value="<?php print $tName; ?>" /></td>
+      <td><input class="flat" type="text" name="fName" value="<?php print htmlentities($tName); ?>" /></td>
       <td><?php print $pCreate_mailbox_name_text; ?></td>
    </tr>
    <?php if ($CONF['quota'] == 'YES') { ?>

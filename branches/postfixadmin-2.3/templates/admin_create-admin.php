@@ -7,7 +7,7 @@
    </tr>
    <tr>
       <td><?php print $PALANG['pAdminCreate_admin_username'] . ":"; ?></td>
-      <td><input class="flat" type="text" name="fUsername" value="<?php print $tUsername; ?>" /></td>
+      <td><input class="flat" type="text" name="fUsername" value="<?php print htmlentities($tUsername); ?>" /></td>
       <td><?php print $pAdminCreate_admin_username_text; ?></td>
    </tr>
    <tr>
