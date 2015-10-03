@@ -120,12 +120,12 @@ function fetchmail_edit_row($data=array()){
 
 function _edit_text($id,$key,$def_vals,$val=""){
    $val=htmlspecialchars($val);
-   return "<input type=text name=${key} id=${id} value='${val}'>";
+   return "<input type=text name=${key} id=${id} value='" . htmlentities($val, ENT_QUOTES) . "'>";
 }
 
 function _edit_password($id,$key,$def_vals,$val=""){
    $val=preg_replace("{.}","*",$val);
-   return "<input type=password name=${key} id=${id} value='${val}'>";
+   return "<input type=password name=${key} id=${id} value=''>";
 }
 
 function _edit_num($id,$key,$def_vals,$val=""){
@@ -143,7 +143,7 @@ function _edit_bool($id,$key,$def_vals,$val=""){
 
 function _edit_longtext($id,$key,$def_vals,$val=""){
    $val=htmlspecialchars($val);
-   return "<textarea name=${key} id=${id}  rows=2 style='width:20em;'>${val}</textarea>";
+   return "<textarea name=${key} id=${id}  rows=2 style='width:20em;'>" . htmlentities($val, ENT_QUOTES) . "</textarea>";
 }
 
 function _edit_enum($id,$key,$def_vals,$val=""){

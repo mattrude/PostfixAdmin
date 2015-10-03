@@ -16,6 +16,9 @@ Version 2.3.8 - 2015/09/29 - SVN r1808 (postfixadmin-2.3 branch)
   - don't prefill username in users/ login on failed logins - fixes (probably
     harmless) XSS
   - fix show_gen_status() to properly escape mail addresses in query (#356)
+  - fix escaping in create-admin, create-mailbox and fetchmail templates -
+    fixes (harmless) XSS on form validation errors
+  - don't echo the password back to the browser in the fetchmail form
   - allow MariaDB in Debian package dependencies
 
 Version 2.3.7 - 2014/02/20 - SVN r1651 (postfixadmin-2.3 branch)
