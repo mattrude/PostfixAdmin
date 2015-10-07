@@ -10,7 +10,7 @@
 # Last update:
 # $Id$
 
-Version 2.3.8 - 2015/09/29 - SVN r1808 (postfixadmin-2.3 branch)
+Version 2.3.8 - 2015/10/07 - SVN r1814 (postfixadmin-2.3 branch)
 ----------------------------------------------------------------
   - fix query to enable/disable alias in edit-mailbox for PostgreSQL (#311)
   - don't prefill username in users/ login on failed logins - fixes (probably
