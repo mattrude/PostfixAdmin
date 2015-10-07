@@ -1,83 +1,9 @@
 <?php
-# $Id$ 
 
-class VacationHandler extends PFAHandler {
-
-    protected $db_table = 'vacation';
-    protected $id_field = 'email';
-    protected $domain_field = 'domain';
-
-    function init($id) {
-        die('VacationHandler is not yet ready to be used with *Handler methods'); # obvious TODO: remove when it's ready ;-) 
-    }
-
-    protected function initStruct() {
-        $this->struct=array(
-            # field name                allow       display in...   type    $PALANG label                     $PALANG description                 default / options / ...
-            #                           editing?    form    list
-            'email'         => pacol(   $this->new, 1,      1,      'text', 'pLogin_username'               , ''                                , '' ),
-            'domain'        => pacol(   1,          0,      0,      'text', ''                              , ''                                , '' ),
-            'subject'       => pacol(   1,          1,      0,      'text', 'pUsersVacation_subject'        , ''                                , '' ),
-            'body'          => pacol(   1,          1,      0,      'text', 'pUsersVacation_body'           , ''                                , '' ),
-            'activefrom'    => pacol(   1,          1,      1,      'text', 'pUsersVacation_activefrom'     , ''                                , '' ),
-            'activeuntil'   => pacol(   1,          1,      1,      'text', 'pUsersVacation_activeuntil'    , ''                                , '' ),
-#           'cache'         => pacol(   0,          0,      0,      'text', ''                              , ''                                , '' ), # leftover from 2.2
-            'active'        => pacol(   1,          1,      1,      'bool', 'active'                        , ''                                 , 1 ),
-            'created'       => pacol(   0,          0,      1,      'ts',   'created'                       , ''                                 ),
-            'modified'      => pacol(   0,          0,      1,      'ts',   'last_modified'                 , ''                                 ),
-            # TODO: add virtual 'notified' column and allow to display who received a vacation response?
-        );
-    }
-
-    protected function initMsg() {
-        $this->msg['error_already_exists'] = 'pCreate_mailbox_username_text_error1'; # TODO: better error message
-        $this->msg['error_does_not_exist'] = 'pCreate_mailbox_username_text_error1'; # TODO: better error message
-        $this->msg['confirm_delete'] = 'confirm_delete_vacation'; # unused?
-
-        if ($this->new) {
-            $this->msg['logname'] = 'edit_vacation';
-            $this->msg['store_error'] = 'pVacation_result_error';
-            $this->msg['successmessage'] = 'pVacation_result_removed'; # TODO: or pVacation_result_added - depends on 'active'... -> we probably need a new message
-        } else {
-            $this->msg['logname'] = 'edit_vacation';
-            $this->msg['store_error'] = 'pVacation_result_error';
-            $this->msg['successmessage'] = 'pVacation_result_removed'; # TODO: or pVacation_result_added - depends on 'active'... -> we probably need a new message
-        }
-    }
-
-    public function webformConfig() {
-        return array(
-            # $PALANG labels
-            'formtitle_create' => 'pUsersVacation_welcome',
-            'formtitle_edit' => 'pUsersVacation_welcome',
-            'create_button' => 'save',
-
-            # various settings
-            'required_role' => 'admin',
-            'listview' => 'list-virtual.php',
-            'early_init' => 1, # 0 for create-domain
-        );
-    }
-
-    protected function validate_new_id() {
-        # vacation can only be enabled if a mailbox with this name exists
-        $handler = new MailboxHandler();
-        return $handler->init($address);                                                                                                                       
-    }
-
-    public function delete() {
-        $this->errormsg[] = '*** deletion not implemented yet ***';
-        return false; # XXX function aborts here! XXX
-
-    }
-
-
-
-
+class VacationHandler {
     protected $username = null;
     function __construct($username) {
         $this->username = $username;
-        $this->id = $username;
     }
 
     /**
@@ -86,24 +12,36 @@ class VacationHandler extends PFAHandler {
      * @return boolean true on success.
      */
     function remove() {
-        if (!$this->updateAlias(0)) return false;
+        $ah = new AliasHandler($this->username);
+        $aliases = $ah->get(true); // fetch all.
+        $new_aliases = array();
+        $table_vacation = table_by_key('vacation');
+        $table_vacation_notification = table_by_key('vacation_notification');
+
+        /* go through the user's aliases and remove any that look like a vacation address */
+        foreach($aliases as $alias) {
+            if(!$ah->is_vacation_address($alias)) {
+                $new_aliases[] = $alias;
+            }
+        }
+        $ah->update($new_aliases, '', false);
 
         // tidy up vacation table.
-        $vacation_data = array(
-            'active' => db_get_boolean(false),
-        );
-        $result = db_update('vacation', 'email', $this->username, $vacation_data);
-        $result = db_delete('vacation_notification', 'on_vacation', $this->username);
-        # TODO db_log() call (maybe except if called from set_away?)
+        $active = db_get_boolean(False);
+        $username = escape_string($this->username);
+        $result = db_query("UPDATE $table_vacation SET active = '$active' WHERE email='$username'");
+        $result = db_query("DELETE FROM $table_vacation_notification WHERE on_vacation='$username'");
         /* crap error handling; oh for exceptions... */
         return true;
     }
 
     /**
      * @return boolean true indicates this server supports vacation messages, and users are able to change their own.
+     * @global array $CONF
      */
     function vacation_supported() {
-        return Config::bool('vacation') && Config::bool('vacation_control');
+        global $CONF;
+        return $CONF['vacation'] == 'YES' && $CONF['vacation_control'] == 'YES';
     }
 
     /**
@@ -111,122 +49,80 @@ class VacationHandler extends PFAHandler {
      * Why do we bother storing true/false in the vacation table if the alias dictates it anyway?
      */
     function check_vacation() {
-        $handler = new AliasHandler();
-
-        if (!$handler->init($this->id)) {
-            # print_r($handler->errormsg); # TODO: error handling
-            return false;
+        $ah = new AliasHandler($this->username);
+        $aliases = $ah->get(true); // fetch all.
+        foreach($aliases as $alias) {
+            if($ah->is_vacation_address($alias)) {
+                return true;
+            }
         }
-
-        if (!$handler->view()) {
-            # print_r($handler->errormsg); # TODO: error handling
-            return false;
-        }
-
-        $result = $handler->result();
-
-        if ($result['on_vacation']) return true;
         return false;
     }
 
     /**
      * Retrieve information on someone who is on vacation
-     * @return struct|boolean stored information on vacation - array(subject - string, message - string, active - boolean, activeFrom - date, activeUntil - date) 
+     * @return struct|boolean stored information on vacation - array(subject - string, message - string, active - boolean) 
      * will return false if no existing data 
      */
     function get_details() {
         $table_vacation = table_by_key('vacation');
-        $E_username = escape_string($this->username);
+        $username = escape_string($this->username);
 
-        $sql = "SELECT * FROM $table_vacation WHERE email = '$E_username'";
+        $sql = "SELECT * FROM $table_vacation WHERE email = '$username'";
         $result = db_query($sql);
-        if($result['rows'] != 1) {
-            return false;
+        if($result['rows'] == 1) {
+            $row = db_array($result['result']);
+            $boolean = ($row['active'] == db_get_boolean(true));
+            return array( 'subject' => $row['subject'],
+                          'body' => $row['body'],
+                          'active'  => $boolean );
         }
-
-        $row = db_array($result['result']);
-        $boolean = ($row['active'] == db_get_boolean(true));
-        # TODO: only return true and store the db result array in $this->whatever for consistency with the other classes
-        return array( 
-            'subject' => $row['subject'],
-            'body' => $row['body'],
-            'active'  => $boolean ,
-            'interval_time' => $row['interval_time'],
-            'activeFrom' => $row['activefrom'],
-            'activeUntil' => $row['activeuntil'],
-        );
+        return false;
     }
     /**
      * @param string $subject
      * @param string $body
-     * @param string $interval_time
-     * @param date $activeFrom
-     * @param date $activeUntil
      */
-    function set_away($subject, $body, $interval_time, $activeFrom, $activeUntil) {
+    function set_away($subject, $body) {
         $this->remove(); // clean out any notifications that might already have been sent.
-
-        $E_username = escape_string($this->username);
-        $activeFrom = date ("Y-m-d 00:00:00", strtotime ($activeFrom)); # TODO check if result looks like a valid date
-        $activeUntil = date ("Y-m-d 23:59:59", strtotime ($activeUntil)); # TODO check if result looks like a valid date
-        list(/*NULL*/,$domain) = explode('@', $this->username);
-
-        $vacation_data = array(
-            'email' => $this->username,
-            'domain' => $domain,
-            'subject' => $subject,
-            'body' => $body,
-            'interval_time' => $interval_time,
-            'active' => db_get_boolean(true),
-            'activefrom' => $activeFrom,
-            'activeuntil' => $activeUntil,
-        );
-
         // is there an entry in the vacaton table for the user, or do we need to insert?
         $table_vacation = table_by_key('vacation');
-        $result = db_query("SELECT * FROM $table_vacation WHERE email = '$E_username'");
-        if($result['rows'] == 1) {
-            $result = db_update('vacation', 'email', $this->username, $vacation_data);
-        } else {
-            $result = db_insert('vacation', $vacation_data);
-        }
-        # TODO error check
-        # TODO wrap whole function in db_begin / db_commit (or rollback)?
+        $username = escape_string($this->username);
+        $body = escape_string($body);
+        $subject = escape_string($subject);
 
-        return $this->updateAlias(1);
+        $result = db_query("SELECT * FROM $table_vacation WHERE email = '$username'");
+        $active = db_get_boolean(True);
+        // check if the user has a vacation entry already, if so just update it
+        if($result['rows'] == 1) {
+            $result = db_query("UPDATE $table_vacation SET active = '$active', body = '$body', subject = '$subject', created = NOW() WHERE email = '$username'");
+        }
+        else {
+            $tmp = preg_split ('/@/', $username);
+            $domain = escape_string($tmp[1]);
+            $result = db_query ("INSERT INTO $table_vacation (email,subject,body,domain,created,active) VALUES ('$username','$subject','$body','$domain',NOW(),'$active')");
+        }
+
+        $ah = new AliasHandler($this->username); 
+        $aliases = $ah->get(true);
+        $vacation_address = $this->getVacationAlias();
+        $aliases[] = $vacation_address;
+        return $ah->update($aliases, '', false);
     }
 
     /**
-     * add/remove the vacation alias
-     * @param int $vacationActive
+     * Returns the vacation alias for this user. 
+     * i.e. if this user's username was roger@example.com, and the autoreply domain was set to
+     * autoreply.fish.net in config.inc.php we'd return roger#example.com@autoreply.fish.net
+     * @return string an email alias.
      */
-    protected function updateAlias($vacationActive) {
-        $handler = new AliasHandler();
-
-        if (!$handler->init($this->id)) {
-            # print_r($handler->errormsg); # TODO: error handling
-            return false;
-        }
-
-        $values = array (
-            'on_vacation' => $vacationActive,
-        );
-
-        if (!$handler->set($values)) {
-            # print_r($handler->errormsg); # TODO: error handling
-            return false;
-        }
-
-        # TODO: supress logging in AliasHandler if called from VacationHandler (VacationHandler should log itsself)
-
-        if (!$handler->store()) {
-            print_r($handler->errormsg); # TODO: error handling
-            return false;
-        }
-
-        # still here? then everything worked
-        return true;
+    public function getVacationAlias() {
+        global $CONF;
+        $vacation_domain = $CONF['vacation_domain']; 
+        $vacation_goto = preg_replace('/@/', '#', $this->username); 
+        $vacation_goto = "{$vacation_goto}@{$vacation_domain}"; 
+        return $vacation_goto;
     }
-
 }
+
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */

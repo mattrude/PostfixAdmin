@@ -6,7 +6,8 @@
  * This source file is subject to the GPL license that is bundled with  
  * this package in the file LICENSE.TXT. 
  * 
- * Further details on the project are available at http://postfixadmin.sf.net 
+ * Further details on the project are available at : 
+ *     http://www.postfixadmin.com or http://postfixadmin.sf.net 
  * 
  * @version $Id$ 
  * @license GNU GPL v2 or later. 
@@ -64,16 +65,11 @@ if ($f_phpversion == 1)
     if (phpversion() < 5) {
         print "<li><b>Error: Depends on: PHP v5</b><br /></li>\n";
         $error += 1;
-    } elseif (version_compare(phpversion(), '5.2.3') < 0) {
-        # smarty uses htmlentities() with 4 parameters, the 4th parameter was introduced in PHP 5.2.3
-        # older PHP versions will cause warnings
-        $phpversion = 5;
-        print "<li><b>Recommended PHP version: >= 5.2.3, you have " . phpversion () . "</b></li>\n";
-    } else {
+    }
+    if (phpversion() >= 5) { 
         $phpversion = 5;
         print "<li>PHP version " . phpversion () . "</li>\n";
     }
-# TODO: check for PHP >= 5.2.3 - smarty uses htmlentities with 4 parameters. The forth parameter was added in PHP 5.2.3, older versions will give a warning
 }
 else
 {
@@ -146,20 +142,6 @@ else
 }
 
 //
-// Check if templates directory is writable
-//
-
-if (!is_writeable($incpath.'/templates_c'))
-{
-    print "<li><b>Error: Smarty template compile directory templates_c is not writable.</b><br />\n";
-	print "<b>Please make it writable.</b><br />\n";
-	print "<b>If you are using SELinux or AppArmor, you might need to adjust their setup to allow write access.</b><br />\n";
-    $error =+ 1;
-} else {
-	print "<li>Smarty template compile directory is writable - OK<br />\n";
-}
-
-//
 // Check if there is support for at least 1 database
 //
 if (($f_mysql_connect == 0) and ($f_mysqli_connect == 0) and ($f_pg_connect == 0))
@@ -202,7 +184,7 @@ if ($phpversion >= 5)
     {
         print "<li>Depends on: MySQL 4.1 - OK\n";
         if ( !($config_loaded && $CONF['database_type'] == 'mysqli') ) {
-            print "<br>(change the database_type to 'mysqli' in config.inc.php if you want to use MySQL)\n";
+            print "(change the database_type to 'mysqli' in config.inc.php!!)\n";
         }
         print "</li>";
     }
@@ -215,7 +197,7 @@ if ($f_pg_connect == 1)
 {
     print "<li>Depends on: PostgreSQL - OK \n";
     if ( !($config_loaded && $CONF['database_type'] == 'pgsql') ) {
-        print "<br>(change the database_type to 'pgsql' in config.inc.php if you want to use PostgreSQL)\n";
+        print "(change the database_type to 'pgsql' in config.inc.php!!)\n";
     }
     print "</li>";
 }
@@ -317,8 +299,10 @@ else
     print "<p>Everything seems fine... attempting to create/update database structure</p>\n";
     require_once($incpath.'/upgrade.php');
 
+    $pAdminCreate_admin_username_text = $PALANG['pAdminCreate_admin_username_text'];
+    $pAdminCreate_admin_password_text = "";
     $tUsername = '';
-    $setupMessage = '';
+    $tMessage = '';
     $lostpw_error = 0;
 
     $setuppw = "";
@@ -327,11 +311,11 @@ else
     if (safepost("form") == "setuppw") {
         # "setup password" form submitted
         if (safepost('setup_password') != safepost('setup_password2')) {
-            $setupMessage = "The two passwords differ!";
+            $tMessage = "The two passwords differ!";
             $lostpw_error = 1;
         } else {
             list ($lostpw_error, $lostpw_result) = check_setup_password(safepost('setup_password'), 1);
-            $setupMessage = $lostpw_result;
+            $tMessage = $lostpw_result;
             $setuppw = "changed";
         }
     } elseif (safepost("form") == "createadmin") {
@@ -339,10 +323,14 @@ else
         list ($pw_check_error, $pw_check_result) = check_setup_password(safepost('setup_password'));
         if ($pw_check_result != 'pass_OK') {
             $error += 1;
-            $setupMessage = $pw_check_result;
+            $tMessage = $pw_check_result;
         }
 
         if($error == 0 && $pw_check_result == 'pass_OK') {
+            if (isset ($_POST['fUsername'])) $fUsername = escape_string ($_POST['fUsername']);
+            if (isset ($_POST['fPassword'])) $fPassword = escape_string ($_POST['fPassword']);
+            if (isset ($_POST['fPassword2'])) $fPassword2 = escape_string ($_POST['fPassword2']);
+
             // XXX need to ensure domains table includes an 'ALL' entry.
             $table_domain = table_by_key('domain');
             $r = db_query("SELECT * FROM $table_domain WHERE domain = 'ALL'");
@@ -350,24 +338,10 @@ else
                 db_insert('domain', array('domain' => 'ALL', 'description' => '', 'transport' => '') ); // all other fields should default through the schema.
             }
 
-            $values = array(
-                'username'      => safepost('username'),
-                'password'      => safepost('password'),
-                'password2'     => safepost('password2'),
-                'superadmin'    => 1,
-                'domains'       => array(),
-                'active'        => 1,
-            );
-
-            list ($error, $setupMessage, $errormsg) = create_admin($values);
-
+            list ($error, $tMessage, $pAdminCreate_admin_username_text, $pAdminCreate_admin_password_text) = create_admin($fUsername, $fPassword, $fPassword2, array('ALL'), TRUE);
             if ($error != 0) {
-                $tUsername = htmlentities($values['username']);
-            } else {
-                $setupMessage .= "<p>You are done with your basic setup. ";
-                $setupMessage .= "<p><b>You can now <a href='login.php'>login to PostfixAdmin</a> using the account you just created.</b>";
+                if (isset ($_POST['fUsername'])) $tUsername = escape_string ($_POST['fUsername']);
             }
-
         }
     } 
 
@@ -375,7 +349,7 @@ else
 # show "create setup password" form
     ?>
 
-<div class="standout"><?php print $setupMessage; ?></div>
+<div class="standout"><?php print $tMessage; ?></div>
 <div id="edit_form">
 <form name="setuppw" method="post" action="setup.php">
 <input type="hidden" name="form" value="setuppw" />
@@ -404,7 +378,7 @@ else
     } elseif ($_SERVER['REQUEST_METHOD'] == "GET" || $error != 0 || $lostpw_error == 0) {
         ?>
 
-<div class="standout"><?php print $setupMessage; ?></div>
+<div class="standout"><?php print $tMessage; ?></div>
 <div id="edit_form">
 <form name="create_admin" method="post">
 <input type="hidden" name="form" value="createadmin" />
@@ -417,19 +391,19 @@ else
       <td><a href="setup.php?lostpw=1">Lost password?</a></td>
    </tr>
    <tr>
-      <td><?php print $PALANG['admin'] . ":"; ?></td>
-      <td><input class="flat" type="text" name="username" value="<?php print $tUsername; ?>" /></td>
-      <td><?php if (isset($errormsg['username'])) print $errormsg['username']; ?><?php print $PALANG['email_address'] ?></td>
+      <td><?php print $PALANG['pAdminCreate_admin_username'] . ":"; ?></td>
+      <td><input class="flat" type="text" name="fUsername" value="<?php print $tUsername; ?>" /></td>
+      <td><?php print $pAdminCreate_admin_username_text; ?></td>
    </tr>
    <tr>
-      <td><?php print $PALANG['password'] . ":"; ?></td>
-      <td><input class="flat" type="password" name="password" /></td>
-      <td><?php if (isset($errormsg['password'])) print $errormsg['password']; ?></td>
+      <td><?php print $PALANG['pAdminCreate_admin_password'] . ":"; ?></td>
+      <td><input class="flat" type="password" name="fPassword" /></td>
+      <td><?php print $pAdminCreate_admin_password_text; ?></td>
    </tr>
    <tr>
-      <td><?php print $PALANG['password_again'] . ":"; ?></td>
-      <td><input class="flat" type="password" name="password2" /></td>
-      <td><?php if (isset($errormsg['password2'])) print $errormsg['password2']; ?></td>
+      <td><?php print $PALANG['pAdminCreate_admin_password2'] . ":"; ?></td>
+      <td><input class="flat" type="password" name="fPassword2" /></td>
+      <td>&nbsp;</td>
    </tr>
    <tr>
       <td colspan="3" class="hlp_center"><input class="button" type="submit" name="submit" value="<?php print $PALANG['pAdminCreate_admin_button']; ?>" /></td>
@@ -477,12 +451,10 @@ function check_setup_password($password, $lostpw_mode = 0) {
     list($confsalt, $confpass, $trash) = explode(':', $setuppw . '::');
     $pass = encrypt_setup_password($password, $confsalt);
 
-    $validpass = validate_password($password);
-
     if ($password == "" ) { # no password specified?
         $result = "Setup password must be specified<br />If you didn't set up a setup password yet, enter the password you want to use.";
-    } elseif (count($validpass) > 0) {
-        $result = $validpass[0]; # TODO: honor all error messages, not only the first one
+    } elseif (strlen($password) < $CONF['min_password_length']) { # password too short?
+        $result = "The setup password you entered is too short. Please choose a better one.";
     } elseif ($pass == $setuppw && $lostpw_mode == 0) { # correct passsword (and not asking for a new password)
         $result = "pass_OK";
         $error = 0;
@@ -494,38 +466,11 @@ function check_setup_password($password, $lostpw_mode = 0) {
         } else {
             $result = '<p><b>Setup password not specified correctly</b></p>';
         }
-        $result .= '<p>If you want to use the password you entered as setup password, edit config.inc.php or config.local.php and set</p>';
+        $result .= '<p>If you want to use the password you entered as setup password, edit config.inc.php and set</p>';
         $result .= "<pre>\$CONF['setup_password'] = '$pass';</pre>";
     }
     return array ($error, $result);
 }
-
-function create_admin($values) {
-
-    DEFINE('POSTFIXADMIN_SETUP', 1); # avoids instant redirect to login.php after creating the admin
-
-    $handler = new AdminHandler(1, 'setup.php');
-    $formconf = $handler->webformConfig();
-
-    if (!$handler->init($values['username'])) {
-        return array(1, "", $handler->errormsg);
-    } 
-
-    if (!$handler->set($values)) {
-        return array(1, "", $handler->errormsg);
-    }
-
-    if (!$handler->store()) {
-        return array(1, "", $handler->errormsg);
-    }
-
-    return array(
-        0,
-        $handler->infomsg['success'],
-        array(),
-    );
-}
-
 
 /* vim: set expandtab softtabstop=4 tabstop=4 shiftwidth=4: */
 ?>

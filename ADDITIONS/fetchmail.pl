@@ -81,38 +81,35 @@ $lockmgr->lock($lock_file) || log_and_die "can't lock ${lock_file}";
 $dbh = DBI->connect($dsn, $db_username, $db_password) || log_and_die "cannot connect the database";
 
 if($db_type eq "Pg") {
-	$sql_cond = "active = 1 AND date_part('epoch',now())-date_part('epoch',date)";
+	$sql_cond = "date_part('epoch',now())-date_part('epoch',date)";
 } elsif($db_type eq "mysql") {
-	$sql_cond = "active = 't' AND unix_timestamp(now())-unix_timestamp(date)";
+	$sql_cond = "unix_timestamp(now())-unix_timestamp(date)";
 }
 
 $sql = "
-	SELECT id,mailbox,src_server,src_auth,src_user,src_password,src_folder,fetchall,keep,protocol,mda,extra_options,usessl, sslcertck, sslcertpath, sslfingerprint
+	SELECT id,mailbox,src_server,src_auth,src_user,src_password,src_folder,fetchall,keep,protocol,mda,extra_options,usessl 
 	FROM fetchmail
 	WHERE $sql_cond  > poll_time*60
 	";
 
 my (%config);
 map{
-	my ($id,$mailbox,$src_server,$src_auth,$src_user,$src_password,$src_folder,$fetchall,$keep,$protocol,$mda,$extra_options,$usessl,$sslcertck,$sslcertpath,$sslfingerprint)=@$_;
+	my ($id,$mailbox,$src_server,$src_auth,$src_user,$src_password,$src_folder,$fetchall,$keep,$protocol,$mda,$extra_options,$usessl)=@$_;
 
 	syslog("info","fetch ${src_user}@${src_server} for ${mailbox}");
-
+	
 	$cmd="user '${src_user}' there with password '".decode_base64($src_password)."'";
 	$cmd.=" folder '${src_folder}'" if ($src_folder);
 	$cmd.=" mda ".$mda if ($mda);
 
 #	$cmd.=" mda \"/usr/local/libexec/dovecot/deliver -m ${mailbox}\"";
 	$cmd.=" is '${mailbox}' here";
-
+	
 	$cmd.=" keep" if ($keep);
 	$cmd.=" fetchall" if ($fetchall);
 	$cmd.=" ssl" if ($usessl);
-	$cmd.=" sslcertck" if($sslcertck);
-	$cmd.=" sslcertpath $sslcertpath" if ($sslcertck && $sslcertpath);
-	$cmd.=" sslfingerprint \"$sslfingerprint\"" if ($sslfingerprint);
 	$cmd.=" ".$extra_options if ($extra_options);
-
+	
 	$text=<<TXT;
 set postmaster "postmaster"
 set nobouncemail
@@ -122,7 +119,7 @@ set syslog
 
 poll ${src_server} with proto ${protocol}
 	$cmd
-
+	
 TXT
 
   ($file_handler, $filename) = mkstemp( "/tmp/fetchmail-all-XXXXX" ) or log_and_die "cannot open/create fetchmail temp file";

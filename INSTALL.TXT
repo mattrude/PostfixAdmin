@@ -39,7 +39,7 @@ DOCUMENTS/ folder.
 Make sure that you are in your WWW directory and then unarchive the
 Postfix Admin archive (whatever the filename is):
 
-  $ tar -zxvf postfixadmin-$version.tgz
+  $ tar -zxvf postfixadmin-2.2.0.tgz
 
 
 2. Setup a Database
@@ -69,21 +69,7 @@ For PostgreSQL:
 3. Configure PostfixAdmin so it can find the database
 -----------------------------------------------------
 
-Create a config.local.php file for your local configuration:
-
-<?php
-$CONF['database_type'] = 'mysqli';
-$CONF['database_user'] = 'postfix';
-$CONF['database_password'] = 'postfixadmin';
-$CONF['database_name'] = 'postfix';
-
-$CONF['configured'] = true;
-?>
-
-See config.inc.php for all available config options and their default value.
-
-You can also edit config.inc.php instead of creating a config.local.php,
-but this will make updates harder and is therefore not recommended.
+Edit the config.inc.php file - or - create config.local.php and add your settings there.
 
 The most important settings are those for your database server.
 
@@ -96,12 +82,9 @@ to
 $CONF['configured'] = true;
 
 
-PostfixAdmin does not require write access to any files except the templates_c 
-directory (smarty cache). You can therefore leave the files owned as root (or
-another user); as long as the web server user (e.g. www-data) can read them, it
-will be fine.
-For templates_c/, allow write access (only) for the web server user (e. g. www-data).
-The easiest way to do this is   chown -R www-data templates_c
+PostfixAdmin does not require write access to any files. You can therefore 
+leave the files owned as root (or a.n.other user); as long as the web server 
+user (e.g. www-data) can read them, it will be fine.
 
 The next 'step', is optional. Only do it, if other non-trusted users have access 
 to your user:
@@ -152,19 +135,7 @@ PostfixAdmin.
 The files in the DOCUMENTS/ directory explain which settings you need to
 do/change.
 
-7. XMLRPC Integration (OPTIONAL!)
---------------------------------
-
-See ADDITIONS/squirrelmail-plugin
-See xmlrpc.php - only a subset of Postfixadmin's functionality is currently exposed.
-See config.inc.php - see xmlrpc_enabled key (defaults to off).
-
-You'll need to install a copy of the Zend Framework (version 1.12.x) within Postfixadmin
-or your PHP include_path (see header within xmlrpc.php).
-NOTE: The XMLRPC interface is _not compatible_ with Zend Framework version 2.x.
-You'll need to enable the xmlrpc link (see config.inc.php)
-
-8. More information
+7. More information
 -------------------
 As of March 2007, PostfixAdmin moved to SourceForge.  For the
 forum posts and source updates, see:

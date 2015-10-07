@@ -3,7 +3,8 @@
 include_once(SM_PATH . 'functions/i18n.php');
 
 function squirrelmail_plugin_init_postfixadmin() {
-    include(dirname(__FILE__) . '/config.php');
+    include(SM_PATH.'plugins/postfixadmin/config.php');
+
     global $squirrelmail_plugin_hooks;
 
     $squirrelmail_plugin_hooks['optpage_register_block']['postfixadmin'] = 'postfixadmin_optpage_register_block';

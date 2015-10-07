@@ -1,6 +1,6 @@
-######################################
-# Virtual Vacation for Postfix Admin #
-######################################
+##################################################
+# Virtual Vacation for Postfix Admin Release 2.x #
+##################################################
 #
 # Postfix Admin (Virtual Vacation)
 # Originally authored by Mischa Peters <mischa at high5 dot net>
@@ -38,7 +38,6 @@ Install Virtual Vacation
 
 1. Create a local account
 -------------------------
-
 Create a dedicated local user account called "vacation". 
 This user handles all potentially dangerous mail content - that is why it
 should be a separate account.
@@ -47,41 +46,33 @@ Do not use "nobody", and most certainly do not use "root" or "postfix".  The
 user will never log in, and can be given a "*" password and non-existent
 shell and home directory.
 
-Also create a separate "vacation" group.
-
 This should look like this:
 
 #/etc/passwd
-vacation:*:65501:65501:Virtual Vacation:/nonexistent:/sbin/nologin
+vacation:*:65501:65501::0:0:Virtual Vacation:/nonexistent:/sbin/nologin
 
 #/etc/group
 vacation:*:65501:
 
 
-2. Create a log directory or log file
--------------------------------------
-
-If you want to log to a file ($log_to_file), create a log directory or an 
-empty log file.
-
-This file or directory needs to be writeable for the "vacation" user.
-
-Note: If you are logging to syslog, you can skip this step.
+2. Create a directory
+---------------------
+Create a directory, for example  /var/spool/vacation, that is accessible
+only to the "vacation" user. This is where the vacation script is supposed
+to store its temporary files. 
 
 
-3. Install vacation.pl
-----------------------
+3. Copy the files
+-----------------
 
-Create a directory /usr/lib/postfixadmin/ and copy the vacation.pl file to it:
+Copy the vacation.pl file to the directory you created above:
 
-  $ mkdir /usr/lib/postfixadmin
-  $ cp vacation.pl /usr/lib/postfixadmin/vacation.pl
-  $ chown -R root:vacation /usr/lib/postfixadmin
-  $ chmod 750 /usr/lib/postfixadmin/ /usr/lib/postfixadmin/vacation.pl
+  $ cp vacation.pl <HOME>/vacation.pl
+  $ chown -R vacation:vacation <HOME>
 
 Which will then look something like:
 
--rwxr-x---   1 root  vacation  3356 Dec 21 00:00 vacation.pl*
+-rwx------   1 vacation  vacation  3356 Dec 21 00:00 vacation.pl*
 
 
 4. Setup the transport type
@@ -90,7 +81,7 @@ Define the transport type in the Postfix master file:
 
 #/etc/postfix/master.cf:
 vacation    unix  -       n       n       -       -       pipe
-  flags=Rq user=vacation argv=/usr/lib/postfixadmin/vacation.pl -f ${sender} -- ${recipient}
+  flags=Rq user=vacation argv=/var/spool/vacation/vacation.pl -f ${sender} -- ${recipient}
 
 5. Setup the transport maps file
 --------------------------------
@@ -133,19 +124,13 @@ file.
 
 You can do this in two ways:
 
-a) edit vacation.pl directly (not recommended!)
+a) edit vacation.pl directly
 
-b) create /etc/postfixadmin/vacation.conf and enter your settings there
+b) create /etc/mail/postfixadmin/vacation.conf and enter your settings there
 
    Just use perl syntax there to fill the config variables listed in vacation.pl
    (without the "our" keyword). Example:
    $db_username = 'mail';
-
-   To make sure nobody except vacation.pl can read your vacation.conf (including the
-   database password), run
-
-   $ chown root:vacation /etc/postfixadmin/vacation.conf
-   $ chmod 640 /etc/postfixadmin/vacation.conf
 
 
 7. Check the alias expansion
@@ -156,7 +141,7 @@ your postfix master.cf file. This is especially the case if you are also using A
 another content filtering system when mail is re-injected into Postfix using the smtpd daemon.
 
 If you are, it's likely that alias expansion may happen more than once, in which case you 
-may see vacation-style responses duplicated. To suppress this behaviour, you need to add:
+may see vacation-style responses duplicated. To suppress this behaviour, you need to add :
 
   -o receive_override_options=no_address_mappings
 
@@ -164,7 +149,9 @@ For example :
 
 smtp      inet  n       -       -       -       12       smtpd
     -o content_filter=amavis:[127.0.0.50]:10024
-    -o receive_override_options=no_address_mappings
+
+    ^^^ Alias expansion occurs here, so we don't want it to happen again for the other smtpd daemon (below)
+        which receives email out of amavis on port 10025.
 
 127.0.0.1:10025 inet    n   -   -   -   - smtpd
     -o smtpd_autorized_xforward_hosts=127.0.0.0/8
@@ -173,12 +160,8 @@ smtp      inet  n       -       -       -       12       smtpd
     -o smtpd_sender_restrictions=
     -o smtpd_recipient_restrictions=permit_mynetworks,reject
     -o mynetworks=127.0.0.0/8
-    -o receive_override_options=no_header_body_checks
+    -o receive_override_options=no_unknown_recipient_checks,no_header_body_checks,no_address_mappings
 
-	^^^ Alias expansion occurs here, so we don't want it to happen again for the
-		first smtpd daemon (above). If you have per-user settings in amavis,
-		you might want to have no_address_mappings in the smtpd on port 10025
-		instead.
 
 
 8. Security
@@ -201,10 +184,9 @@ joeuser#something.com@autoreply.yourdomain.com
 
 vacation.pl then checks the database to see wether a user is on holiday and
 what message to send back. Make sure that vacation.pl is able to communicate
-to your database. You have to specify the database, username and password for 
-it as described in the "Configure vacation.pl" section.
-
-NOTE: Make sure that the path to perl in vacation.pl is correct.
+to your database. In the first couple of lines you have to specify the
+database, username and password for it.
+NOTE: Make sure that the path to perl is correct.
 
 
 I'm in trouble!

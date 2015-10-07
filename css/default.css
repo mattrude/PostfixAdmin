@@ -1,17 +1,12 @@
-@import url(calendar.css);
 body {
 	background: #ffffff;
 	color: #000000;
 	font-family: "BitStream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: normal;
-	text-align: left;
+	text-align: center;
 }
 
-#container {
-	width:970px;
-	margin:auto;
-}
 a {
 	text-decoration: none;
 	color: #888888;
@@ -30,20 +25,6 @@ table {
 	/* border-spacing: 0; */
 	/* padding: 0; */
 	border-collapse: collapse; /* for IE */
-	text-align: left;
-}
-
-input, .button, textarea {
-	padding: 6px;
-}
-
-input, .button, textarea, select {
-	font-family: "BitStream Vera Sans", Verdana, Arial, Helvetica, sans-serif;
-	font-size: 13px;
-}
-
-.readonly {
-	background:#eee;
 }
 
 .button {
@@ -51,12 +32,12 @@ input, .button, textarea, select {
 	color: #777777;
 	background: #dddddd;
 	padding: 3px 3px 3px 3px;
+	font-size: 11px;
 }
 
 .button:hover, .button:focus {
-	background: #eee;
-	color: #666;
-	text-decoration:none;
+	background: #BCFF36;
+	color: #888888;
 }
 
 .flat {
@@ -66,7 +47,7 @@ input, .button, textarea, select {
 ul.flash-info {
 	border:2px solid #AFE1A6; /* medium green */
 	padding:1em;
-	max-width:970px;
+	max-width:730px;
 	margin-left:auto;
 	margin-right:auto;
 	list-style:none;
@@ -75,7 +56,7 @@ ul.flash-info {
 ul.flash-error {
 	border:2px solid #FF6347; /* tomato */
 	padding:1em;
-	max-width:970px;
+	max-width:730px;
 	margin-left:auto;
 	margin-right:auto;
 	list-style:none;
@@ -85,41 +66,30 @@ ul.flash-error {
 	color: #d01313;
 }
 
-#motd {
-	color: maroon;
-	padding-top:2em;
-}
-
 .standout {
 	color: maroon;
 	padding: 3px 3px 3px 3px;
 	text-align: center;
 }
 
-#login_header, #login, #main_menu, #overview,
-#admin_domains, #admin_virtual, .nav_bar, #alias_domain_table,
-#alias_table, #mailbox_table, #overview_table, #log_table,
-#admin_table, #footer, .subnav {
-	width: 990px;
-	margin: 0 auto;
-}
-
 #login_header {
+	width: 750px;
+	margin: 0 auto;
 	padding-bottom: 10px;
 	text-align: left;
 }
 
 #login {
-	width: 990px;
+	width: 750px;
 	margin: 0 auto;
-	background: url(../images/mail_bg.gif) right 50% no-repeat;
 }
 
 #login_table {
-	border-left: none;
-	border-right: 1px solid #999;
-	width: 400px;
-	margin: 0 0 0 200px;
+	border-left: 8px solid gray;
+	border-right: 8px solid gray;
+	background: #eeeeee;
+	width: 350px;
+	margin: 0 auto;
 	border-collapse: separate;
 	border-spacing: 10px;
 }
@@ -128,94 +98,95 @@ ul.flash-error {
 	font-size: 13px;
 }
 
-#menu, #tabbar {
-	text-align:center;
-	float:left;
-	width:100%; 
+#menu {
+	width: 750px;
 	margin: 0 auto;
 	padding-top: 10px;
 	white-space: nowrap;
 }
 
-#menu ul, #tabbar  ul	{
+#menu ul {
 	padding: 0;
 	margin: 0;
 	margin-left:auto;
 	margin-right:auto;
 	list-style: none;
-	text-align: center;
-	position:relative;
-	width:990px;
-	float:left;
 }
 
-#menu li, #tabbar li {
+#menu li {
 	float: left;
 	background: #efefef;
 	margin-right: 3px;
 	border-top: 4px solid #aaaaaa;
-	position:relative;
 }
 
-#menu li:hover, #menu li.sfhover, #tabbar li:hover, #tabbar li.sfhover {
-	background: #ccc;
+#menu li:hover, #menu li.sfhover {
+	background: #BFFF00;
 }
 
-#menu li ul, #tabbar li ul {
+#menu li ul {
 	position: absolute;
 	width: auto;
-	left: -999em; 
-	right:auto;
-	background: #FFFFFF; 
-	color: #999999;
+	left: -999em;
+    background: #FFFFFF;
 	border:2px solid white;
 	border-top:none;
 }
-
-#menu li:hover ul, #menu li.sfhover ul, #tabbar li:hover ul, #tabbar li.sfhover ul {
+#menu li:hover ul, #menu li.sfhover ul {
    left: auto;
 }
 
-#menu li ul li, #tabbar li ul li {
-	float: none;
+
+#menu li ul li {
+    float: none;
 	margin-right: 0px;
-	border-top:2px solid white;
+	border-top:2px solid white;;
 	text-align:left;
-	right:auto;
 }
 
-#menu a, #tabbar a {
+
+
+
+#menu a {
 	display: block;
 	width: auto;
 	padding: 20px 5px 5px 5px;
-}
-
-#menu a, #tabbar a, #menu a:hover, #tabbar a:hover {
 	color: #888888;
 }
 
-#menu li ul li a, #tabbar li ul li a {
+#menu a:hover {
+	color: #888888;
+}
+
+
+
+#menu li ul li a {
 	padding: 5px 5px 5px 5px;
 }
 
-.subnav p {
-	padding-left:10px;
-	margin-top:2em;
-	margin-bottom:0;
-	font-size:12px;
+
+
+#main_menu, #edit_form {
+	width: 750px;
+	margin: 0 auto;
 }
 
 #edit_form table {
-	margin: 0 50px;
+	margin: 0 auto;
 	padding-top: 10px;
 	text-align: left;
+	width: 500px;
+	border: 1px solid #efefef;
 }
 
-#edit_form th  {
-	text-align: left;
+#edit_form h3  {
+	text-align: center;
 	font-size: 12px;
 	margin: 0;
+	background: #AFE1A6; /*#b4004a;*/
+	border: 1px solid #bbb;
 	line-height: 25px;
+	color: #555555;
 }
 
 .hlp_center {
@@ -223,13 +194,16 @@ ul.flash-error {
 }
 
 .help_text {
+	background: #efefef;
+	border-left: 1px solid #bbbbbb;
+	border-right: 1px solid #bbbbbb;
 	text-align: center;
 	padding-top: 5px;
 	padding-bottom: 5px;
 }
 
 #main_menu table {
-	margin: 0 0;
+	margin: 0 auto;
 	text-align: left;
 	padding-top: 20px;
 	padding-bottom: 20px;
@@ -241,15 +215,23 @@ ul.flash-error {
 }
 
 #main_menu a {
+	color: #888888;
 	padding-left: 8px;
 }
 
 #main_menu a:hover {
-	color: #333;
+	color: #40B33C; /*#CD6A6A;*/
 	text-decoration: none;
 	padding-left: 4px;
-	border-bottom: none;
-	border-left: 4px solid #333;
+	border-bottom: 1px solid #40B33C;
+	border-left: 4px solid #40B33C;
+}
+
+#overview, #admin_domains, #admin_virtual {
+	width: 750px;
+	margin: 0 auto;
+	background: #AFE1A6; /*#9ACD32;*/
+	border: 1px solid #bbb;
 }
 
 #overview h4, #overview P, #overview FORM, #admin_virtual h4, #admin_virtual P, #admin_virtual FORM {
@@ -258,13 +240,39 @@ ul.flash-error {
 	line-height: 30px;
 }
 
+#nav_bar {
+	text-align: right;
+	width: 750px;
+	margin: 0 auto;
+}
+
+#alias_domain_table, #alias_table, #mailbox_table, #overview_table, #log_table, #admin_table {
+	width: 750px;
+	margin: 0px auto;
+	border: 1px solid #efefef;
+}
+
 #alias_domain_table .header, #alias_table .header, #mailbox_table .header, #overview_table .header, #log_table .header, #admin_table .header {
 	line-height: 20px;
 	background: #efefef;
 	color: black;
 }
 
+#alias_domain_table .hilightoff, #alias_table .hilightoff, #mailbox_table .hilightoff, #overview_table .hilightoff, #log_table .hilightoff, #admin_table .hilighoff {
+	background: white;
+}
+
+#alias_domain_table .hilighton, #alias_table .hilighton, #mailbox_table .hilighton, #overview_table .hilighton, #log_table .hilighton, #admin_table .hilighton {
+	background: #D9FF43; /*#D6FF85;*/ /*#ffdddd;*/
+}
+
+#alias_domain_table tr:hover, #alias_table tr:hover, #mailbox_table tr:hover, #overview_table tr:hover, #log_table tr:hover, #admin_table tr:hover {
+        background: #D9FF43; /*#D6FF85;*/ /*#ffdddd;*/
+}
+
+
 #alias_domain_table h3, #alias_table h3, #mailbox_table h3, #overview_table h3, #log_table h3, #admin_table h3 {
+	background: silver;
 	text-align: left;
 	font-size: 12px;
 	font-weight: bold;
@@ -273,47 +281,8 @@ ul.flash-error {
 	margin: 0;
 }
 
-#alias_domain_table .hilightoff, #alias_table .hilightoff, #mailbox_table .hilightoff, #overview_table .hilightoff, #log_table .hilightoff, #admin_table .hilighoff {
-	background: white;
-}
-
-#alias_domain_table .hilighton, #alias_table .hilighton, #mailbox_table .hilighton, #overview_table .hilighton, #log_table .hilighton, #admin_table .hilighton {
-	background: #eee; /*#D6FF85;*/ /*#ffdddd;*/
-}
-
-#alias_domain_table tr:hover, #alias_table tr:hover, #mailbox_table tr:hover, #overview_table tr:hover, #log_table tr:hover, #admin_table tr:hover {
-	background: #eee; /*#D6FF85;*/ /*#ffdddd;*/
-}
-
-th {
-	text-align: center;
-	padding:7px 0;
-	margin: 0 0 14px 0;
-	border-bottom: 1px solid #bbb;
-	color: #555555;
-}
-
-td {
-	padding:7px 7px;
-}
-
-td.label {
-	text-align:right;
-	margin-right:0px;
-}
-
-label {
-	padding-right:0;
-	font-weight:bold;
-	vertical-align:middle;
-}
-
-#alias_domain_table td, #alias_table td, #mailbox_table td, #overview_table td, #log_table td, #admin_table td {
-	text-align: left;
-}
-
 #footer {
-	width:975px;
+	width: 750px;
 	margin: 20px auto;
 	border-top: 1px solid #bbbbbb;
 	background: #efefef;
@@ -344,42 +313,3 @@ div.setup {
 div.setup li {
 	padding-bottom:1em;
 }
-
-.searchresult {
-	background:lightgreen;
-}
-
-span.active { 
-	font-weight:bold; 
-}
-
-div.nav_bar {
-	text-align: left;
-}
-
-
-.quota {
-z-index:99;
-height:14px;
-position: absolute;
-}
-.quota_text {
-z-index:100;
-  text-align: center;
-  font-size: 10px;
-  color: #666;
-
-  cursor: default;
-  position: absolute;
-  width:120px;
-  height:14px;
-  margin-top:-14px;
-}
-.quota_bg { background-color: white; z-index:98; width:120px; height:14px;margin-top:-1px;margin-left:-1px;   border: 1px solid #999;}
-.quota_no_border { border:none; margin:0; }
-.quota_high { background: url(../images/quota-colors.png) repeat-x 0 -28px #f90509; }
-.quota_mid  { background: url(../images/quota-colors.png) repeat-x 0 -14px #e3e909; }
-.quota_low  { background: url(../images/quota-colors.png) repeat-x 0 0px #05f905; }
-.quota_text_high { color: white; }
-.quota_text_mid { color: #666; }
-.quota_text_low { color: #666; }
