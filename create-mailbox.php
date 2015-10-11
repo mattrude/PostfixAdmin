@@ -129,6 +129,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
             $tDomain = $fDomain;
             $pCreate_mailbox_password_text = $PALANG['pCreate_mailbox_password_text_error'];
         }
+    } else {
+        $min_length = $CONF['min_password_length'];
+        if($min_length > 0 && strlen($fPassword) < $min_length) {
+           flash_error(sprintf($PALANG['pPasswordTooShort'], $CONF['min_password_length']));
+           $error = 1;
+        }
     }
 
     if ($CONF['quota'] == "YES")

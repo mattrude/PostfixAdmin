@@ -10,6 +10,10 @@
 # Last update:
 # $Id$
 
+Changes since the 2.3.8 release
+-------------------------------
+  - enforce $CONF[min_password_length] in create-mailbox
+
 Version 2.3.8 - 2015/10/07 - SVN r1814 (postfixadmin-2.3 branch)
 ----------------------------------------------------------------
   - fix query to enable/disable alias in edit-mailbox for PostgreSQL (#311)
